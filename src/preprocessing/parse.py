@@ -7,9 +7,9 @@ class Parser:
         self.text = text
 
     def find_footnotes(self):
-        detected_blocks = []
+        notes_map = {}
         
-        header_pattern = re.compile(r'^#{0,4}\s*Notes\s*$', re.MULTILINE) # check for headers with "Notes" (e.g. "## Notes")
+        header_pattern = re.compile(r'^#{0,4}\s*Notes\s*$', re.MULTILINE | re.IGNORECASE) # check for headers with "Notes" (e.g. "## Notes")
         listitem_pattern = re.compile(r'^(?:\[?(\d+|[ivxlc]+)\]?\.?\s+)(.*)', re.MULTILINE) # check for numbered list items (1. , 33. , etc.)
         terminator_pattern = re.compile(r"\n\n+") # set terminator to first instance of two or more newlines
 
@@ -36,13 +36,29 @@ class Parser:
             if block_end_offset == -1:
                 block_end_offset = len(self.text) # if no terminators are found, set the block end to the end of the text
 
-            for match in listitem_pattern.finditer(self.text, pos=block_start, endpos=block_end_offset):
-                detected_blocks.append((match.start(2), match.end(2)))
+            # Find all list items in the block
+            list_matches = list(listitem_pattern.finditer(self.text, pos=block_start, endpos=block_end_offset))
+            
+            for i, match in enumerate(list_matches):
+                note_num = match.group(1)
+                note_start = match.start(2)  # Start of the note text
+                
+                # Find the end of this note's text
+                if i + 1 < len(list_matches):
+                    # Next list item exists, note ends at start of next item
+                    note_end = list_matches[i + 1].start()
+                else:
+                    # Last item, note ends at block end
+                    note_end = block_end_offset
+                
+                # Extract and clean the note text
+                note_text = self.text[note_start:note_end].strip().replace('\n', ' ')
+                notes_map[note_num] = note_text
 
-            if detected_blocks:
-                return detected_blocks
+            if notes_map:
+                return notes_map
         
-        return detected_blocks
+        return notes_map
     
     def find_chapters(self):
         chapter_pattern = re.compile(
@@ -114,3 +130,86 @@ class Parser:
 
         return chapters
         
+    def find_sections(self):
+        return 
+    
+    def find_paragraphs(self):
+        return
+    
+    def find_note_references(self):
+        reference_pattern = re.compile(r'\$\{\s*\}\^\{(\d+(?:,\d+)*)\}\$')
+        references = []
+        for match in reference_pattern.finditer(self.text):
+            note_ids = match.group(1).split(',')
+            offset = match.start()
+            for note_id in note_ids:
+                references.append((note_id.strip(), offset))
+
+        return references
+    
+    def link_notes_to_text(self):
+        chapters = self.find_chapters()
+        notes_map = self.find_footnotes()
+        references = self.find_note_references()
+
+        if not chapters or not notes_map:
+            return {"error": "Could not find chapters or notes to link."}
+
+        chapters_with_notes = {title: [] for title, _, _ in chapters}
+        chapters_with_notes['Unlinked Notes'] = []
+
+        # Find the notes section boundaries to avoid matching references within it
+        notes_header = re.search(r'^#{0,4}\s*Notes\s*$', self.text, re.MULTILINE | re.IGNORECASE)
+        notes_section_start = notes_header.start() if notes_header else len(self.text)
+        notes_section_end = len(self.text)  # Default to end of text
+        
+        if notes_header:
+            # Try to find the end of the notes section by looking for the next major section
+            next_section_pattern = re.compile(
+                r"^\s*(?:Index|Bibliography|References|Appendix|Appendices|Glossary|Acknowledgements|Chapter|#)"
+                r"(?:\s+\d+)?\s*$", 
+                re.MULTILINE | re.IGNORECASE
+            )
+            next_section_match = next_section_pattern.search(self.text, pos=notes_header.end())
+            if next_section_match:
+                notes_section_end = next_section_match.start()
+
+        # Group references by note_id to collect all offsets for each note
+        note_references = {}
+        for note_id, ref_offset in references:
+            # Ignore references found within the notes section itself
+            if notes_section_start <= ref_offset < notes_section_end:
+                continue
+                
+            if note_id not in note_references:
+                note_references[note_id] = []
+            note_references[note_id].append(ref_offset)
+
+        # Associate notes with chapters based on where their references appear
+        for note_id, ref_offsets in note_references.items():
+            note_text = notes_map.get(note_id)
+            if not note_text:
+                continue # skip if there is no corresponding note text
+
+            # Find all chapters that contain references to this note
+            found_in_any_chapter = False
+            for title, start_offset, end_offset in chapters:
+                # Check if any reference for this note is within this chapter
+                chapter_refs = [offset for offset in ref_offsets if start_offset <= offset < end_offset]
+                if chapter_refs:
+                    chapters_with_notes[title].append({
+                        'id': note_id, 
+                        'text': note_text,
+                        'reference_offsets': chapter_refs
+                    })
+                    found_in_any_chapter = True
+                    # Don't break - continue to check other chapters
+
+            if not found_in_any_chapter:
+                chapters_with_notes['Unlinked Notes'].append({
+                    'id': note_id, 
+                    'text': note_text,
+                    'reference_offsets': ref_offsets
+                })
+
+        return chapters_with_notes
