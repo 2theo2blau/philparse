@@ -78,6 +78,68 @@ class TestParser(unittest.TestCase):
         for chapter, notes in chapters_with_notes.items():
             print(f"{chapter}: {len(notes)} notes")
 
+    def test_find_chapter_subsections(self):
+        # Construct the absolute path to the test file
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.abspath(os.path.join(current_dir, '..', '..', '..'))
+        file_path = os.path.join(project_root, 'texts', 'txt', 'unit-tests', 'chapters.txt')
+        
+        with open(file_path, 'r') as f:
+            text = f.read()
+
+        parser = Parser(text)
+        chapter_subsections = parser.find_chapter_subsections()
+        
+        print("Detected chapter subsections:", chapter_subsections)
+        
+        self.assertIsInstance(chapter_subsections, dict)
+        self.assertTrue(len(chapter_subsections) > 0)
+
+        # Check for specific subsections in Chapter 13
+        chapter_13_title = next((title for title in chapter_subsections if 'Chapter 13' in title), None)
+        self.assertIsNotNone(chapter_13_title)
+        
+        subsections = chapter_subsections.get(chapter_13_title, [])
+        subsection_titles = [s['title'] for s in subsections]
+        
+        expected_subsections = [
+            "Introduction",
+            "Two Types of Understanding-Based Account: Constitutive vs Basis",
+            "Competent Dissent",
+            "Competent Dissent and Constitutive Accounts",
+            "Competent Dissent and Basis Accounts",
+            "Two Ways of Believing a Basis-Explicable A Priori Proposition",
+            "A Role for Intuitions in Basis Accounts",
+            "Synthetic A Priori Propositions: Normative Truths",
+            "Interim Summary",
+            "The Non-Uniformity of Sources of the A Priori",
+            "Basic Skepticism about Intuitions: Phenomenology and Intellectual Seemings",
+            "Justification by Inclinations to Judgment",
+            "Conclusion"
+        ]
+
+        # We're checking the start of the list, so we don't need to match all of them
+        for i, expected_title in enumerate(expected_subsections):
+            self.assertIn(expected_title, subsection_titles[i])
+
+    def test_find_end_sections(self):
+        # Construct the absolute path to the test file
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.abspath(os.path.join(current_dir, '..', '..', '..'))
+        file_path = os.path.join(project_root, 'texts', 'txt', 'unit-tests', 'end-sections.txt')
+        
+        with open(file_path, 'r') as f:
+            text = f.read()
+
+        parser = Parser(text)
+        end_sections = parser.find_end_sections()
+        
+        self.assertIsInstance(end_sections, list)
+        self.assertTrue(len(end_sections) > 0)
+
+        section_titles = [s['title'] for s in end_sections]
+        self.assertIn('Bibliography', section_titles)
+        self.assertIn('Index', section_titles)
 
 
 if __name__ == '__main__':

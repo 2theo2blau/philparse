@@ -70,7 +70,7 @@ class Parser:
         )
 
         terminator_pattern = re.compile(
-            r"^\s*(?:Index|Bibliography|References|Appendix|Appendices|Glossary|Acknowledgements|Notes|Endnotes)\s*$",
+            r"^\s*#*\s*(?:Index|Bibliography|References|Appendix|Appendices|Glossary|Acknowledgements|Notes|Endnotes|Afterword)\s*$",
             re.MULTILINE | re.IGNORECASE
         )
 
@@ -129,9 +129,150 @@ class Parser:
             chapters.append((title, start_offset, end_offset))
 
         return chapters
+    
+    def find_intro_sections(self):
+        chapters = self.find_chapters()
+        if not chapters:
+            return []
         
-    def find_sections(self):
-        return 
+        first_chapter_start_offset = chapters[0][1]
+        truncated_text = self.text[:first_chapter_start_offset]
+        
+        # Updated pattern to include Contents and handle apostrophes
+        intro_pattern = re.compile(
+            r'^#+\s*(?:Contents|Introduction|Preface|Prologue|Publisher\'?s?\s*Acknowledgements?|Acknowledgements?)\s*$', 
+            re.MULTILINE | re.IGNORECASE
+        )
+        
+        # Find all intro section headers
+        intro_matches = list(intro_pattern.finditer(truncated_text))
+        if not intro_matches:
+            return []
+        
+        # Extract full sections with their content
+        intro_sections = []
+        for i, match in enumerate(intro_matches):
+            title = match.group(0).strip().lstrip('#').strip()
+            start_offset = match.start()
+            content_start = match.end()
+            
+            # Skip the newline after the header if present
+            if content_start < len(truncated_text) and truncated_text[content_start] == '\n':
+                content_start += 1
+            
+            # Find the end of this section
+            if i + 1 < len(intro_matches):
+                # Next intro section exists
+                end_offset = intro_matches[i + 1].start()
+            else:
+                # Last intro section, ends at first chapter
+                end_offset = first_chapter_start_offset
+            
+            intro_sections.append({
+                'title': title,
+                'start_offset': start_offset,
+                'content_start': content_start,
+                'end_offset': end_offset,
+                'content': self.text[content_start:end_offset].strip()
+            })
+        
+        return intro_sections
+        
+    def find_chapter_subsections(self):
+        chapters = self.find_chapters()
+        if not chapters:
+            return {}
+
+        chapter_map = {}
+
+        # Regex to find markdown headers (e.g., #, ## Subsection)
+        subsection_pattern = re.compile(r"^\s*#+\s*(.+?)\s*$", re.MULTILINE)
+
+        # Re-run chapter search to get header end positions
+        chapter_header_pattern_str = (
+            r"^\s*#+\s*(?:Chapter\s+)?(?:\d+|[IVXLC]+)\s*\n+\s*#+\s*[^#\n].*$"
+            r"|^\s*Chapter\s+(?:\d+|[IVXLC]+)\s*$"
+        )
+        chapter_header_pattern = re.compile(chapter_header_pattern_str, re.MULTILINE | re.IGNORECASE)
+        chapter_header_matches = {match.start(): match for match in chapter_header_pattern.finditer(self.text)}
+
+        for i, (title, start_offset, end_offset) in enumerate(chapters):
+            chapter_map[title] = []
+            
+            header_match = chapter_header_matches.get(start_offset)
+            content_start = header_match.end() if header_match else start_offset
+
+            # Find all subsection headers within the chapter's content
+            subsection_matches = list(subsection_pattern.finditer(self.text, pos=content_start, endpos=end_offset))
+
+            for j, match in enumerate(subsection_matches):
+                sub_title = match.group(1).strip()
+                sub_start_offset = match.start()
+                sub_content_start_offset = match.end()
+
+                if sub_content_start_offset < end_offset and self.text[sub_content_start_offset] == '\n':
+                    sub_content_start_offset += 1
+
+                if j + 1 < len(subsection_matches):
+                    sub_end_offset = subsection_matches[j + 1].start()
+                else:
+                    sub_end_offset = end_offset
+                
+                sub_content = self.text[sub_content_start_offset:sub_end_offset].strip()
+
+                chapter_map[title].append({
+                    'id': j + 1,
+                    'title': sub_title,
+                    'start_offset': sub_start_offset,
+                    'end_offset': sub_end_offset,
+                    'content': sub_content
+                })
+
+        return chapter_map
+    
+    def find_end_sections(self):
+        chapters = self.find_chapters()
+        if not chapters:
+            return []
+
+        last_chapter_end_offset = chapters[-1][2]
+        truncated_text = self.text[last_chapter_end_offset:]
+
+        end_pattern = re.compile(
+            r"^\s*#*\s*(?:Index|Bibliography|References|Appendix|Appendices|Glossary|Acknowledgements?|Notes|Endnotes|Afterword)\s*$",
+            re.MULTILINE | re.IGNORECASE
+        )
+
+        end_sections = []
+
+        matches = list(end_pattern.finditer(truncated_text))
+
+        for i, match in enumerate(matches):
+            title = match.group(0).strip().lstrip('#').strip()
+            start_offset = match.start()
+            content_start = match.end()
+
+            if content_start < len(truncated_text) and truncated_text[content_start] == '\n':
+                content_start += 1
+
+            if i + 1 < len(matches):
+                end_offset = matches[i + 1].start()
+            else:
+                end_offset = len(truncated_text)
+            
+            global_start_offset = last_chapter_end_offset + start_offset
+            global_content_start = last_chapter_end_offset + content_start
+            global_end_offset = last_chapter_end_offset + end_offset
+
+            end_sections.append({
+                'title': title,
+                'start_offset': global_start_offset,
+                'content_start': global_content_start,
+                'end_offset': global_end_offset,
+                'content': truncated_text[content_start:end_offset].strip()
+            })
+
+        return end_sections
     
     def find_paragraphs(self):
         return
