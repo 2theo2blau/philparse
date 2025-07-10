@@ -1,0 +1,646 @@
+this is a fake end to a previous bit of the book.
+
+# 12 
+
+## Knowing by Imagining ${ }^{1}$
+
+Timothy Williamson
+
+## 1
+
+Imagining is often contrasted with knowing. When you know nothing about something, you have to imagine it instead. Knowledge deals in facts, imagination in fictions. This chapter sketches a way of thinking about the imagination on which that stereotypical contrast is utterly misleading. Far from being the opposite of knowing, imagining has the basic function of providing a means to knowledgeand not primarily to knowledge of the deep, elusive sort that we may hope to gain from great works of fiction, but knowledge of far more mundane, widespread matters of immediate practical relevance.
+
+The assimilation of imagining and knowing is a card that can be played for either realist or idealist ends. The idealist wants to shift our conception of knowing towards our conception of imagining: somehow even knowing deals in fictions. By contrast, the realist wants to shift our conception of imagining towards our conception of knowing: somehow even imagining deals in facts. The spirit of this chapter is firmly realist. It aims more to rethink imagination than to rethink knowledge. Consequently, it is not appropriate to start by defining 'imagination'. Any such definition would be premature in advance of inquiry. Without one, we can still make progress with that inquiry on the basis of our capacity to recognize clear cases of imagination. What unifies them (if anything), and therefore which less clear cases should be grouped with them, are to be identified in the course of inquiry, not prejudged from the beginning.
+
+A more useful starting point is to ask oneself why the elaborate capacity for imagining that normal humans possess should have arisen in our evolutionary history. Although this chapter will not attempt any detailed evolutionary considerations, one feature of the view to be proposed is that it makes the evolutionary advantage of having a good imagination obvious. That contributes to the view's explanatory power, and so to its abductive confirmation.
+
+The reference to humans' evolutionary history does not imply that the imagination is an exclusively human capacity. It is quite plausible that some non-human animals engage in at least primitive imaginative exercises, and thereby gain a similar advantage. In this chapter, however, the examples will largely concern the human imagination, since we know so much more about it.
+
+Of course, that we possess an imagination does not prove that it confers or once conferred some evolutionary advantage on either the individual or the species. In principle, the imagination might have arisen as an accidental by-product of something else that did confer an evolutionary advantage at one or other level. Sometimes, for structural reasons, the easiest way for evolution to develop the capacity to do something useful involves developing the capacity to do something useless too. This chapter does not take for granted that the imagination confers an evolutionary advantage on either the individual or the species. Rather, it proposes a speculative view of the imagination on which it does confer an evolutionary advantage on both the individual and the species, and that aspect of the view's explanatory power contributes to its confirmation.
+
+There are many kinds of evolutionary advantage. Presumably, peacocks have unwieldly magnificent tails because peahens prefer peacocks so endowed. One could develop a similar hypothesis about the imagination. Other things being equal, the more imaginative you are, the better your seduction technique: if you dance, talk, and do other things more imaginatively, you are more exciting to be with. In One Thousand and One Arabian Nights, Scheherazade's skill at telling stories keeps her alive and eventually enables her to pass on her genes. On the view to be proposed here, however, a good imagination also confers much more straightforward and direct advantages which do not depend on whether other members of the species are attracted by works of your imagination.
+
+# 2 
+
+Consider a small group of our distant human ancestors, travelling across a difficult landscape previously unknown to them. How might they find an imagination useful?
+
+One obvious answer is that an imagination will alert them to various potential dangers and opportunities. They are about to enter a forest. They imagine wolves in the forest; warned of the danger, they keep a sharper look-out for signs of wolves. They imagine edible berries in the forest; alerted to the potential opportunity, they look about for bushes of the right kind. In both cases, their imagination enables them to prepare for practically relevant possibilities, helping them avoid dangers and take advantage of opportunities.
+
+To serve that purpose well, the imagination must be both selective and realityoriented. They could imagine the wolves bringing them food to eat, but doing so would be a waste of time, and a distraction from more practically relevant possibilities. An imagination that clutters up the mind with a bewildering plethora of wildly unlikely scenarios is almost as bad as no imagination at all. It is better to have an imagination that concentrates on fewer and more likely scenarios. One's imagination should not be completely independent of one's knowledge of what the world is like.
+
+Such examples suggest a distinction between two modes in which the imagination can operate: voluntary and involuntary. When you encounter a problem to which there is no obvious solution, you can turn your imagination to thinking up ways of solving it and to thinking through their consequences. Our little group may do that when they come to a deep river that they must cross. Such uses of the imagination are often voluntary. But sometimes we need our imaginations to work involuntarily too.
+
+If the group is absorbed in joking together as it enters the forest, it may be saved by an imagination that breaks into the stream of consciousness with reminders of dangers and opportunities.
+
+Imagination resembles attention in having both voluntary and involuntary modes of operation, and for similar reasons. We need to be able to focus our attention voluntarily on something: for example, to set ourselves to watch a hole in case an animal comes out. But we also need our attention to be capable of involuntary switches: for example, to be drawn by a slight movement at the periphery of vision, perhaps a predator or prey, despite our previous intention of watching something else. At least metaphorically, one might regard imagination as a form of attention to possibilities.
+
+Since members of the group have imaginations, they can be expected to use them, voluntarily or even involuntarily, in ways that serve no immediate practical purpose too, for instance by inventing and telling stories. In the long run, of course, such uses of the imagination may help the group bond. Moreover, even the most playful uses of the imagination may also help to exercise the capacity and keep it in good trim, ready for more practical applications, just as a cat practices its hunting skills by playing with a mouse once caught, letting it go and recapturing it.
+
+# 3 
+
+So far, the imagination has been described primarily as raising possibilities, rather than assessing the truth-values of propositions. One might therefore be tempted to suppose that the proper role of the imagination belongs, in Hans Reichenbach's terminology, to the context of discovery, rather than the context of justification. On a simpleminded version of the distinction, one dreams up scientific theories in the context of discovery, but assesses them as true or false, or as probable or improbable on the evidence, in the context of justification. Rationality is essential in the context of justification, but not in the context of discovery. If you came up with the theory in the first place under the influence of drink or drugs, never mind, but you must sober up or come down from your high before you reach a conclusion as to its status on the evidence. Similarly, someone might think, the imagination has done its work once it has delivered enough propositions to consciousness, to be entertained there. On this view, the imagination plays no further role in the assessment of those propositions as true or false, or as probable or improbable on the evidence.
+
+The considerations of the previous section already include signs that such a view is inadequate. The need for the imagination to be selective and reality-oriented in bringing material to consciousness suggests that it must be capable of some sort of rational responsiveness to evidence. But in many examples we can see the imagination playing a far more direct role in the assessment of truth-value.
+
+Think of a hunter who finds his way obstructed by a mountain stream rushing between the rocks. He reaches the only place in the vicinity where jumping the stream might be feasible. The best scenario for him is to jump and succeed in getting across the stream. Then he can continue on his way with little loss of time or energy. The worst scenario for him is to jump and fail to get across the stream, for then he will probably be drowned or smashed on the rocks. If he does not
+
+jump, and goes another way instead, he suffers a great loss of time and energy, but does not incur imminent death or injury; that is the intermediate scenario. Thus it is vitally important for the hunter to know whether he can jump the stream, whether he would succeed if he did try to jump it, before he decides whether to attempt the jump. Since the method of trial and error is too risky a way of finding out whether he can jump the stream, he needs a way of finding out whether he can do it in advance of trying. He can remember some of his past jumps, but he cannot remember failing with a jump that was clearly easier than this one, or succeeding with a jump that was clearly harder. He has to consider not only the width of the stream, but also the awkwardness of the place from which he would have to launch himself, the slipperiness of the rocks on which he would have to land, how tired he is, and so on. How should he try to determine whether he would succeed?
+
+There is a natural human method of gauging one's capacities in such situations. One imagines oneself trying. If one then imagines oneself succeeding, one judges that if one tried, one would succeed. If instead one imagines oneself failing, one judges that if one tried, one would fail. If one is still uncertain, one repeats the thought experiment, perhaps many times. If our hunter cannot resolve the uncertainty, he will presumably take the long way round-unless he is being chased by a sabre-toothed tiger, in which case he may jump anyway.
+
+A traditional stereotype of the imagination can make reliance on such an imaginative exercise look like a mad way of making up one's mind. For however difficult the jump, one can imagine succeeding with it, and however easy the jump, one can imagine failing with it. How can one learn anything relevant from what one chooses to imagine? Such incomprehension indicates neglect of the distinction in Section 2 between voluntary and involuntary exercises of the imagination. When the hunter makes himself imagine trying to jump the stream, his imagination operates in voluntary mode. But he neither makes himself imagine succeeding nor makes himself imagine failing. Rather, having forced the initial conditions, he lets the rest of the imaginative exercise unfold without further interference. For that remainder, his imagination operates in involuntary mode. He imagines the antecedent of the conditional voluntarily, the consequent involuntarily. Left to itself, the imagination develops the scenario in a reality-oriented way, by default.
+
+Obviously, nothing has been said to guarantee that the imagination will reach a true answer. In some cases, it reaches a false one. The imagination, like perception, memory, and every other generic human cognitive capacity, is fallible. In other cases, when too much uncertainty is registered, the imagination reaches no answer at all. Nevertheless, under suitable conditions, the method constitutes a reliable way of forming a true belief as to what would happen in hypothetical circumstances. I have used it myself in situations like that described, and lived to tell the tale, as have other people I know. Indeed, there is no good reason to deny that, under suitable conditions, the method enables one to know what would happen in the hypothetical circumstances, because the conditional connection is safe from failure. Of course, hardly anything has been said so far to explain the method's reliability, except for the hint in Section 1 of evolutionary pressures. Later sections will suggest some links between the method and other normal human cognitive processes. First, however, it
+
+will be useful to have some more examples, to illustrate the range of cases over which the method is applicable.
+
+The method can be applied with complex iterations. Suppose that now the hunter's way to the next valley is blocked by broken cliffs. Can he climb through or up them? The price of trying and failing is again high: perhaps becoming exhausted, perhaps getting stuck halfway up. The hunter stares at the rock face, trying to trace a route all the way to the top in his imagination, testing each step for feasibility by imagining what it would involve. No more rational method of answering the question is available to him.
+
+Even in the modern world, important decision-making often relies on knowledge or beliefs acquired through the imagination. For example, you are looking round a house, wondering whether to buy it. You want to know whether, if you lived in it, you would like doing so. You voluntarily imagine the antecedent of the conditional; your final decision may depend on what consequent you involuntarily imagine.
+
+Not all the knowledge gained from such imaginative exercises concerns the capacities and dispositions of agents. For example, if you look at a piece of furniture and then at a doorway, you can sometimes come to know whether the former would go through the latter, without measuring either, by imagining trying to get the former through the latter. You gain knowledge of spatial relations between the doorway and the furniture.
+
+The examples so far may appear to involve an essential role for mental imagery, in some sense. But even if that appearance is veridical, we should not overgeneralize to the conclusion that all imagining involves imagery. For example, you are very busy, and wonder whether to postpone a lunch appointment with a friend. You want to know whether, if you did postpone the appointment, she would be upset. You voluntarily imagine the antecedent of the conditional. You might then involuntarily form a visual image of your friend with a composed or disappointed face. But no such imagery is necessary for imagining her reacting with composure or disappointment. Again, suppose that a politician is trying to work out what his core supporters would do at the next election if he voted for gun control. He imagines their reactions, but doing so need not involve mental imagery.
+
+Given this heterogeneity of knowledge-yielding imaginative exercises, we need a more abstract characterization of what is going on.
+
+# 4 
+
+As Frank Ramsey observed, how we evaluate conditionals is closely tied to how we update our beliefs on new information. For example, suppose that someone tells a shepherd 'The sheep have broken out of the pen and disappeared', and the shepherd concludes 'The sheep have gone down to the river.' Then presumably, even if the shepherd had not been given the testimony, he could still have reached the indicative conditional conclusion 'If the sheep have broken out of the pen and disappeared, they have gone down to the river' (or the subjunctive conditional conclusion 'If the sheep had broken out of the pen and disappeared, they would have gone down to the river', depending on subtle differences in the cognitive process). The testimony in the first case is the same as the antecedent of the conditional in the second case, and the
+
+unconditional conclusion in the first case is the same as the consequent of the conditional in the second case. If we regard the shepherd's updating of his beliefs in the first case as an online process, then we can regard his evaluation of the conditional in the second case as the corresponding offline process. If he accepted the conditional on the basis of an imaginative exercise similar to those in Section 3, as we may assume, then that imaginative exercise is the offline analogue of online updating. Very roughly, the online and offline processes take the same input-'The sheep have broken out of the pen and disappeared' - and deliver the same output"The sheep have gone down to the river'-by the same means. One process is online and the other offline in virtue of the different sources of the input. If we apply the term 'imagine' on the basis of the source of the input, we shall classify only the offline process as an imaginative exercise. If we apply the term 'imagine' on the basis of the processing between input and output, we shall classify the online process as an imaginative exercise too. It is more important to see the underlying cognitive similarity than to decide exactly how to use the word 'imagine'.
+
+In many of the examples in Section 3, the cognitive process took a mix of online and offline input. When the hunter imagines himself trying to jump the stream, he also has to look carefully at its banks in front of him, to tailor his imaginative exercise as exactly as he can to their actual contours. Voluntarily in imagination, he somehow adds his jumping to the perceived scene. But that element of offline input is enough to make it a clear case of imagination.
+
+Typically, there are further differences between the online and offline processes. When the new information to be updated on derives from sensory perception, we are hard put to articulate it verbally in its full specificity, to be the antecedent of a conditional. Moreover, when we learn something by perception or testimony, we usually learn other things too. When you learn by sight that the sheep have gone, you usually also learn that you can see that the sheep have gone. When you learn by testimony that the sheep have gone, you usually also learn that you have been told that the sheep have gone. But often we do not build that extra information into the antecedent of the corresponding conditional. For conditionals such as 'If the sheep have gone, I can see that the sheep have gone' and 'If the sheep have gone, I have been told that the sheep have gone' are far from trivial. Nevertheless, these differences of detail do not undermine the strong cognitive analogy between the online and offline processes.
+
+One consequence of the analogy is that any scepticism about the offline processes is liable to generalize to the online processes too. For example, someone who doubts that in suitable conditions the shepherd's imaginative exercise enables him to know that if the sheep have broken out of the pen and disappeared, they have gone down to the river should also doubt that in suitable conditions, on being told that the sheep have broken out of the pen and disappeared, the shepherd can know that they have gone down to the river. That looks like the thin end of the wedge for a far more general scepticism.
+
+Much of our knowledge of the future depends on cognitive processes relevantly similar to imaginative exercises. For consider some cognitive process by which we form expectations about the future based on our knowledge of the present. Although we know far less about the future than we do about the recent past, we are not entirely
+
+ignorant of the future. The process may be more or less hardwired into our brains, such as one for forming expectations about where a moving object in our visual field will be in a fraction of a second's time. Alternatively, the process may involve complex conscious reasoning, such as one for forming expectations about the political situation a year from now. Our imagination enables us to apply such a cognitive process offline, to imagined input about a time $t$, to reach a conditional conclusion of the form 'If X were to obtain at $t$, then Y would obtain at $t+1$.' Similarly, we can reach a conditional conclusion of the form 'If Y were to obtain at $t+1$, then Z would obtain at $t+2$.' Under conditions that make it legitimate to assume transitivity for the conditionals at issue, we can derive the further conclusion 'If X were to obtain at $t$, then Z would obtain at $t+2$ ', and so on. ${ }^{2}$ If these offline imaginative exercises are unreliable, the likeliest explanation is that the corresponding online processes for forming expectations about the future are also unreliable.
+
+An analogous point applies to large tracts of our knowledge of the past. Consider cases where we use inference to the best explanation to solve a crime or to interpret an archaeological site. For such abductive reasoning, we need auxiliary conditional premises of the form 'If the explanans had obtained in the past, then the explanandum would obtain now.' We may have to obtain those conditionals in the same way as before, by an imaginative exercise. Unless one has general sceptical inclinations, it is unwise to deny that, in suitable conditions, imaginative exercises are a source of knowledge.
+
+Could someone argue that what have here been called 'imaginative exercises' are really just inductive inferences? Most of them depend somehow on past experience, and go beyond it non-deductively. If that suffices for a cognitive process to be an inductive inference, then they are inductive inferences. But they do not depend on the subject's remembering the relevant past experiences. What matters is whether they have made the subject skilful enough in performing the imaginative exercise itself. It is irrelevant to the process whether the subject can assemble the particular premises of the supposed inductive inference. Nor is it remotely clear in the given cases how to fill in ' $F$ ' and ' $G$ ' in the conclusion of the supposed inductive inference, 'All Fs are Gs' (or 'Most Fs are Gs', for that matter). Thus it is also irrelevant to the process whether the subject can formulate the general conclusion of the supposed inductive inference. The imaginative exercises are inductive inferences only in a sense so loose as to be entirely unhelpful.
+
+# 5 
+
+We can test the cognitive view of the imagination by confronting a genuine structural difference between imagination and perception, one sometimes used to contrast perception as reality-directed with imagination as supposedly not so. The structured difference is this. If you perceive an F, then there is an F that you perceive. Macbeth literally saw a dagger only if there was a dagger that he saw; otherwise he only seemed to himself to be seeing a dagger. By contrast, you may literally imagine an F even if there is no F that you imagine. I am imagining a golden mountain in Austria. Since there is no golden mountain at all in Austria, a fortiori there is no golden mountain in Austria that I am imagining. What should we make of this difference? I will argue
+
+that it is predicted by the cognitive account of the imagination sketched above, and so confirms rather than disconfirms that account.
+
+First, consider the involuntary imaginative exercise of developing an initial hypothetical supposition, in effect answering a 'What if?' question. On the cognitive account, various offline cognitive procedures add further conclusions to a pool that starts with the initial supposition. The process can be iterated indefinitely. Although most of the procedures are non-deductive, reasoning by deductive logic is an especially good procedure from a cognitive point of view, since it guarantees truth-preservation. The deductive aspect of the whole process will look something like the method of tableaux in first-order logic, by which the consequences of the initial premises are teased out-although in our imaginative exercises the aim is not usually to reach a contradiction. For each logical constant, there is a rule for extending a branch of a tableau which contains a formula whose main connective is that constant. For present purposes, the rule that matters is the one for the quantifier $\exists$ ('something'). It says that if a branch contains a formula of the form $\exists x \Phi(x)$, then one may add to it the formula $\Phi(a)$, where $a$ is an individual constant that has not previously appeared on that branch. One can then apply the rule for the main connective in $\Phi(a)$ (if it has one), and so on. Informally, we can regard $a$ as an 'arbitrary name' for a satisfier of the formula $\Phi(x)$ as a value of the variable $x$-if there are several satisfiers, it does not matter which one. The point of the ban on previous occurrences of $a$ in the branch is to avoid prejudging anything else about the satisfier. If an interpretation $I$ verifies every formula on the branch before $\Phi(a)$, then it verifies $\exists x \Phi(x)$, so some interpretation differing from $I$ at most in making an object $o$ the value of $x$ verifies $\Phi(x)$, so modifying $I$ to make $o$ the denotation of $a$ yields an interpretation that verifies every formula on the branch up to and including $\Phi(a)$. The formula $\Phi(a)$ has the form of a formula expressing a singular proposition about a particular object, even if the individual constant $a$ does not really denote anything: after all, $\exists x \Phi(x)$ may be false on its intended interpretation.
+
+Now read $\Phi(x)$ as ' $x$ is a golden mountain in Austria'. Thus $\exists x \Phi(x)$ expresses the proposition that there is a golden mountain in Austria. If an imaginative exercise starts from that false hypothesis, the cognitive account of the imagination (defeasibly) predicts that developing it properly will involve applying some informal analogue of the tableau rule for $\exists$, and thereby adding some informal analogue of $\Phi(a)$ to the development. That is, one will do something formally similar to thinking of some particular object that it is a golden mountain in Austria, even though really there is no particular object of which one is thinking that it is a golden mountain in Austria. But that is a good description of a case in which one imagines a golden mountain in Austria, even though there is no golden mountain in Austria that one imagines. Of course, the description does not entail that one forms a mental image of a golden mountain in Austria, but we saw in Section 3 that forming mental imagery is not necessary for imagining. Although one may imagine a golden mountain in Austria by forming a mental image of one, the informal analogue of $\Phi(a)$ may be a mental image. Thus the very feature that was supposed to differentiate imagining from reality-directed attitudes is predicted by the account of imagining as a realitydirected attitude.
+
+In more general terms, the felt tendency of the imagination to be specific, to fill in details, is partly explained by the hypothesis that it uses something like the tableau rule for the quantifier $\exists$ in developing an initial supposition. The explanation can be strengthened with the additional hypothesis that the imagination also uses something like the tableau rule for disjunction, $\vee$, in developing the initial supposition. The rule says that if a branch contains a formula of the form $\Phi \vee \Psi$, then one may divide it into two sub-branches, one containing all formulas already on the branch and $\Phi$, the other containing all formulas already on the branch and $\Psi$. Informally, the idea is to explore the two (not mutually exclusive) ways in which the disjunction may hold separately. This corresponds to the dissatisfaction one tends to feel about, for instance, just imagining that the keys are in either the kitchen or the bedroom while neither imagining that they are in the kitchen nor imagining that they are in the bedroom.
+
+It is almost trivial that the imagination uses something like the other standard tableau rules in developing an initial supposition. For example, the rule for conjunction, \&, says that if a branch contains a formula of the form $\Phi \& \Psi$, then one may add to it both the formula $\Phi$ and the formula $\Psi$. Similarly, it would be hard to imagine that Mary is tall and thin without also imagining that she is tall and imagining that she is thin. On the cognitive view of the imagination, one would expect it to use something like the tableau rules in developing an initial supposition. The imagination conforms to that prediction.
+
+# 6 
+
+The cognitive view of the imagination does not predict that it will be cognitively reliable only for tasks just like those it evolved to serve. Its tendency to use something like rules of deductive logic is an example to the contrary, since they are quite generally truth-preserving. The simplest forms of reasoning to implement that are truth-preserving for practical matters are truth-preserving for all matters.
+
+Once we appreciate the role of the imagination as a standard means for evaluating conditionals and modal claims, we should be much less inclined to regard the use of thought experiments in philosophy (or natural science) as constituting any highly distinctive method. Still less should we be tempted to characterize such a method in terms of cooked-up categories such as 'philosophical intuition', which serve mainly to obscure the similarities between thought experiments and more routine exercises of the imagination in virtually every branch of human inquiry. We simply reserve the term 'thought experiment' for the more elaborate and eye-catching members of the kind.
+
+One might suppose that, as science progresses, the role of the imagination will increasingly be confined to the context of discovery, and that in the context of justification it will gradually be replaced by more rigorous methods. But there is evidence to the contrary. For rigorous science relies on mathematics, and so indirectly on the axioms or first principles of mathematics. But when one examines the justifications mathematicians give of their first principles, such as axioms of set theory, one finds unashamed appeals to the imagination. Things are complicated, because the justification is abductive: it involves the derivability of
+
+standard 'working' mathematics from the candidate first principles-and, one hopes, the non-derivability of contradictions. But it also involves the way in which the candidate first principles fit together as parts of an intrinsically simple, elegant, and unified picture of mathematical reality. Those theoretical virtues are needed to trump rival gruesomely gerrymandered pictures, for example, one on which the hierarchy of sets is truncated at an arbitrarily chosen large cardinal, in the usual manner characteristic of abductive theory comparison. Moreover, since by Gödel's second incompleteness theorem the axioms can be proved jointly consistent only on the basis of even stronger axioms that are inconsistent if the former are, much of mathematicians' confidence in the consistency of their axioms comes from the way in which they form such a coherent picture. Of course, they also have inductive evidence of their consistency, because no one has ever yet derived a contradiction from them, but mathematicians put comparatively little weight on such inductive evidence. They have much less confidence in the consistency of alternative axiom sets from which no one has ever yet derived a contradiction, but which do not seem to form a coherent picture. Without an imagination, one would be in no position to judge whether some candidate first principles form a coherent picture of mathematical reality. For the foreseeable future at the very least, imagination will play a crucial role in the context of scientific justification, not only in the context of scientific discovery.
+
+Whatever the function or evolutionary origin of our capacities, we are not forbidden to use them for other ends, including playful ones. Imagination has enabled humans to produce works of art, great and awful. Indeed, the combination of voluntary hypothetical suppositions and involuntary developments of those suppositions is reminiscent of the way some novelists describe novel-writing. An imagination is cognitively powerful only if it is capable of producing and developing fictions. But if we try to understand the imagination while taking for granted that fiction is its central or typical business, we go as badly wrong as we would if we tried to understand arms and legs while taking for granted that dancing is their central or typical business.
+
+# Notes 
+
+1. [This chapter was first published as Williamson 2016, under the same title as here.] This chapter is based on my talk to the 2012 Claremont conference on Knowledge through Imagination. Other versions of the material were presented at a workshop at the InterUniversity Centre in Dubrovnik and at the following universities: Belgrade, Bergen, Birmingham, Boğaziçi (Istanbul), Cambridge, Edinburgh, Gothenburg, Liverpool, London (King's College), Manchester, Oxford, Warwick (apologies to any I have forgotten). I am grateful to the audiences at all these events for stimulating discussion. The piece takes further ideas from my books The Philosophy of Philosophy (2007a) and, to a slight extent, Knowledge and its Limits (2000). Its development was so loosely related to the literature that I decided, contrary to the unanimous advice of editors and referees, not to add footnotes. Interested readers may find points of similarity with other chapters in this book.
+2. [We can dispense with the qualification about transitivity by making the transition from 'If X were to obtain at $t$, then Y would obtain at $t+1$ ' and 'If X were to obtain at $t$ and Y at $t+1$, then Z would obtain at $t+2$ ' to 'If X were to obtain at $t$, then Z would obtain at $t+2$ ', since
+
+even logics for counterfactual conditionals such as those of Lewis (1973) and Stalnaker (1968), which invalidate transitivity, validate the quasi-transitivity principle that $p \square \rightarrow q$ and $(p \& q) \square \rightarrow r$ entail $p \square \rightarrow r$. On such semantics, if there are no $p$-worlds then the conclusion is vacuously true, while if there are $p$-worlds then there are $(p \& q)$-worlds by the first premise, so, non-vacuously, the closest $p$-worlds are $q$-worlds and, nonvacuously, the closest ( $p \& q$ )-worlds are $r$-worlds; hence, non-vacuously, the closest $p$-worlds are $r$-worlds. Thus, by accumulating the results of the imaginative exercise as one goes along, one can iterate indefinitely. In the online case, this corresponds to using memories of the past as well as knowledge of the present in making predictions.]
+
+# 13 
+
+## Intuition, Understanding, and the A Priori ${ }^{1}$
+
+Paul Boghossian
+
+## Introduction
+
+Over the past several years, I have explored a particular version of the classical idea that we can explain the a priori justification that we have for certain of our beliefs by appealing solely to the understanding that we have of their ingredient concepts (see Boghossian 1996, 2003b, 2012). To use some terminology that has become standard, I have tried to show that some propositions are epistemically analytic, justifiably believable merely on the basis of being understood (see Boghossian 1996, Williamson 2007a). ${ }^{2}$
+
+This proposal, I have argued, should be sharply distinguished from the idea that some propositions are metaphysically analytic, that is, true by virtue of their identity alone and without any contribution from the 'worldly facts'. The latter idea has been justly discredited: even paradigm examples of 'analytic' propositions, such as All squares are four-sided, are about squares and sides and not about the word 'square' or the concept square. ${ }^{3}$ And when such an analytic proposition is true it is made true by the relevant worldly facts, in this case by facts about squares.
+
+There are many reasons for taking an account of a priori justification in terms of epistemic analyticity seriously, not least among them being that, at least in certain cases, such an account seems true: for example, it is plausible that my justification for believing that all squares have four sides rests exclusively on my understanding of the ingredient concepts. Another consideration in favor of such an account is its promise to explain a priori justification without invoking the potentially obscure and problematic notion of intuition.
+
+In what represents a substantial change of mind on my part, however, I have come to believe that this latter motivation-this fear of intuitions-is, ultimately, both futile and misguided.
+
+It is futile in that one cannot escape appealing to intuitions in the theory of the a priori. And it is misguided in that intuitions are not as problematic or as obscure as I had previously thought. In this essay, I will make a start (but only a start) at explaining and defending these claims: an adequate treatment would have to be much longer than is possible in this volume.
+
+I should clarify at the outset that I am not abandoning understanding-based accounts of the a priori altogether. I continue to believe that such accounts are correct for a certain range of cases. However, to this ongoing commitment, I would now add the following three observations.
+
+First, that understanding-based accounts won't cover the entire range of propositions that are known a priori, and that, as a consequence, intuitions are needed if we are to give a complete picture of this type of knowledge. As Kant would have put it, there are synthetic propositions known a priori, not just (epistemically) analytic ones.
+
+Second, in certain cases, the deployment of an understanding-based account itself relies on appeal to the notion of an intuition. ${ }^{4}$
+
+Finally, intuitions are not quite as problematic or obscure as I had previously assumed.
+
+# Two Types of Understanding-Based Account: Constitutive vs Basis 
+
+A priori justified beliefs that are good candidates to be explained by an understanding-based account include the following:
+(1) All quadrilaterals have four interior angles.
+(2) If Mary ate the apple and the pear, then Mary ate the apple.
+(3) It is necessary that whoever knows p believes p .
+(4) In the Gettier scenario, Mr. Smith has a justified true belief but does not know.
+(5) In the standard Twin Earth scenario, Oscar's word 'water' has $\mathrm{H}_{2} \mathrm{O}$ in its extension but not XYZ, while Toscar's word 'water' has XYZ in its extension but not $\mathrm{H}_{2} \mathrm{O} .{ }^{5}$
+
+What has not been widely understood, however, is that there are two distinct, indeed, mutually incompatible, ways in which the understanding might be a source of a priori justification. ${ }^{6}$
+
+On one type of account, S's understanding of p justifies S's assent to p in virtue of the fact that S's understanding of p is constituted in part by S's disposition to assent to p .
+(Constitutive) S's assent to p is justified by S's understanding of p in virtue of the fact that S's understanding of p is partly constituted by S's disposition to assent to p .
+
+On the other type of account, S's understanding of p justifies S's assent to p in virtue of the fact that S's understanding of p serves as a good epistemic basis for S's assent to p .
+(Basis) S's understanding of p justifies S's assent to p in virtue of the fact that S's understanding of p serves as a good epistemic basis for S's assent to p .
+
+Examples of both types of account may be found in the literature. Although they are very different, indeed, mutually exclusive, types of explanation, they are routinely conflated. ${ }^{7}$
+
+The idea behind a Constitutive account is the thought that, under certain conditions, an assent that is constitutive of a thinker's understanding of a given proposition (or of one of its ingredient concepts), will be, eo ipso, an assent to which she is entitled.
+
+To illustrate, suppose you are sympathetic, as many are, to a conceptual-role semantics for the logical constants. If so, you'll think that a disposition to assent to certain basic logical truths involving those constants (or to inferences involving them) is constitutive of your understanding them. For example, you may think that to possess the concept and you need to be disposed to assent to (at least some) instances of propositions of the form If $A$ and $B$, then $A .{ }^{8}$
+
+Of course, even if this were granted, there would still be a question about your justification for assenting to these propositions. Why should the metasemantic fact that your assenting to Conjunction Elimination (CE) is constitutive of your possessing and translate into the epistemic fact that you are justified in assenting to CE?
+
+Clearly, the answer here can't be that your understanding of and provides an epistemic basis for your assenting to CE, since your disposition to assent to p is not in general a good basis for your assenting to p .
+
+In the case of such understanding-constituting dispositions, explaining a priori justification in terms of the understanding will need to rely on the existence of true bridge principles of the form:
+(Concept-Justification Connection): For certain propositions p, if a disposition to assent to p is constitutive of understanding p , then a thinker who understands p is eo ipso entitled to assent to $\mathrm{p} .{ }^{9}$
+
+It's a non-trivial question in the theory of the a priori whether there are such bridge principles. (For more details on this see my 2003b and 2012.)
+
+However, even if their existence were considered unproblematic, our job would hardly be done, since it is clear that there are many understanding-based a priori propositions that could not be accounted for in this way.
+
+The key reason is that there are many understanding-based a priori propositions assent to which is not understanding-constituting.
+
+For example, my knowledge of (1), that all quadrilaterals have four interior angles, is understanding-based; but the usual understanding of quadrilateral will advert only to its being a closed figure consisting of four line segments linked end to end. And yet, although the definition of quadrilateral makes no mention of interior angles, my grasp of that definition can serve as the epistemic basis for my knowledge that all quadrilaterals have four interior angles.
+
+For these sorts of non-constitutive understanding-based assents, a thinker's understanding of the concepts ingredient in p serves as the epistemic basis for her assent to p. The assent is not constitutively built into the understanding, as on a Constitutive account, but is prompted by that understanding. And when it is prompted by it in the right way, the understanding is sufficient for justifying it. ${ }^{10}$
+
+Both Basis and Constitutive models are important, then, in that neither model, by itself, can account for the entire range of cases of understanding-based a priori justification.
+
+# Competent Dissent 
+
+Understanding-based accounts face many difficult challenges; of these, one has become very influential. It has been pressed with great force and detail by
+
+Williamson (2007a). Although I've discussed it in other writings, it will be useful to consider it again, against the backdrop of the distinction between Constitutive and Basis accounts.
+
+Williamson draws our attention to the following fact: not everyone who understands (3) assents to it.
+
+Many philosophers, native speakers of English, have denied [(3)]... They are not usually or plausibly accused of failing to understand the words 'know' or 'believe.' (2007a: 168)
+
+Some epistemologists, and hence, presumably, experts on the concepts of knowledge and belief, have officially rejected (3). This fact appears to pose a prima facie problem for understanding-based accounts of (3), a problem that we can formulate in a first pass as follows: If understanding (3) were sufficient for assenting to (3) with justification, how is it that these experts, who ex hypothesi understand (3) perfectly well, insist on rejecting (3)?
+
+Of course, if (3) were just a special case, we could quarantine it. But Williamson's idea is that there is nothing special about (3). For any proposition p that we might think of as epistemically analytic, we can imagine an 'expert' on p who, having developed sophisticated theoretical misgivings about p , rejects p with full understanding. ${ }^{11}$
+
+On the basis of such examples, Williamson puts forward a thesis that I shall label:
+(Generalized Competent Dissent, GCD) For any proposition p, it is possible for someone to dissent from p while retaining full competence with p (full understanding of p ).
+
+Thus, Williamson (2011) has maintained that not even assenting to instances of CE could be considered constitutive of possession of and since, even in that seemingly ironclad case, we could imagine someone developing sophisticated reasons for doubting CE, and so ending up refusing to assent to
+(2) If Mary ate the apple and the pear, then Mary ate the apple.
+
+Williamson takes the phenomenon of competent, indeed expert, dissent, to refute understanding-based accounts of the a priori. But, how, exactly, does it do so?
+
+The challenge assumes a different form depending on the type of understandingbased account at which it is directed. In both cases, though, the challenge proves to be answerable.
+
+# Competent Dissent and Constitutive Accounts 
+
+Let us start with a Constitutive account. With such an account, the threat from GCD looks quite direct, since a Constitutive account needs to rely on some constitutive understanding-assent links, the existence of which GCD denies.
+
+To sharpen our focus, let us look at a classic formulation of a proposed understanding-assent link, Christopher Peacocke's account of the possession conditions for and:
+(CPC) Conjunction is that concept $C$ to possess which a thinker must find transitions that are instances of the following forms primitively compelling, and must do so because they are of these forms:
+
+![img-3.jpeg](img-3.jpeg)
+
+To say that the thinker finds such transitions primitively compelling is to say this: (1) he finds them compelling; (2) he does not find them compelling because he has inferred them from other premises and/or principles; and (3) for possession of the concept $C$ in question (here conjunction) he does not need to take the correctness of the transitions as answerable to anything else. (1992: 6; emphasis added) ${ }^{12}$
+
+According to Peacocke, in order to understand the concept conjunction you need to find CE inferences primitively compelling: that is, compelling when considered on their own and independently of any other considerations. ${ }^{13}$
+
+Why this play with the notion of the 'primitively compelling'? The answer should be obvious: If you're thinking of understanding a concept in terms of assent, either to propositions or to inferences involving that concept, you want to include only those assents that are necessary for understanding. A logician may know all sorts of interesting truths about Conjunction; but most of those would be extraneous to what is required for understanding it. A physicist may know all manner of empirical truths involving the concept Conjunction, but these, too, would be extraneous to what is required for understanding it.
+
+Now, this observation poses a problem for Williamson's recipe for generating expert-based counterexamples to any proposed understanding-assent link, since it is obviously consistent with your refusing, on the basis of sophisticated theoretical considerations, to assent to a given inference form, that you continue to find that inference form primitively compelling, that is, when it is considered on its own and independently of these sophisticated considerations. Indeed, a natural description of Williamson's expert, who develops theoretical misgivings about CE, is that she retains the disposition to assent to CE but refuses to act on that disposition as a result of the theoretical misgivings. ${ }^{14}$ As we may put it, she may continue to find CE primitively compelling, even as she now finds it derivatively uncompelling.
+
+Williamson's expert, then, is not yet a counterexample to the claim that CE is constitutive of understanding Conjunction.
+
+Williamson's unerring sense of dialectic leads him to take the further required step. He invites us to imagine the following possible future for our expert: at first, she continues to find CE primitively compelling, even as she stops finding it compelling all things considered. After a while, though, she stops finding it even primitively compelling. It becomes second nature to her to refuse to assent to CE. When she now looks at CE, she no longer finds it tempting. She even forgets the theoretical reasons that first inclined her to give up CE. If you ask her why she doesn't follow virtually every other person in endorsing CE, she says she just doesn't see its plausibility. She may even say that it's obvious to her that CE is fallacious, but offer nothing further. As so developed, Williamson claims, the imagined expert constitutes a decisive counterexample to the claim that assent to CE is constitutive of understanding Conjunction.
+
+Unfortunately, the argument doesn't work. The problem is that the more unselfconscious we make our expert's refusal to assent to CE, the more implausible it becomes that she really does continue to possess and (as opposed to possessing some closely related concept).
+
+If our expert dissenter really did succeed in relinquishing any disposition to assent to CE, and presented no particular reason for her refusal, insisting, for example, that it was simply obvious that She ate the apple does not follow from She ate the apple and the pear, it would cease to be plausible that she is disagreeing with us about and. ${ }^{15}$
+
+Let me put this point another way. If the expert's offering sophisticated reasons for refusing to assent to CE were playing no role in securing the verdict that she continues to possess and, then it ought to be possible to describe an entirely unsophisticated person, a child, for example, who has mastered Conjunction but who also refuses to assent to CE without offering any particular reason for that refusal.
+
+But it is clearly not possible to do any such thing.
+Recall here Wittgenstein's discussion in the Philosophical Investigations of the conditions under which we would be willing to say that a child has grasped the concept of expanding the series +2 (1953: \$185). As Wittgenstein points out, one of the conditions we insist on is that the child be able to expand the series correctly in a range of simple cases. Unless and until the child has been able to do this reliably enough, we are unwilling to attribute mastery of the concept to him. Deviation from these conditions would require special explanation, if it is to be compatible with mastery of the concept.
+
+Williamson's strategy of using experts on a concept C to secure counterexamples to any proposed understanding-assent link $\mathrm{p}(\mathrm{C})$ is flawed. The fact that the person is an expert on C serves to make it plausible that the person possesses the concept C. But the fact that she arrives at her refusal to assent to $\mathrm{p}(\mathrm{C})$ via sophisticated theoretical reasons means that she can at most claim to find p derivatively uncompelling, not primitively uncompelling. To the extent to which we develop the example so as to make it seem that the expert now finds CE primitively uncompelling, to that extent the example loses its force.
+
+So much, then, for trying to use expert-based competent dissent against the existence of constitutive understanding-assent links.
+
+# Competent Dissent and Basis Accounts 
+
+Let us turn to asking how the phenomenon of competent dissent might be used against a Basis account.
+
+On such an account, S's a priori justification for assenting to (1),
+(1) All quadrilaterals have four interior angle
+is said to be given by her understanding of the concept quadrilateral (and the other ingredient concepts). She is justified in assenting to (1) not because assenting to it is constitutive of understanding (1), but because her understanding is, somehow or other, a sufficient epistemic basis for assenting to (1), and she bases her assent on that understanding. ${ }^{16}$
+
+But, now, if GCD is true, a problem seems to arise for a Basis account of (1): For how could the justification provided by the understanding of (1) be sufficient for assenting to (1), when some people with understanding assent to it precisely because they understand it, while others refuse to assent to it, despite understanding it just as well as those who do? How could the justification provided by the understanding be visible to some and yet hidden from others?
+
+Although this can look like an impressive objection, and some important philosophers have endorsed it (e.g., Sosa, 2007), it is answerable.
+
+We are familiar from other epistemic contexts with the phenomenon of a perfectly good justification for believing p being occluded from a thinker by his believing some misleading considerations that seem to support not-p. Take a perceptual case. I may have perfectly good visual evidence that there is a fox in front of me. But I ignore this good visual evidence because of my strongly held background belief that there are no foxes in New York, and that the creatures that look like foxes in New York actually belong to a species of locally bred dog. In such a case, the occlusion of a pre-existing justification by what is taken to be, rightly or wrongly, a trumping consideration is not hard to understand.
+
+And there is no reason that I know of why this type of occlusion should not also occur in cases where it is the understanding, rather than perception, that is providing the relevant justification. That takes care of any potential threat that the phenomenon of expert competent dissent may be thought to pose for a Basis account.
+
+# Two Ways of Believing a Basis-Explicable A Priori Proposition 
+
+Consider again the examples of a priori beliefs that are plausibly explained by a Basis account.
+(1) All quadrilaterals have four interior angles.
+(4) In the Gettier scenario, Mr. Smith has a justified true belief but does not know. ${ }^{17}$
+(5) In the standard Twin Earth scenario, Oscar's word 'water' has $\mathrm{H}_{2} \mathrm{O}$ in its extension but not XYZ, while Toscar's word 'water' has XYZ in its extension but not $\mathrm{H}_{2} \mathrm{O}$.
+
+When we look at these examples of Basis Account-friendly propositions, we are liable to be struck by the fact that there seem to be two importantly distinct types.
+
+In the case of an example like (1), it is plausible that you come to believe (1) because you work out that it is true. Indeed, it is plausible that you work it out by inferring it from the definition of quadrilateral that you have previously grasped.
+
+Another case where you come to work out that a proposition is true on the basis of your understanding, but which is interestingly different from (1), is given by Elijah Chudnoff. Chudnoff (2013) considers a thinker who works out that
+(6) Necessarily, any two circles of unequal radii can intersect at most at two points.
+
+You visualize two circles of unequal radii and, by manipulating them in imagination, you come to realize that a proposition as strong as (6) is true.
+
+This example is interesting in that, although it is clearly plausible that the truth of (6) is worked out and worked out on the basis of the subject's understanding of the ingredient concepts, it is implausible to think that it is worked out via an inference from the relevant definitions. Rather, the working out takes place partly in the imagination, with the understanding supplying the relevant images, and the license to generalize and modalize the proposition that they appear to illustrate. ${ }^{18}$
+
+In both of these cases, your justification for believing p relies on your working $p$ out on the basis of your understanding, whether this working out be via inference from a definition of one of its ingredient concepts, or via the imagination, or perhaps in other ways as well.
+
+It's not easy to fully specify this notion of 'working out'. But the crucial aspect of the phenomenon it points to is that the subject ends up with some grip, on the basis of reasoning in a broad sense, on why the proposition in question is to be believed, on the grounds for believing it.
+
+Consider, though, by way of contrast, the famous Gettier thought experiment. In that case, you are told that Mr. Smith stands in a certain relation to a given proposition p. After contemplating the situation for a bit, it comes to seem to you that, in the situation as specified, Mr. Smith has a justified true belief that p , but does not know that $p$.
+
+This process could be represented in one of two ways. It could be represented as your performing a person-level inference from
+(7) Mr. Smith stands in the Gettier relation to p
+to
+(8) Mr. Smith has a justified true belief but does not know.
+
+Or, it could be represented as your considering the conditional
+(9) If Mr. Smith stands in the Gettier relation to p, then Mr. Smith has a justified true belief but does not know
+and its coming to seem true to you, leading you to assent to it. ${ }^{19}$
+Either way, the crucial point is that, in this case, while you may have a good grip on why Mr. Smith has a justified true belief in the scenario as described, you don't have a good grip on why Mr. Smith does not know. It simply strikes you that he does not know.
+
+There is an important sense in which the transition from (7) to (8), or the conditional in (9), is simply found to be 'primitively compelling' (although, of course, this need not imply that the transition or the proposition is concept-constituting: being found primitively compelling is a necessary condition for being conceptconstituting, not sufficient for it). You can identify no premises from which you worked out that (9) is true. You can identify no definition of knowledge from which you deduced it. (The only definition of knowledge you are aware of is the JTB definition, and that predicts precisely the opposite conclusion.) Although you know in virtue of which features of the situation Mr. Smith has a justified true belief,
+
+you don't know in virtue of which features of the situation he doesn't know (philosophers have been arguing about that ever since the thought experiment was first put forward).
+
+When (9) strikes you as true, you might develop some hypotheses about why it is true, hypotheses about the features of the contemplated scenario in virtue of which Mr. Smith does not know. You might think that it has to do with the fact that his reasoning involves false lemmas; or with the fact that the method by which he formed his belief could so easily have led to a false belief. And so on.
+
+All these hypotheses, though, would have the status of conjectures. And even if every single one of them turned out to be false, this would not affect the probative value of the verdict elicited by the thought experiment. It would still count as a datum that anyone standing in the Gettier relation to p would have a justified true belief that p , but not know that p .
+
+Similarly, in the Twin Earth case. You don't know in virtue of which features of the case it strikes you as true that Oscar's and Toscar's extensions of 'water' are nonoverlapping. What you know is that it simply strikes you as true; and that fact sets off a search for the grounds of its truth.
+
+This point is made even more vividly by Trolley examples. ${ }^{20}$ When you contemplate the first Trolley case, the one where you sacrifice the one to save the five by flipping a switch that moves the trolley onto a side-rail, you might think you see that the moral is a consequentialist one: you have a duty to save the five, even if it involves sacrificing the one.
+
+But that confidence is soon undermined by your reluctance, in the second variant of the thought experiment, to sacrifice the one to save the five where that act would involve actively throwing the large man standing next to you on the bridge onto the path of the oncoming trolley.
+
+What, then, is the moral of the pair of thought experiments taken together? Is it that you are required to save the larger number under conditions where you can do so simply by letting someone die, but that it is impermissible for you to save the larger number if it requires you to actively kill someone?
+
+We don't yet know what these pair of thought experiments show. Anything we say at this point would be conjectural, and subject to refutation by further considerations or further thought experiments. What we have is the raw data about what it is morally permissible to do under the two different scenarios.
+
+Like the cases before them, this pair of Trolley cases illustrates that sometimes a proposition-in these cases, a conditional normative proposition-simply strikes you as true. You don't work it out from identifiable premises. You don't know why it is true. You don't know if there is a general principle that it exemplifies and which would predict the pattern of verdicts you are prepared to make.
+
+All you have is that it vividly strikes you as true; and as such, you accept it. You treat it as a datum (defeasible, to be sure) that any acceptable theory of the topic should respect. In this respect, our intuitions about these cases resemble perceptions, and the verdicts based upon them resemble perceptual judgments. They are data awaiting proper explanation by a deeper theory.
+
+# A Role for Intuitions in Basis Accounts 
+
+Let us set aside for now the cases where an a priori justified proposition is believed because it is worked out. Let's look at cases where an a priori proposition is not worked out at all, but simply strikes you as true.
+
+If we wish to say that, in these latter cases, your a priori justification for the proposition believed is given by your understanding of the concepts ingredient in the belief, how should we think about this? How could the understanding justify a proposition other than by showing it to follow from some premises (typically from a definition)? What could be the model for some non-inferential way in which our understanding of knowledge or extension could justify, respectively, the Gettier proposition, on the one hand, and the Twin Earth proposition, on the other?
+
+Some philosophers, Ernest Sosa, for example, would have no great difficulty with this question. Since Sosa is, in effect, a Reliabilist about justification, he can simply say that 'we have a competence grounded in our understanding' for telling the true from the false in the particular domain under discussion. And it is that understanding-grounded reliability that explains (indeed constitutes) our justification.
+
+However, since Reliabilism is a clearly inadequate view of epistemic justification, I cannot accept that answer. As a result, I face the problem of trying to say how our understanding of a proposition could non-inferentially justify our assent to that proposition. How could the relation between our understanding of p and our assent to p be analogous to the relation that obtains between our perception that p and our assent to p ? This is the theoretical point at which intuitions seem to supply just what's needed in order to make Basis accounts work.
+
+What I mean by 'intuition' I will explain in further detail below. For now, it will suffice to say that I intend to be invoking the classic (if still controversial) idea of an 'intellectual seeming'. This notion is to be sharply distinguished from any doxastic notion such as judgment, or an inclination to judge. It is to be thought of as the intellectual version of a sensory seeming (the sort of seeming that is caused in you by your vision, as when it visually seems to you that the cat is sleeping on the bed).
+
+The sensory seeming is to be distinguished from the visual state that causes it. Two visual states may be identical, even as the sensory seemings that they cause are distinct. We know this most vividly from the case of aspect-seeing, as when one and the same diagram, and hence in the appropriate sense, one and the same visual state, sometimes seems to present a duck and sometimes a rabbit.
+
+We see this phenomenon vividly in the intellectual case as well, as when a pun is experienced first with one meaning and then with another. For example:
+(10) I was wondering why that baseball was coming towards me so fast; then it hit me.
+
+Most of us first hear (10) with the physical meaning of 'hit', and immediately thereafter with the cognitive meaning of 'hit'. This alternation between the two distinct meanings heard expressed (a phenomenon which rightly fascinated Wittgenstein) is not an alternation between states that have individuating sensory
+
+phenomenologies; it's an alternation between two intellectual impressions of which thought is being expressed.
+
+We get a similar phenomenon in the syntactic case. Most people, when they first hear the garden-path sentence
+(11) The horse raced past the barn fell.
+hear it as ungrammatical. Eventually, though, they light on the passive sense of 'raced' and then experience the perfectly coherent thought that is expressed by the sentence under this grammatical guise.
+
+These examples form part of the classical case for the involvement of intuitions, or intellectual seemings, in connection with ordinary cases of linguistic and syntactic understanding. And this no doubt explains why the idea that we manifest our syntactic and semantic competence through intuitions-about grammatical wellformedness, on the one hand, and analytic entailments, on the other-is hardly a new one. ${ }^{21}$
+
+However, once we have made clear the distinction between Constitutive and Basis accounts of the epistemically analytic, and the difference between propositions that are believed because they are worked out, and those that simply strike us as true, we are in a position to see that, in addition to this standard observational evidence, there is a strong theoretical motivation, of a broadly internalist sort, for giving intuitions a role, even in what are meant to be understanding-based accounts. That role emerges when we ask, How does your understanding of $p$, in a case where your understanding does not supply you with a premise for inferring p , give you an epistemic basis for believing p ?
+
+It is hard to see what could count as an internalistically acceptable answer to this question, if not something along the following lines: The understanding of p , when appropriately prompted, supplies you with the intuition that p . If we were unable to provide an answer of this sort, we would be hard-pressed to say how the understanding of p could serve as an (internalistically recognizable) epistemic basis for believing p .
+
+This, then, is part of the reason for why I have come to regard the avoidance of intuitions in the theory of the a priori as futile. The main stratagem by which intuitions were to be avoided was to be through understanding-based accounts of the a priori. However, it turns out that, once enough relevant distinctions have been made, the principal type of understanding-based account, the Basis version, will need to appeal to intuitions in order to tell a satisfying epistemological story.
+
+# Synthetic A Priori Propositions: Normative Truths 
+
+Be that as it may, there is an even stronger reason for doubting that the theory of the a priori can make do without appealing to intuitions-and that is that there are important cases of a priori justified belief that cannot be explained solely by the understanding that we have of them. To put it in Kantian terminology, there are synthetic a priori propositions. In particular, all substantive normative principles are synthetic a priori. I will illustrate my argument by focusing on the case of
+
+moral principles, but the argument is, I believe, a general one that applies to all substantive normative principles.
+
+What do I mean by a 'substantive moral principle'? Let us agree that the minimal content of a moral judgment claiming that some act of type A is wrong (typically) expresses the speaker's distinctively moral disapproval of A, and (always) claims of A that it merits that distinctive sort of disapproval. I shall take this to be the uncontroversial minimal core of a concept like (morally) wrong. ${ }^{22}$ Mutatis mutandis for the other canonical moral concepts.
+
+A non-substantive, or trivial, moral proposition would then be an obviously epistemically analytic claim such as, for example,
+(12) If an act A is morally wrong, then it merits moral disapproval.
+
+By contrast, a substantive moral principle would involve claiming that some particular act-type was morally wrong, as, for example, in:
+(13) Inflicting severe pain on babies just for fun is morally wrong.
+(14) Another person's suffering is a prime facie moral reason for someone to help relieve it.
+
+Substantive moral claims can thus be represented as being of the following form:
+(Moral Norm, MN) Necessarily, if x is D , then x is M
+where ' D ' is a canonical descriptive term and ' M ' is a canonical moral term.
+Consider (13). Most of us believe (13). Indeed, most of us believe that it is as fully justified a proposition as we are likely to encounter; ${ }^{23}$ and that it is justified a priori. The question of concern to me at the moment is: Does our justification for believing (13) rest solely on our understanding of its ingredient concepts?
+
+Some philosophers are inclined to think that Moore (1903a) already showed us that the answer to this question is 'No' (see Darwall, Gibbard and Railton, 1992, Fine 2002). Although I agree with Moore's conclusion, I believe that the considerations he adduced in its favor are vulnerable; I hope to do a little better.
+
+How did Moore argue for the claim that substantive moral principles could not be (in my terms) epistemically analytic? Without delving into the exegetical details, his most famous argument involves an appeal to a restricted version of the doctrine we have previously encountered as (Generalized Competent Dissent, GCD). The restriction is to substantive moral propositions:
+(Moral Generalized Competent Dissent, MGCD) For any substantive moral proposition p , it is possible for there to be someone who dissents from p while retaining full competence with p .
+
+The weaknesses in Moore's argument should be apparent from our previous discussion.
+For one thing, as we have seen, there is no general warrant to believe GCD. If there is warrant to believe MGCD, the special case where GCD is restricted to moral principles, we would need an explanation as to why. But Moore offers no such explanation.
+
+Second, and as we have also already seen, merely establishing that a particular assent is not constitutive of understanding doesn't imply that our justification for
+
+that assent is not understanding-based, since it's possible that that justification is explained by a Basis model rather than by a Constitutive model.
+
+For both of these reasons, Moore fails to justify the claim that our knowledge of moral principles cannot be explained by the understanding alone. In what follows, however, I will briefly supply an alternative argument for the claim that substantive moral principles are synthetic a priori.
+
+Let's begin with the observation that, on either the Constitutive model or the Basis model, if a given proposition of the form MN were epistemically analytic, then mere reflection on the concepts wrong and $D$ would suffice for you to justifiably believe that that instance of MN is true. However, mere reflection on the relevant concepts doesn't suffice for such belief.
+
+To see why, suppose the opposite. Imagine that the concept that you would express by 'wrong' includes not only the minimal core that I previously outlined, according to which to call an act-type A wrong is to claim that A merits disapproval of the distinctively moral type, but also a substantive conception of which acts are wrong. For example, suppose it can be shown to follow from the concept that you express by 'wrong' (in the relevantly broad sense of 'follow'), that it is morally wrong to ignore someone else's pain if, at little cost to yourself, you could help relieve it.
+
+About such a substantive concept, embodying a substantive view of which acttypes count as wrong, it seems we can always competently ask:
+(Concept Correctness Open Question) Yes, but is that the correct concept of wrong, the one that specifies those acts that are genuinely deserving of moral disapproval? We can all agree that act-type A is ruled wrong by your substantive concept of 'wrong'; but is it genuinely wrong?
+
+Consider the contrast here with the concept quadrilateral. If someone said: 'According to my concept quadrilateral, a quadrilateral always has four sides', it wouldn't make any sense to ask, 'Yes, but is that the correct concept quadrilateral? Is that the concept that delivers the genuinely correct verdicts about how many sides quadrilaterals have?' (Of course, one could always ask whether a particular concept expressed by a word w is identical to the one that other members of one's community also express by w; but that is a different matter.)
+
+By contrast, it always seems to make sense to ask, about any moral concept that embodies a substantive view about what counts as right and wrong, whether it is correct, whether it correctly reflects whatever moral facts there are about the rightness and wrongness of acts. ${ }^{24}$
+
+Although the matter deserves a great deal more discussion than I can give it here, the argument I have offered seems not to be restricted to moral concepts but would appear to apply to any normative concept whatsoever, including those that are characteristic of the theories of rationality and justified belief. ${ }^{25,26}$
+
+If these considerations are correct, we cannot think of the a priori justified normative judgments that we are tempted to make as simply revealing to us some information that is already encoded within our canonical normative concepts.
+
+Furthermore, if these a priori justified normative judgments are supported by intuitions, as they often seem to be, then those intuitions cannot be thought of as simply revealing to us the natures of our moral concepts (as on Basis accounts), but
+
+must be thought of more ambitiously, as revealing to us the true natures of moral right and wrong.
+
+Fine (2002) would resist this last conclusion. He has maintained that Moore's Open Question Argument defeats not only the claim that normative truths are built into our moral concepts, but also the view that they are built into the very natures of the properties of right and wrong. Since Fine takes it that all metaphysically necessary truths are grounded in facts about the natures of the implicated properties, he concludes that moral truths cannot be regarded as metaphysically necessary but must be thought of as involving a sui generis notion of necessity, namely, normative necessity. This view of moral truths makes them analogous to nomological necessities, like laws of nature-that is to say, contingent from a metaphysical point of view.
+
+This is quite a startling picture of moral truths and makes it very hard to see how we could have any a priori knowledge of them-via intuition, or in any other way.
+
+It is, therefore, important to see that Fine's conclusion about moral properties is not supported by the version of Moore's Open Question Argument that I have been presenting here. My version applies exclusively to the normative concepts, asking whether any particular normative concept could encode substantive normative facts. This might equivalently be put by asking whether any particular normative concept correctly reflects the essence of the properties of right and wrong that are designated by our normative concepts.
+
+What does follow from my version of Moore's argument is that, if intuitionbacked moral knowledge is to be possible, there must be intellectual seemings whose justificatory power is not sourced in the understanding alone.
+
+The acknowledgement of such non-understanding-sourced intuitions will sit ill with the theories of many philosophers, even of those who are not skeptical about intuitions. Intuition-friendly philosophers like Sosa, Goldman, and Pust, for example, all insist that intuitions ultimately derive whatever probative power they have from being sourced in the understanding (see Sosa 1998, 2007; Goldman 2007; Pust 2000).
+
+However, if my argument works, it shows the need for an epistemic resource in the theory of the a priori that is not merely grounded in our conceptual understanding. Since I believe that it is independently plausible that that resource is provided by the rationalist notion of an intuition, or intellectual seeming, I take it to be an argument for the existence of such intuitions, ones whose probative power derives not merely from our understanding of concepts.
+
+To put this point another way, we must recognize a distinction between a proposition that is self-evident-that is justifiably believable simply on the basis of being understood-and propositions that are intuitive-that is justifiably believable not merely on the basis of being understood but also because, when one considers them, one has the intellectual impression that they are true.
+
+# Interim Summary 
+
+I have argued that there are two distinct types of understanding-based accounts of a priori justification, Constitutive and Basis. While the first type of account relies on there being constitutive assents, the second one does not.
+
+I further argued that both types of theory survive the invocation of the phenomenon of expert competent dissent, a phenomenon that is widely taken to undermine any understanding-based account of a priori justification.
+
+However, I noted that a Basis model needs to rely on the notion of an intuition in order to provide a satisfactory epistemology of a priori justification.
+
+And that, in any case, there are important instances of a priori justification that cannot be explained at all by understanding-based accounts.
+
+I concluded that this establishes the need to recognize intuitions as a source of a priori warrant, alongside the understanding.
+
+# The Non-Uniformity of Sources of the A Priori 
+
+If the argument up to this point is correct, justification in the a priori domain has more than one source-some a priori justification is grounded in the understanding, while some is grounded in intuition.
+
+Is this a plausible outcome? Shouldn't all a priori justification derive from a single source in much the way in which (as we are prone to think) all a posteriori justification derives (ultimately) from the single source of sensory experience?
+
+That the a posteriori has a single source is secured trivially and by definition-the a posteriori just is justification that derives ultimately from experience. (That's not to deny, of course, that there are different subspecies of a posteriori justification-for example, inferential and perceptual.)
+
+A priori justification, by contrast, has a merely negative characterization: it is that justification which is not a posteriori. And this means that there is no definitional guarantee that everything that is a priori will have the same epistemic source. For all that the notion of apriority speaks to, it is possible that some a priori justification has its source in the understanding and the rest in some other source, for example, in intuition.
+
+## Basic Skepticism about Intuitions: Phenomenology and Intellectual Seemings
+
+But how could intuitions reveal to us the true natures of such properties as right and wrong, or of any other property for that matter? Isn't this just to postulate one mystery in order to solve another?
+
+I understand well this type of skepticism about the justificatory power of intuitions; I used to endorse it myself. ${ }^{27}$ But, as I've indicated, I've come to think that an appeal to intuitions is inevitable and that many of the misgivings that philosophers have about them are misguided. Obviously, there is a huge number of issues to be discussed; here I'll only be able to make a start on some of the most basic.
+
+An intuition, as I understand it (following many others), is an intellectual seeming. ${ }^{28}$ An intellectual seeming is similar to a sensory seeming in being a presentation of a proposition's being true; yet dissimilar to it in not having a sensory phenomenology.
+
+It is also to be sharply distinguished from any species of judgment; it must be understood as pre-judgmental and pre-doxastic, if it is to be capable of serving as an epistemic basis for a judgment.
+
+To illustrate, let's go back to the case of the Trolley problem about whether to throw the large man off the bridge in order to save the lives of the five innocents trapped below. In thinking about this case, it can come to very vividly seem to you that it would be wrong to throw him off the bridge. But we can also imagine that even while it so seems to you, you hesitate to make the judgment, wanting to assure yourself that you have not overlooked anything. Finally, satisfied, you make the judgment that it would be wrong. The state of its seeming wrong to you was intellectual, not sensory; yet evidently pre-judgmental and pre-doxastic. When the judgment finally came, it was based on that pre-judgmental seeming.
+
+This, and many other intuitive judgments appear to instantiate this type of threestep process: you consider a scenario and a question about it; after sufficient reflection, a particular answer to that question comes to seem true to you, either because, as we saw earlier, you work out that it is true, or because, without working it out, it just comes to strike you as true; finally, you endorse this proposition.
+
+Recently, however, a great deal of skepticism has been directed at the very existence of intellectual seemings in the sense invoked here. Skeptics say that when they try to introspect intellectual seemings they come up empty (Cappelen 2012, Deutsch 2015, and Williamson 2005). All they encounter, they say, is either the judgment itself, or, if you insist on something pre-judgmental, an inclination to judge. Williamson, for example, says:
+
+Although mathematical intuition can have a rich phenomenology, even a quasi-perceptual one, for instance in geometry, the intellectual appearance of the Gettier proposition is not like that. Any accompanying imagery is irrelevant. For myself I am aware of no intellectual seeming beyond my conscious inclination to believe the Gettier proposition. Similarly, I am aware of no intellectual seeming beyond my conscious inclination to believe Naïve Comprehension, which I resist because I know better. (2007a: 217)
+
+It is certainly true that a vivid phenomenology is not ordinarily associated with the intuitions we have in response to thought experiments. But I don't believe that this observation gives us an adequate basis for being skeptical about intuitions, that it marks a distinction between intuitions and other undeniably real phenomena of conscious mental life.
+
+Consider the very thing that the intuition skeptic is not skeptical about-namely, occurrent judgment. As I survey this room, there is a sense in which I am making dozens of judgments, and acquiring the corresponding beliefs. If this way of putting things seems somehow too 'active', then let's say that as I survey this room I note various things and accept various propositions and thereby acquire the corresponding beliefs.
+
+But it would be false to say that each of those occurrent noticings, acceptances, or judgments has its own distinctive phenomenology, at least not if what we mean by 'phenomenology' is the type of phenomenal quality that is characteristic of sensation. Certainly, I can make various judgments without saying the words of a public
+
+language to myself (as John Broome seems to have been inclined to say at some point (see Broome 2013)).
+
+Another interesting example of a conscious mental phenomenon that lacks a distinctive phenomenology is a phenomenon I have come to label 'taking'. I believe a strong case can be made for saying that what distinguishes person-level inference from mere associative thinking is that, in an inference, the transition from one thought to another is mediated by the thinker's taking it that the 'premise' thought supports the 'conclusion' thought (see Boghossian 2014). But it would be wrong to identify this taking with a mental state that has a distinctive phenomenology. ${ }^{29}$
+
+Thus, the absence of a vivid phenomenology should not be regarded as decisive grounds against the existence of intellectual seemings.
+
+# Justification by Inclinations to Judgment 
+
+Well, perhaps there is no good reason not to believe in intellectual seemings; but what positive reason is there to believe in them? Why can't we do whatever needs doing simply with the notion of an 'inclination to judgment', as Williamson claims? Why do we need to recognize phenomenologically elusive states of conscious 'intellectual seemings' which are not themselves judgments, or inclinations to judge?
+
+The main reason for being dissatisfied with any sort of doxastic substitute for intellectual seemings is that no such substitute could give us the means by which to explain, in any sort of internalistically acceptable way, how we could be justified in making the a priori judgments in question.
+
+Consider again the Gettier scenario and the Gettier judgment that we end up with, that Mr. Smith has a justified true belief but does not know. This judgment, we believe, is strongly justified, indeed, so strongly justified that it is capable of refuting the very strongly entrenched JTB theory. Moreover, we take it to be justified a priori. Let us assume we are correct in these assumptions. How is the intuition skeptic, who believes only in inclinations to judgment, to explain these facts?
+
+On the intuition-friendly story, the Gettier judgment is justified by the Gettier intuition: that Mr. Smith, in the circumstances as described, has a justified true belief but does not know is supported by its intellectually seeming to the thinker that Mr. Smith has a justified true belief but does not know. We shall shortly look at this story in greater detail. But it has an epistemic form that is familiar to us from the empirical case (the justification of judgment by sensory seemings).
+
+But what can the intuition skeptic offer us?
+He can try saying that your Gettier judgment is justified by your inclination to make it. But that wouldn't by itself be a good answer. Your being inclined to judge that p is not usually a good reason, all by itself, for your believing that p .
+
+Here, once again, Reliabilism would be able to provide an easy solution. Suppose your being inclined to judge that p were, under the relevant conditions, a reliable means of arriving at the truth. Then, under the terms of Reliabilism, your judgment that p would be justified by your inclination, without there being any need to postulate intellectual seemings as the basis for the judgment that p .
+
+Unfortunately, Reliabilism is false. ${ }^{30}$ (It is striking how dramatically the landscape of epistemological issues would be affected if Reliabilism were a viable theory of epistemic justification.)
+
+If we set Reliabilism aside, the only other conditions under which your inclination to judge that p would justify your judging that p would be if your inclination were based on its following, and on its seeming to you to follow, from some justified background theory of yours, that p .
+
+If we apply this observation to the Gettier case, the only conditions under which your inclination to make the Gettier judgment could justify your making the Gettier judgment would be if it followed, and seemed to you to follow, from your background theory of knowledge, that Mr. Smith has a justified true belief but does not know.
+
+The trouble (as we have already seen) is that your background theory of knowledge is presumably the JTB theory of knowledge. And far from its following from the JTB theory that Mr. Smith does not know, it is actually inconsistent with the JTB theory that Mr. Smith does not know. Indeed, the JTB theory is what gets refuted by the Gettier judgment.
+
+So, how, on this account, could we be justified in making the Gettier judgment? However, if we are not justified in making the Gettier judgment, how could it be rational for us to have overthrown centuries of epistemological theorizing on its basis?
+
+The problem here is a perfectly general one, as I hope is clear. Through thought experiments, and other exercises of the imagination and/or understanding, we arrive at (typically direct) a priori truths that can serve to refute previously well-established background theories.
+
+The intuition-skeptic's story, that the a priori judgment flows from an antecedently justified background theory, is deeply problematic, because that background theory may not only not entail the judgment; it may actually be refuted by it.
+
+Someone might believe this objection to the intuition-skeptic too hasty for the following reason. Admittedly, our intuitive judgment about the Gettier case does not derive from our explicitly held philosophical theory about knowledge, the JTB theory. But perhaps there is some other theory that we hold not explicitly, but tacitly, and that entails the Gettier judgment? When we react to the Gettier thought experiment with the Gettier judgment, might we not be manifesting our acceptance of this tacit theory? ${ }^{31}$
+
+There are at least two reasons why this line of thought can't save the proposal on offer.
+
+First, if appeal to such a tacit theory is to genuinely shore up an intuition-skeptical view, it had better be uncontroversial that the propositions of this tacit theory can themselves be justified without appeal to intuitions. However, if my previous discussion of the synthetic a priori status of normative propositions is correct, they cannot be.
+
+Second, and putting this first objection to one side, we would still need to explain why we always trust the deliverances of the tacit theory over those of the explicit one. Why do we treat the putative Gettier truth as a counterexample to the JTB theory? Why not, rather, regard the thought experiment as showing that we hold a
+
+false tacit theory on the grounds that it has been shown to be in conflict with what the received view, the JTB theory, predicts?
+
+Think of the corresponding issue as it might arise in the empirical sciences. If we discerned a conflict between an innately acquired and tacitly held folk physics, and an explicitly arrived at physical theory, we certainly wouldn't immediately privilege the folk physics. On the contrary, we would typically consider it refuted. ${ }^{52}$ With what justification, then, do we privilege the tacit theory of knowledge over a theory that had been developed by such giants as Plato and Russell, and which had been accepted as received wisdom by countless generations of philosophers?
+
+The fact that we (nearly) always privilege the intuition-supported judgment shows that we regard it as more strongly justified than its negation, a negation which is supported by all those explicit arguments.
+
+But we don't yet have an explanation of why we would be right to do so, if we are restricted to appealing solely to the resources provided by the intuition-skeptic. It remains to show, of course, that we don't face a similar epistemological difficulty, if we help ourselves to the idea of an intellectual seeming. Unfortunately, that is a huge task which cannot be undertaken within the confines of the present volume and so will have to await another occasion.
+
+# Conclusion 
+
+Understanding-based accounts are plausible for a range of important cases of a priori justification. They come in two importantly different versions, neither one of which is defeated by the phenomenon of expert competent dissent.
+
+However, the theory of the a priori cannot hope to make do without appeal to a notion of intuition or rational insight. This is so both because the Basis version of an understanding-based account needs to rely on it in spelling out how it proposes to do its epistemic work; but also because, more importantly, there are propositions that are synthetic a priori. ${ }^{53}$
+
+## Notes
+
+1. This paper is published here for the first time.
+2. In my sense, a person has 'understanding' of or 'competence with' a concept if he has mastery of the concept. If we think of concepts as individuated by their conceptual role, then a master of a concept would have a full grasp of the concept's individuative conceptual role. He wouldn't be like the subject in Burge's (1979) famous thought experiment, Burt, who has an incomplete understanding or faulty understanding of the concept arthritis, believing that arthritis can also occur in the thigh. Burge advocates saying that there is a notion of concept possession according to which Burt possesses the concept arthritis despite having a faulty grasp of it. I need not deny that claim. But I do need to insist that the sort of understanding that is presupposed by understanding-based accounts of a priori knowledge has to be the sort of 'full understanding' characteristic of the experts, rather than the sort of 'partial understanding' that may be possessed by ordinary folks. (Alternatively, you could take me to be talking about a priori knowledge involving propositions containing 'nondeferential' concepts.)
+
+3. I shall work within a Fregean framework. I shall designate concepts by italicizing the English words that typically express them and propositional contents by italicizing the English sentences that typically express them.
+4. The first point is entirely consistent with my previous commitments; the other two are not.
+5. Later in the paper, when I discuss our a priori knowledge of normative propositions, I will explain why (3) and (4) may not ultimately be good candidates for understanding-based accounts; at this stage of the argument, though, this won't matter.
+6. This was not clear in my (1996) but was clarified in my (2003b).
+7. Why should these two types of explanation be seen as mutually exclusive? Suppose that S's understanding of p is constituted by S's disposition to assent to p . It would follow that S's understanding of p cannot serve as a good epistemic basis for S's assent to p , since, in general, S's disposition to assent to p cannot serve as an epistemic basis for her assent to p , let alone a good one.
+8. An alternative version, favored, for example, by George Bealer (1998), would run the theory in terms of a subject's needing to have the intuition that instances of 'If A and B, then A' are true. I am open to this version of a conceptual-role semantics.
+9. In my 2003b, this type of bridge principle is called the 'Meaning-Entitlement Connection.'
+10. The qualification 'in the right way' is there to accommodate the possibility of deviant causal chains, a complication that need not detain us.
+11. For present purposes, 'rejecting p' and 'dissenting from p' are to be taken to be equivalent to 'refusing to assent to p'.
+12. A similar emphasis on the conceptual role's being 'underived' can be found in Schiffer 2013.
+13. For concreteness I focus on a particular case, that of and. In his 2011, Williamson claims that I have retreated to this case having conceded defeat for Modus Ponens and other logical rules. I have no idea why he says that. Everything I say about conjunction could be adapted to the case of the other logical constants and their constitutive rules. In any case, the question under consideration is whether he has succeeded in devising a general recipe for defeating any proposed understanding-assent link. It's perfectly fair to assess his claim to have done so in the way that best exposes its weaknesses.
+14. Williamson himself describes his relation to Naïve Comprehension along similar lines: 'Similarly, I am aware of...my conscious inclination to believe Naïve Comprehension, which I resist because I know better' (2007a: 217).
+15. This is also argued for in Boghossian 2012.
+16. It is important to see that a Basis view is not committed to any particular conception of the understanding of a concept.
+17. While it is common for friends of the a priori to include examples involving knowledge as examples of a priori propositions that are covered by understanding-based accounts, we will later see a reason for doubting that any normative proposition falls under such an account. For now, I will go along with the common assumption.
+18. Precisely how to describe the epistemology of such cases requires a lot more investigation than it has received.
+19. Indeed, not only may (9) strike you as true, but so might its modalized, quantified counterpart: $\square(\forall \mathrm{x})(\forall \mathrm{p})[\mathrm{xGp} \rightarrow \mathrm{xJTBp} \wedge \neg \mathrm{xKp}]$. Williamson (2007a) has disputed this characterization of the content of the proposition that's judged in this and other thought experiments. Limitations of space prevent me from discussing his objections here. I will just record my conviction that this standard representation of the judgment involved in thought experiments seems to me correct.
+20. I will soon be arguing that normative propositions are not knowable a priori on the basis of the understanding alone. But this will not affect the use to which I am putting them here,
+
+which is to illustrate the way in which some a priori propositions can simply strike us as true, without our working them out, without our having much of a sense of which features of the situation ground their truth.
+21. I'm grateful to Barry Smith for emphasizing to me that it is the same notion of intuition that is at work in this connection as in connection with philosophical thought experiments.
+22. By a moral judgment, I will always mean here a pure moral judgment that predicates of some act type, some canonical moral property such as 'right' or 'wrong,' 'good' or 'bad'. Judgments that predicate moral properties of individuals-as in 'Donald Trump is evil'will be impure moral judgments whose truth will partly depend on that of the pure ones and partly on the truth of nonmoral judgments (about e.g. Donald Trump's biography).
+23. A committed relativist about morality once publicly rejected my claim that we all believe (13) to be true and justified, by saying that she thought it depended on how much fun was at issue, drawing gasps from the room.
+24. It might be thought that this argument presupposes a realist view of morality and that this limits its applicability. It's not clear to me how much of a realist view it presupposes, but certainly not more than I take to be true.
+25. This is why I earlier said, in footnote 5, that propositions (3) and (4), involving the normative notions of knowledge and justification, may not ultimately be explicable by understanding-based accounts.
+26. You might worry that if this argument locates any interesting division at all between concepts, it's not one between the normative and the non-normative. For isn't there a correctness open question about, for example, natural kind concepts, which are not in any obvious way normative concepts? I don't believe so: the sense of the open question in the two cases seems to me to be distinct. In the case of a normative concept, we can ask whether any of the purported truths yielded by the substantive normative concept is true. In the case of a natural kind concept, we can ask whether it 'carves nature at the joints', we are asking not whether the propositions it encodes are true, but rather whether they are nomological or counterfactual-supporting, or something along those lines.
+27. See my (2003a). For another exposition of skepticism see Wright (2004).
+28. See, for example, Bealer (1992). Some philosophers deny that intuitions are best understood as a species of seeming. John Bengson (2015), for example, thinks that intuitions should be thought of as presentations, rather than seemings. The difference between them is supposed to be that while the content of a seeming would be explicitly available to a subject, the content of a presentation need not be. I believe that, in this sense, presentations won't be able to epistemically justify a belief that is based upon them, but I won't go into this issue here.
+29. In Ned Block's (1995) terminology, these states may be taken to be 'access conscious' without being 'phenomenal conscious'.
+30. See Cohen (1984), Foley (1985), and Bonjour (1985).
+31. Some who hold this view might be tempted by the thought that this tacit theory constitutes our grasp of the concept knowledge.
+32. An example I learned from Gilbert Harman: humans seem innately to believe that an object (like a bomb) thrown from a moving object (like an airplane) will fall in a straight line. According to our best physical theories, however, such an object would move in a parabolic path in the direction in which the plane was moving when it released it.
+
+33. I am grateful to John Bengson, Kit Fine, Yu Guo, Antonella Mallozzi, Jake Nebel, Stephen Schiffer, Susanna Siegel, Crispin Wright, and to audiences at the American University of Beirut, the NYU Seminar on Mind and Language, the Philosophical Society at the University of Oxford, and the 2016 Pro-Seminar for first-year PhD students at the Philosophy program at NYU, for helpful feedback on the material in this paper. This paper draws on some material from my 2016.
+
+# 14 
+
+## Reply to Boghossian on Intuition, Understanding, and the A Priori ${ }^{1}$
+
+Timothy Williamson
+
+In 'Intuition, Understanding, and the A Priori' (Chapter 13), Boghossian makes a Kantian-sounding division between the analytic a priori and the synthetic a priori.
+
+Analyticity here is epistemic: Boghossian initially paraphrases 'epistemically analytic' as 'justifiably believable merely on the basis of being understood'. Correspondingly, 'synthetic' can be paraphrased as 'not justifiably believable merely on the basis of being understood'. He means understanding in the ordinary sense in which native speakers of a language fully understand what they express in it, at least when not deferring to experts (as they might in using natural kind terms). It is not the sense in which a linguist studying her own native language may painfully struggle to achieve a better theoretical understanding of it. Henceforth, I will use 'understand' for 'fully understand' in Boghossian's sense.
+
+Boghossian contrasts epistemic analyticity with metaphysical analyticity, which concerns truth rather than understanding and picks up the old idea of truth in virtue of meaning. A significant point of agreement between us is our denial, for similar reasons, that there are metaphysically analytic truths. The sentence 'All squares are four-sided' expresses the proposition that all squares are four-sided, which is true because all squares are four-sided, just as the sentence 'Some dogs are spotted' expresses the proposition that some dogs are spotted, which is true because some dogs are spotted (Williamson 2007a: 48-72). It is not even clear that epistemic analyticity in Boghossian's sense entails truth, for truth is unnecessary for justification on his internalist view.
+
+Boghossian holds that intuition is needed to explain synthetic a priori justification, for instance of normative truths. This is in striking contrast with his earlier work, where he rejected appeals to it as obscurantist (Chapter 2, originally Boghossian 2003a).
+
+Boghossian also suggests that intuition is essentially involved in some analytic a priori justification too. More specifically, he divides the understanding-based justification characteristic of the epistemically analytic a priori into two types, labelled 'constitutive' and 'basis'. In the constitutive type, one's assent to a proposition is justified in virtue of the fact that one's understanding of it is partly constituted by one's disposition to assent to it. In the basis type, one's assent is justified in virtue of the fact that one's understanding of the proposition serves as a good epistemic basis
+
+for one's assent. Boghossian argues that the two types of justification are needed for different cases. In non-inferential justification of the basis type, he suggests, one's understanding of the proposition serves as a good epistemic basis for one's assent to it by supplying one with an intuition of that very proposition. There the role of understanding involves the role of intuition, rather than providing an alternative to it.
+
+In Chapters 3, 5, and 7 (originally Williamson 2003, 2011, and 2012, respectively) and elsewhere (Williamson 2007a: 73-133), I argue that the connection between understanding and assent is too loose to support understanding-based justification of the types Boghossian postulates. As he recognizes, by itself the new-found role for intuition does not answer that challenge. He therefore spends much of the first half of the chapter responding to my critique, before invoking intuitions. Section 1 below answers his response. Section 2 turns to his appeal to intuitions, and argues that they cannot do the work for which he invokes them.
+
+# 1. Understanding and Assent 
+
+Boghossian starts with the constitutive type of understanding-based justification. In such cases-if there are any-when all goes well one's assent to a proposition $p$ is justified in virtue of the fact that one's understanding of $p$ is partly constituted by one's disposition to assent to $p$. As he refines the account in the spirit of conceptualrole semantics, it makes having an underived or primitive disposition to assent to $p$ a necessary condition for understanding $p$, for the relevant propositions $p$.
+
+In my previous critique, I consider actual or possible people who came to understand $p$ in the normal way but then developed sophisticated theoretical doubts about $p$, on the basis of which they now dissent from $p$, while still understanding $p$. These people are experts; their understanding of $p$ is non-deferential. Boghossian concedes that such cases can arise. However, he rightly notes, dispositions can be retained while inhibited. Handcuffs may inhibit a prisoner's disposition to hit out. Similarly, an expert may retain the disposition to assent to $p$, while inhibiting it on theoretical grounds. Examples are common. Thus the mere combination of understanding with refusal to assent does not refute Boghossian's constitutive account in its current form. So far so good.
+
+Naturally, in writing my original critique, I was well aware of the possibility of inhibited dispositions to assent, and addressed its relevance explicitly (Williamson 2003: 254; 2007a: 99-105). In particular, I argued that the expert may gradually lose even the disposition to assent to $p$, while still retaining understanding of $p$. After all, many acquired dispositions are habits, which can be lost as well as gained over time. Since having the underived disposition to assent to $p$ entails having the disposition to assent to $p$, the expert lacks the underived disposition to assent to $p$ but still understands $p$, and thus is a direct counterexample to Boghossian's present constitutive account.
+
+The core of Boghossian's reply is his claim that once the expert loses her underived disposition to assent to $p$, it is no longer plausible that she still understands $p$. He treats her as if she had simply forgotten what proposition $p$ is. He does not consider what the expert can still do, having lost the disposition to assent to $p$. She can still remember assenting to $p$; she knows just what it was like to exercise the disposition to
+
+do so. She can also imagine just what it is like to exercise the disposition, for others who still have it. She still expects them to assent to $p$. She feels to herself like someone who has painfully struggled free of the disposition to commit a common fallacy, or to reason according to the prejudices of the bigoted community in which she was reared. In these ways, her situation is very unlike that of 'an entirely unsophisticated person, a child, for example', to which Boghossian compares it. Unlike the child or unsophisticate, she can fluently converse with others when they assert $p$, perhaps explaining to them why, in her opinion, they are mistaken. By normal standards, she is exercising her native speaker competence with the language, in particular when she expresses $p$, not revealing her incompetence. The last thing she needs is a language lesson. Perhaps children and other unsophisticates who lack both the disposition to assent to $p$ and the expert's abilities can also understand $p$, but one need not insist on that point just to give a counterexample to the claimed necessity of having an underived disposition to assent to $p$ for understanding $p$, for the relevant propositions $p$.
+
+Boghossian illustrates his argument with the example of 'and'-elimination, the inference from a conjunction to one or other of its conjuncts. However, I have already discussed that case in detail in Chapter 5 (originally Williamson 2011), arguing that a disposition to assent to all instances of 'and'-elimination is unnecessary for understanding conjunctions. Since Boghossian has not replied to that argument, there is no need to repeat it here. One can also argue for the same conclusion in a different way, pioneered by Paolo Casalegno (2004), which I defend in Chapter 7 (originally Williamson 2012) from Boghossian's criticisms in Chapter 6 (originally Boghossian 2012).
+
+When we turn to the basis type of understanding-based justification, the dialectic differs slightly. In such cases-if there are any-when all goes well one's assent to $p$ is justified in virtue of the fact that one's understanding of $p$ serves as a good epistemic basis for one's assent to $p$. How can that be, if an expert can understand $p$ without assenting to $p$, as Boghossian concedes?
+
+Boghossian's answer is that the expert's understanding of $p$ still provides her with a good justification for believing $p$, but her theoretical commitments prevent her from seeing it. However, given what has just been argued, we may assume that the expert understands $p$ while having no disposition, derived or underived, to assent to $p$. In the key cases, she has no way of getting to $p$ just by steps which strike her as cogent. Does her understanding of $p$ provide her with a good justification for believing $p$ ? For her, such a justification is out of reach, not just out of sight.
+
+Could Boghossian reply that, although the unorthodox expert's understanding of $p$ provides her with no justification for $p$, the orthodox expert's understanding of $p$ does provide him with a justification for $p$ ? Such a multiplication of understandings does not fit Boghossian's argument. The orthodox expert would no longer have a justification for $p$ because he understands $p$, otherwise the unorthodox expert would also have that justification for $p$, since she too understands $p$. Rather, the orthodox expert would have a justification for $p$ because he understands $p$ in a specific way, in which the unorthodox expert does not understand $p$. But how are the relevant ways of understanding to be individuated? The obvious danger is that any difference in background beliefs will constitute a difference in ways of understanding, so that
+
+there will be understanding-based justifications of the basis type for all those background beliefs, making them all epistemically analytic. In any case, Boghossian treats understanding as something shared by competent non-deferential speakers, and denies it to the unorthodox expert who lacks the disposition to assent, so the envisaged response is not his.
+
+Thus, to defend the basis type of understanding-based justification in the relevant cases, Boghossian will need strong arguments against the counterexamples of understanding $p$ without being disposed to assent to $p$, just as he needs such arguments to defend the constitutive type of understanding-based justification. He has not supplied such arguments.
+
+The failure of the required links between understanding and underived dispositions to assent vitiates Boghossian's appeal to intuitions with respect to the basis type of understanding-based justification, since the type lacks instances. However, that by itself does not destroy his case for intuitions, since he argues for them independently with respect to the synthetic a priori, for which he does not postulate understandingbased justification. Let us turn to that case.
+
+# 2. Intuitions 
+
+What does Boghossian mean by 'intuition'? He says that intuitions are 'intellectual seemings'. He explains that 'An intellectual seeming is similar to a sensory seeming in being a presentation of a proposition's being true; yet dissimilar to it in not having a sensory phenomenology' (Chapter 13, p. 201). He adds that an intellectual seeming 'is also to be sharply distinguished from any species of judgment; it must be understood as pre-judgmental and pre-doxastic, if it is to be capable of serving as an epistemic basis for a judgment' (Chapter 13, p. 201). In characterizing intuitions as 'pre-judgmental and pre-doxastic', he is also denying that they are dispositions or inclinations or temptations to judge or believe, for a similar reason: 'Your being inclined to judge that p is not usually a good reason, all by itself, for your believing that p' (Chapter 13, p. 203).
+
+According to Boghossian, many intuitive judgments are the outcome of a threestep process:
+you consider a scenario and a question about it; after sufficient reflection, a particular answer to that question comes to seem true to you, either because ... you work out that it is true, or because, without working it out, it just comes to strike you as true; finally, you endorse this proposition. (Chapter 13, p. 202)
+
+The intuition corresponds to the seeming true to you at the second step.
+Boghossian envisages intuitions as playing a distinctive role in the epistemology of the a priori. However, the account in his paper does not predict that intuitions cannot play a similar role for what would normally be treated as a posteriori justification. His description of the three-step process covers a wide variety of cases. For instance, you consider the scenario that you receive an invitation to Donald Trump's birthday party, and this question about it: in the scenario, what should you do? After sufficient reflection, this answer to the question comes to seem true to you: you should ignore the invitation. It does so because, without working it out, it just comes to strike you as
+
+true. Finally, you endorse the proposition that you should ignore the invitation. But that does not seem a good candidate for a proposition belief in which is justified a priori.
+
+One might postulate all sorts of unconscious inferences in such a case. However, on Boghossian's internalist conception of epistemic justification, what matters is what is explicitly available to the subject, which the unconscious inferences are not.
+
+A more fundamental concern is whether any mental states meet Boghossian's job specification for intuitions. Consider his account of thinking about 'whether to throw the large man off the bridge in order to save the lives of the five innocents trapped below':
+it can come to very vividly seem to you that it would be wrong to throw him off the bridge. But we can also imagine that even while it seems to you, you hesitate to make the judgment, wanting to assure yourself that you have not overlooked anything. Finally, satisfied, you make the judgment that it would be wrong. The state of its seeming wrong to you was intellectual, not sensory; yet evidently pre-judgmental and pre-doxastic. When the judgment finally came, it was based on that pre-judgmental seeming. (Chapter 13, p. 202)
+
+Clearly, in this case, the vivid seeming that it would be wrong precedes the judgment that it would be wrong. But why assume that it also precedes the inclination to judge that it would be wrong? Boghossian says 'you hesitate to make the judgment', which suggests that you are already set to make it, but hold off out of caution. In effect, you are disposed to make the judgment, but inhibit the disposition, temporarily. Before committing, you give yourself a final chance to check. Such processes are often conscious. In such a case, there may be nothing which could be the seeming except a consciously inhibited disposition to judge that it would be wrong to throw the man off the bridge. That is not pre-judgmental in the sense Boghossian requires, because he denies that judging $p$ can be appropriately based on the disposition to judge $p$.
+
+Of course, for all I have proved, in Boghossian's case you may also be in some further mental state which both presents the proposition that it would be wrong to throw the man off the bridge and precedes even the disposition to make that judgment. But how is one supposed to know whether one is in such a mysterious extra state? In my own case, for all introspection tells me, there is only the consciously inhibited disposition to judge.
+
+Could Boghossian just postulate that we are in these mysterious extra states of intuiting? The trouble is that, given his internalism, any difference in justification presumably corresponds to a consciously available difference in mental state. Thus, if the difference between the presence and absence of the extra state of intuiting is not consciously available, it makes no difference to justification. Positing a consciously unavailable difference will not serve his purposes.
+
+A similar problem arises for unhesitating judgments. For instance, a philosopher asks you to consider the scenario that on the street you pass a baby in a pram, and this question about it: should you throw the baby out of the pram? Obviously not; there is no need to pause for reflection-we might worry about someone who did. That the case is so much easier than the trolley problems debated by moral philosophers does not weaken its epistemic status; quite the opposite. But the intermediate step, which would correspond to the intuition, appears to be missing. At the conscious level, there is no intermediate stage of hesitation. In this case, the only consciously
+
+available mental state is the judgment itself, that you should not throw the baby out of the pram. It will not serve Boghossian's internalist purposes to postulate a consciously unavailable intermediate stage of intuiting.
+
+The problem is not the availability of the contents of the alleged intuitions. They are the same as the contents of the ensuing explicit judgments. Even when one consciously resists the temptation to make the judgment, one is typically aware of the content of the judgment one is resisting the temptation to make. The problem is that, on Boghossian's account, in the relevant cases the justification to believe that content is sourced in a prior relation to it that is neither judging nor being tempted to judge, but intuiting. Thus, for the justification to meet his internalist standards, the intuiting relation itself must be accessible to the subject. But if it were, Boghossian would not need to resort to postulation. He could just tell us how to introspect the difference between intuitions and conscious temptations to judge in ourselves. He does no such thing.
+
+When one examines Boghossian's arguments, one finds that the difference between intuitions and conscious temptations to judge is postulated, not found. In effect, he argues that, since internalism must be true, and cannot work without such a consciously accessible difference, there must be such a difference. But there is not. To postulate a consciously accessible difference is not to access it. His laudable desire to avoid obviously false psychological claims forces him to make intuitions so elusive to the subject that they cannot meet the internalist standard they were postulated to satisfy.
+
+A further problem for non-doxastic intuitions is that their justificatory power is unclear. Why should they be impervious to all the usual distortions from ignorance and error, bigotry and bias? For instance, consistent Nazis' non-doxastic intuitions, if any, may well have pro-Nazi contents. On an internalist view of justification, can such intuitions help justify the Nazis in their beliefs? If so, can they also justify the Nazis in acting on those beliefs? If not, why not? Without answers to such questions, Boghossian's view cannot be fully assessed.
+
+Epistemology is hard. No serious approach to epistemic justification is pain-free. Consequently, one should not simply dismiss such an approach on the basis of a handful of alleged counterexamples. One must compare the rival approaches over the full range of the phenomena to be understood, to assess which approach does best overall. That is not how Boghossian proceeds. Rather, he starts by dismissing Reliabilism, perhaps on the basis of alleged counterexamples such as Laurence Bonjour's. He uses the term 'Reliabilism' to cover a wide variety of externalist epistemologies, including my own knowledge-first theory as well as more traditional belief-first forms of reliabilism. Having eliminated the externalist competition once and for all, to his own satisfaction, he then considers how one might begin to develop an internalist alternative. But that is not how it works. There are well-developed externalist epistemologies. The onus is on internalists to do better. That requires a well-developed internalist alternative. The result of Boghossian's understandable caution is that he has not here provided one.
+
+# Note 
+
+1. This paper is published here for the first time.
+
+

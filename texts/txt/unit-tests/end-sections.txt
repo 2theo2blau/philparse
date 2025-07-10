@@ -1,0 +1,647 @@
+end of the previous chapter.
+
+# 18 
+
+## Closing Reflections
+
+Paul Boghossian
+
+Is philosophy a distinctive discipline, with its own domain, and its own a priori methods for investigating it; or is it just a speculative, more abstract cousin of the empirical sciences?
+
+When I entered Princeton's graduate program in 1978, following an undergraduate degree in physics, Richard Rorty was in the process of completing his provocative book Philosophy and the Mirror of Nature (Rorty 1979). In it, Rorty argued that philosophy, especially of the analytic variety, depended for its viability on certain distinctions-particularly between the analytic and the synthetic, and the a priori and the a posteriori-which it had been busy undermining, thereby, in his view, turning its ingenuity against itself.
+
+Rorty found analytic philosophy's demise a cause for celebration but to a novice graduate student, about to commit to a lifetime of studying the subject, it was disconcerting, to say the least. And yet it seemed to me that Rorty was more or less right about the dependence he was claiming, at least when it came to philosophy's most foundational issues, such as the nature of existence, essence, value, truth, logic, modality, rationality, among others. I couldn't see, for example, how to make sense of the philosophy book I had most admired as an undergraduate, Saul Kripke's Naming and Necessity, as an exercise in post-Quinean philosophy.
+
+The rationalist conception of philosophy to which I was drawn does not, of course, require that nothing counts as a philosophical issue if it has an empirical dimension. That would be absurdly restrictive. For one thing, and as we have seen repeatedly throughout this volume, empirical evidence may always enter, often in very rich ways, in fixing the subject matter of a question to be answered by a priori means. In addition, there are certainly topics of philosophical interest in which empirical evidence may be relevant in other ways. If you wish to give an account of the nature of color concepts as they are deployed in perception (as is attempted in Boghossian and Velleman 1989, 1991) you may need to know a great deal about the science of colors and of color perception. If you wish to give an account of the nature of the imagination and of its capacity to justify empirical beliefs, you may need to know a great deal about the psychology of the imagination. Indeed, sometimes you may need to reconsider whether a particular topic is purely a priori: space and time provide striking examples of topics that were thought to be purely a priori until developments
+
+in physics forced a reconsideration. Rationalism about philosophy, then, isn't the view that philosophy never involves empirical evidence; it's rather the view that it needn't involve it; and that the most effective methods for studying its most foundational questions don't involve it.
+
+Given these views, it came as something of a relief to discover that the distinctions that Quine and Rorty rejected could be saved from their critiques. One key moment involved the realization that philosophers had routinely conflated a dubious metaphysical notion of analyticity (truth in virtue of meaning) with a defensible epistemic notion (knowable to be true on the basis of grasp of meaning); and that the latter could be used, without invoking the former, to provide an account of at least some a priori knowledge. This was the view I first started exploring in 'Analyticity Reconsidered' (Boghossian 1996, reprinted here as Chapter 1) and that I pursued further in a number of subsequent papers.
+
+One of these, 'Blind Reasoning' (2003a; Chapter 2) was slated for delivery at the Joint Session of the Aristotelian Society and the Mind Association in Belfast in July 2003, with a reply by Timothy Williamson. In that paper, my strategy had been to assume the existence of constitutive understanding-assent links-in the form of a conceptual-role semantics for the logical constants-so as to explore their potential for explaining our entitlement to basic logical inferences, inferences to which we seem to be entitled despite our not possessing a non-circular warrant for them. For these purposes, great precision in the correct formulation of a conceptual-role semantics was not required; of much greater moment was the question of the existence of the appropriate epistemic bridge principles connecting understanding-assent links with positive epistemic standing. In his reply, Williamson chose to devote much of his attention not only to the details of formulating a conceptual-role semantics but also to raising an ingenious new objection to the very possibility of understanding-assent links, his now famous argument from expert dissent. While I continued to ignore issues of detailed formulation, it was important to defend the possibility of understanding-assent links against his objections, the result being a number of further exchanges on this score.
+
+Over the years, I came to change my mind about some central issues independently of Williamson's arguments. One of them stemmed from a growing awareness that one type of understanding-based account of the a priori-precisely the type that relied on understanding-assent links-was unlikely to yield an internalistically acceptable account of a priori justification without supplementation; and a commitment to some type of internalism about epistemic justification seemed to me then, as it continues to seem to me now, non-optional.
+
+Another stemmed from the growing realization that understanding-based accounts were unlikely to yield explanations for the full range of a priori justification, in particular, for our knowledge of normative principles. Both of these realizations help explain the evolution of my attitude over these years towards the notion of intuition, from a hesitant skepticism to a cautious embrace.
+
+As these remarks illustrate, our exchanges on particular problems-already quite broad in themselves-interacted with even broader background commitments. These background commitments, while not directly under discussion, conditioned and
+
+shaped our respective perceptions of the range of viable solutions to the problems which were.
+
+Foremost among these background commitments concerns the conflict between externalism and internalism, most especially as it arises within epistemology, but also to some extent as it arises within meta-semantics. During the course of the debates, I was repeatedly struck by two points.
+
+The first is the extent to which our divergent views on particular topics could be traced back to our divergent views about epistemic justification. Although Williamson occasionally professes open-mindedness on this issue, many of his arguments presuppose a broadly externalist, typically Reliabilist, conception of epistemic justification, a conception which I find impossible to accept. (To emphasize: what's at issue here is epistemic justification, not knowledge: it was common ground between us that, for the purposes of these exchanges, we would not presuppose a 'knowledge-first' epistemology.) For example, Williamson's central arguments against the importance of the a priori-a posteriori distinction will only seem plausible to someone with antecedent Reliabilist convictions.
+
+The second point was how much easier many philosophical problems become on Reliabilist assumptions. What does justification have to do with truth, given that one can be justified in believing a false proposition? How does perception justify belief? How could the mere understanding of a proposition justify belief in that proposition? How could a mere intellectual impression justify belief in a general modalized proposition? All of these questions, and many others besides, which pose enormous challenges to internalists, become relatively easy on Reliabilist views.
+
+Unfortunately, Reliabilism about epistemic justification is not plausible, and so this easy way out of those philosophical quandaries is blocked. As we can see from the intelligibility of skeptical scenarios in which you are surreptitiously envatted, the rational management of your beliefs is not, in the first instance, a matter of getting things right, much less a matter of getting them reliably right; it is about updating your beliefs in a way that is normatively appropriate, whether or not that results in true beliefs. A Reliabilist view of epistemic justification loses its subject matter just as fully as does a functionalist view of sensation: they both commit the mistake of conflating the normal effects of a property's instantiation with an account of that property's nature.
+
+The externalism-internalism conflict in meta-semantics also plays an important background role in our debates. Williamson's social-externalist sympathies show up right at the start, in the debate in Belfast, in the form of his reliance on the claim that, by the sort of ordinary communal standards of competence exploited in a Burge-style thought experiment, it is sufficient for a subject to be competent in the use of a word ' C ' for him to understand the concept $C$. Such a claim is clearly inhospitable to the conceptual-role semantics that I was presupposing in that symposium, a type of semantics that is much more appropriate for characterizing the understanding possessed by the experts to whom ordinary speakers defer (mastery), than for characterizing the understanding of ordinary speakers themselves.
+
+Williamson's reliance on such weak communal standards of concept attribution continues through to the last of our exchanges, despite my insistence that I was talking about mastery of a concept, rather than mere possession. Williamson occasionally
+
+raises questions about how that distinction is to be understood. But that is not much of a mystery. The distinction I am invoking is presupposed by the very thought experiments-namely, Burge's-on which Williamson's social externalism is based. Those thought experiments, in which subjects are said to possess a given concept $C$ despite understanding it incompletely, or misunderstanding it, because they defer to communal experts, depend on the idea that the conceptual role associated with $C$ by the experts is both complete and fully correct, whereas those of ordinary speakers needn't be.
+
+Furthermore, although I acknowledge the strength of the considerations that lead some philosophers to want to espouse externalist meta-semantical views, I believe we are some distance from fully understanding the difficulties, indeed paradoxes, to which an externalist individuation of concepts gives rise, and so should avoid writing as though the matter has already been decisively settled in their favor (see Boghossian 1994b, 2011b, in preparation).
+
+The one mistake that, as it seems to me, everyone needs to avoid is antecedent commitment to some big 'system' (Naturalism, for example) in advance of a detailed exploration of particular issues. Whilst it can be impressive to construct a systematic view that contains mutually cohering answers to many central questions, we are better off developing careful, nuanced accounts of particular domains. The 'systems first' approach inevitably leads to procrustean maneuvers in which we are forced to chop off crucial aspects of common sense-qualia, normativity, the a priori, or what have you-in order to make the phenomena fit our preconceived picture. In the great battle of philosophical styles, represented by the two giants, David Lewis and Saul Kripke, both of whom I was privileged to have as teachers in graduate school, I side firmly with Kripke.
+
+At the end of the day, what we most need is to encourage the attitude of intellectual humility gestured at in our preface: that all these competing ideas, about philosophy, and within philosophy, are just so many research programs which, despite philosophy's long history, are still in their early stages and deserve to be explored in a spirit of open-mindedness.
+
+# Bibliography 
+
+Bach, Kent. (1988). Burge's New Thought Experiment: Back to the Drawing Room. Journal of Philosophy, 85(2), 88-97.
+Bach, Kent. (1999). The Myth of Conventional Implicature. Linguistics and Philosophy, 22(4), $327-66$.
+Barwise, Jon. (1977). Handbook of Mathematical Logic. North-Holland.
+Bealer, George. (1992). The Incoherence of Empiricism. Aristotelian Society Supplementary Volume, 66(1), 99-138.
+Bealer, George. (1998). A Theory of Concepts and Concepts Possession. Philosophical Issues, 9, 261-301.
+Bealer, George. (2000). A Theory of the A Priori. Pacific Philosophical Quarterly, 81(1), 1-30.
+Behnap, Nuel. (1962). Tonk, Plonk and Plink. Analysis, 22(6), 130-4.
+Benacerraf, Paul. (1973). Mathematical Truth. Journal of Philosophy, 70(19), 661-79.
+Bengson, John. (2015). The Intellectual Given. Mind, 124(495), 707-60.
+Bird, Alexander. (1998). Dispositions and Antidotes. Philosophical Quarterly, 48(191), 227-34.
+Block, Ned. (1995). On a Confusion about a Function of Consciousness. Behavioral and Brain Sciences, 18(2), 227-47.
+Boghossian, Paul. (1989). The Rule-Following Considerations. Mind, 98(392), 507-49.
+Boghossian, Paul. (1994a). Inferential-Role Semantics and the Analytic/Synthetic Distinction. Philosophical Studies, 73(2-3), 109-22.
+Boghossian, Paul. (1994b). The Transparency of Mental Content. Philosophical Perspectives, $8,33-50$.
+Boghossian, Paul. (1996). Analyticity Reconsidered. Noûs, 30(3), 360-91.
+Boghossian, Paul. (1997). Analyticity. In B. Hale and C. Wright (eds), A Companion to the Philosophy of Language (pp. 331-68). Blackwell.
+Boghossian, Paul. (2000). Knowledge of Logic. In Paul Boghossian and Christopher Peacocke (eds), New Essays on the A Priori. Clarendon Press.
+Boghossian, Paul. (2001). How Are Objective Epistemic Reasons Possible? Philosophical Studies, 106(1/2), 1-40.
+Boghossian, Paul. (2003a). Blind Reasoning. Aristotelian Society Supplementary Volume, 77(1), $225-48$.
+Boghossian, Paul. (2003b). Epistemic Analyticity: A Defense. Grazer Philosophische Studien, $66(1), 15-35$.
+Boghossian, Paul. (2008). Replies to Wright, MacFarlane and Sosa. Philosophical Studies, 141(3), 409-32.
+Boghossian, Paul. (2009). Virtuous Intuitions: Comments on Lecture 3 of Ernest Sosa's A Virtue Epistemology. Philosophical Studies, 144(1), 111-19.
+Boghossian, Paul. (2011a). Williamson on the A Priori and the Analytic. Philosophy and Phenomenological Research, 82, 488-97.
+Boghossian, Paul. (2011b). The Transparency of Mental Content Revisited. Philosophical Studies, 155(3), 457-65.
+Boghossian, Paul. (2012). Inferentialism and the Epistemology of Logic: Reflections on Casalegno and Williamson. Dialectica, 66, 221-36.
+Boghossian, Paul. (2014). What is Inference? Philosophical Studies, 169(1), 1-18.
+
+Boghossian, Paul. (2016). Reasoning and Reflection: A Reply to Kornblith. Analysis, 76(1), $41-54$.
+Boghossian, Paul. (2017). Postscript: Further Thoughts about Analyticity, 20 Years Later. In Hale Wright and Alexander Miller (eds), A Companion to the Philosophy of Language, Second Edition (pp. 611-18). Blackwell.
+Boghossian, Paul. (forthcoming). Intuition and A Priori Justification. In Dylan Dodd and Elia Zardini (eds), Beyond Sense? New Essays on the Significance, Grounds, and Extent of the A Priori. Oxford University Press.
+Boghossian, Paul. (in preparation). Transparency and Concepts.
+Boghossian, Paul and Velleman, David. (1989). Color as a Secondary Quality. Mind, 98(January), 81-103.
+Boghossian, Paul and Velleman, David. (1991). Physicalist Theories of Color. Philosophical Review, 100(January), 67-106.
+Bonjour, Lawrence. (1985). The Structure of Empirical Knowledge. Harvard University Press.
+Bonjour, Lawrence. (1998). In Defense of Pure Reason: A Rationalist Account of A Priori Justification. Cambridge University Press.
+Boolos, George. (1971). The Iterative Conception of Set. Journal of Philosophy, 68(8), 215-31.
+Brandom, Robert. (2000). Articulating Reasons: An Introduction to Inferentialism. Harvard University Press.
+Broome, John. (2013). Rationality through Reasoning. Wiley-Blackwell.
+Burge, Tyler. (1979). Individualism and the Mental. Midwest Studies in Philosophy, 4(1), 73-122.
+Burge, Tyler. (1986). Intellectual Norms and Foundations of Mind. Journal of Philosophy, 83, $697-720$.
+Burge, Tyler. (1993). Content Preservation. Philosophical Review, 102, 457-88.
+Byrne, Ruth. (2005). The Rational Imagination: How People Create Alternatives to Reality. MIT Press.
+Cappelen, Herman. (2012). Philosophy without Intuitions. Oxford University Press.
+Carnap, Rudolf. (1966). Philosophical Foundations of Physics: An Introduction to the Philosophy of Science. Basic Books.
+Carroll, Lewis. (1895). What the Tortoise Said to Achilles. Mind, 4(14), 278-80.
+Carston, Robyn. (2002). Thoughts and Utterances: The Pragmatics of Explicit Communication. Blackwell.
+Casalegno, Paolo. (2002). The Problem of Non-conclusiveness. Topoi, 21, 75-86.
+Casalegno, Paolo. (2004). Logical Concepts and Logical Inferences. Dialectica, 58, 395-411.
+Casullo, Albert. (2003). A Priori Justification. Oxford University Press.
+Casullo, Albert. (2012). Articulating the A Priori-A Posteriori Distinction. In Essays on a Priori Knowledge and Justification. Oxford University Press.
+Casullo, Albert. (2013). Articulating the A Priori-A Posteriori Distinction. In Albert Casullo and Joshua C. Thurow (eds), The A Priori in Philosophy. Oxford University Press.
+Casullo, Albert. (forthcoming). A Defense of the Significance of the A Priori-A Posteriori Distinction. In Dylan Dodd and Elia Zardini (eds), Beyond Sense? New Essays on the Significance, Grounds, and Extent of the A Priori. Oxford University Press.
+Chisholm, Roderick. (1977). Theory of Knowledge (2nd edition). Prentice Hall.
+Chudnoff, Elijah. (2013). Intuition. Oxford University Press.
+Coffa, Alberto. (1991). The Semantic Tradition from Kant to Carnap: To the Vienna Station. Cambridge University Press.
+Cohen, Stewart. (1984). Justification and Truth. Philosophical Studies: An International Journal for Philosophy in the Analytic Tradition, 46(3), 279-95.
+Creath, Richard. (1992). Carnap's Conventionalism. Synthese, 93(1-2), 141-65.
+
+Crossley, John, Ash, Christopher, Brickhill, Christopher, and Stillwell, John. (1972). What Is Mathematical Logic? Oxford University Press.
+Darwall, Stephen, Gibbard, Allan, and Railton, Peter. (1992). Toward Fin de siècle Ethics: Some Trends. The Philosophical Review, 101(1), 115-89.
+Davies, M. and Humberstone, L. (1980). Two Notions of Necessity. Philosophical Studies, $38(1), 1-30$.
+Deutsch, Max. (2015). The Myth of the Intuitive: Experimental Philosophy and Philosophical Method. MIT Press.
+Devitt, Michael. (1995). Coming to Our Senses: A Naturalistic Program for Semantic Localism. Cambridge University Press.
+Devitt, Michael. (2005). There is No a Priori. In Steup Matthias and Sosa Ernest (eds), Contemporary Debates in Epistemology (pp. 105-15). Blackwell.
+Dummett, Michael. (1973). Frege: Philosophy of Language. Duckworth.
+Dummett, Michael. (1975). Wang's Paradox. Synthese, 30(3-4), 201-32.
+Dummett, Michael. (1991). The Logical Basis of Metaphysics. Harvard University Press.
+Elugardo, Reinaldo. (1993). Burge on Content. Philosophy and Phenomenological Research, $53(2), 367-84$.
+Evans, Gareth. (1979). Reference and Contingency. Monist, 62, 161-89.
+Evans, Gareth. (1982). The Varieties of Reference. Ed. J. McDowell. Clarendon Press.
+Evans, Jonathan and Over, David. (2004). If. Oxford University Press.
+Evans, Jonathan and Stanovich, Keith. (2013). Dual-Process Theories of Higher Cognition: Advancing the Debate. Perspectives on Psychological Science, 8(3), 223-41.
+Field, Hartry. (1989). Realism, Mathematics \& Modality. Blackwell.
+Field, Hartry. (2005). Recent Debates about the A Priori. In Tamar Szabo Gendler and John Hawthorne (eds), Oxford Studies in Epistemology (vol. 1, pp. 69-88). Oxford University Press.
+Fine, Kit. (2002). Varieties of Necessity. In Tamar Szabo Gendler. In John Hawthorne (ed.), Conceivability and Possibility (pp. 253-81). Oxford University Press.
+Fodor, Jerry A. (1987). Psychosemantics: The Problem of Meaning in the Philosophy of Mind. MIT Press.
+Fodor, Jerry A. (1994). The Elm and the Expert. MIT Press.
+Fodor, Jerry A. and Lepore, Ernest. (1991). Why Meaning (Probably) Isn't Conceptual Role. Mind and Language, 6(4), 328-43.
+Fodor, Jerry A. and Lepore, Ernest. (1992). Holism: A Shopper's Guide. Blackwell.
+Foley, Richard. (1985). What is Wrong with Reliabilism? Monist, 68, 188-202.
+Frege, Gottlob. (1879). Begriffsschrift, eine der arithmetischen nachgebildete Formelsprache des reinen Denkens. In J. van Heijenoort (ed.), Stefan Bauer-Mengelberg (trans.), Frege to Gödel, A Source Book in Mathematical Logic, 1879-1931. Harvard University Press.
+Frege, Gottlob. (1950). The Foundations of Arithmetic. Northwestern University Press.
+Frege, Gottlob. (1979). Posthumous Writings. (Hans Hermes, Friedrich Kambartel, Friedrich KaulbachPeter Long, and Roger White, trans.). Basil Blackwell.
+Gödel, Kurt. (1947). What is Cantor's Continuum Problem? In Kurt Gödel: Collected Works Vol. II (pp. 254-70). Oxford University Press.
+Goldberg, Sanford C. (2002). Do Anti-Individualistic Construals of Propositional Attitudes Capture the Agent's Conception? Noûs, 36(4), 597-621.
+Goldman, Alvin. (2007). Philosophical Intuitions: Their Target, Their Source, and Their Epistemic Status. Grazer Philosophische Studien, 74(1), 1-26.
+Grice, H. P. (1961). The Causal Theory of Perception, Part I. Aristotelian Society Supplementary Volume, 35, 121-52.
+Grice, H. P. (1989). Studies in the Way of Words. Harvard University Press.
+
+Grice, H. P. and Strawson, P. F. (1956). In Defense of a Dogma. Philosophical Review, 65(2), $141-58$.
+Hale, Bob. (1987). Abstract Objects. Blackwell.
+Hallett, Michael. (1984). Cantorian Set Theory and Limitation of Size. Clarendon Press.
+Harman, Gilbert. (1967). Quine on Meaning and Existence I. The Death of Meaning. Review of Metaphysics, 21(1), 124-51.
+Harman, Gilbert. (1973). Thought. Princeton University Press.
+Harman, Gilbert. (1986a). Change in View: Principles of Reasoning. MIT Press.
+Harman, Gilbert. (1986b). The Meanings of Logical Constants. In Ernest Lepore (ed.), Truth and Interpretation: Perspectives on the Philosophy of Donald Davidson (pp. 125-34). Blackwell.
+Harman, Gilbert. (1994a). Doubts about Conceptual Analysis. In John O'Leary-Hawthorne and Michaelis Michael (eds), Philosophy in Mind (pp. 43-8). Kluwer Academic.
+Harman, Gilbert. (1994b). Comments on Boghossian. Presented at the APA Symposium on Analytic Truth. Boston, MA.
+Harman, Gilbert. (1996). Analyticity Regained? Noûs, 30(3), 392-400.
+Harman, Gilbert. (1999). Reasoning, Meaning, and Mind. Clarendon Press.
+Harman, Gilbert. (2003). The Future of the A Priori. Journal of Philosophical Research, 28, $23-34$.
+Harris, John. (1982). What's So Logical about the 'Logical' Axioms? Studia Logica, 41, 159-71.
+Harris, Paul. (2000). The Work of the Imagination. Wiley-Blackwell.
+Hawthorne, John. (2002). Deeply Contingent A Priori Knowledge. Philosophy and Phenomenological Research, 65, 247-69.
+Hintikka, Jaakko. (1962). Knowledge and Belief. Cornell University Press.
+Hintikka, Jaakko. (1999). The Emperor's New Intuitions. Journal of Philosophy, 96(3), 127-47.
+Horwich, Paul. (2000). Stipulation, Meaning and Apriority. In P. Boghossian and C. Peacocke (eds), New Essays on the A Priori (pp. 150-69). Oxford University Press.
+Huemer, Michael. (2001). Skepticism and the Veil of Perception. Rowman \& Littlefield.
+Hume, David. (1978). A Treatise of Human Nature. Oxford University Press.
+Jackson, Frank. (1982). Epiphenomenal Qualia. Philosophical Quarterly, 32, 127-36.
+Jackson, Frank. (1998). From Metaphysics to Ethics: A Defence of Conceptual Analysis. Clarendon Press.
+Jenkins, Carrie and Masahi, Kasaki. (2015). The Traditional Conception of the A Priori. Synthese, 92, 2725-46.
+Karttunen, Lauri and Peters, Stanley. (1979). Conventional Implicature. In David A. Dinneen and Choon-kyu Oh (eds), Presupposition (Syntax and Semantics) (vol. 11, pp. 1-56). Academic Press.
+Kitcher, Philip. (1983). The Nature of Mathematical Knowledge. Oxford University Press.
+Kitcher, Philip. (2000). A Priori Knowledge Revisited. In Paul Boghossian and Christopher Peacocke (eds), New Essays on the a Priori (pp. 65-91). Oxford University Press.
+Kornblith, Hilary. (2012). On Reflection. Oxford University Press.
+Kripke, Saul. (1972). Naming and Necessity. In Gilbert Harman and Donald Davidson (eds), Semantics of Natural Language (pp. 253-355). Reidel.
+Kripke, Saul. (1979). A Puzzle about Belief. In A. Margalit (ed.), Meaning and Use (pp. 239-83). Reidel.
+Kripke, Saul. (1980). Naming and Necessity. Blackwell.
+Kroedel, Thomas. (2012). Implicit Definition and the Application of Logic. Philosophical Studies, 158(1), 131-48.
+Lehrer, Keith. (1990). Theory of Knowledge. Routledge.
+Lewis, David. (1970). How to Define Theoretical Terms. Journal of Philosophy, 67(13), 427-46.
+
+Lewis, David. (1973). Counterfactuals. Blackwell.
+Lewis, David. (1997). Finkish Dispositions. Philosophical Quarterly, 47(187), 143-58.
+Lycan, William G. (1991). Definition in a Quinean World. In Definitions and Definability: Philosophical Perspectives (pp. 111-31). Springer.
+Maddy, Penelope. (2007). Second Philosophy: A Naturalistic Method. Oxford University Press.
+Maddy, Penelope. (2011). Defending the Axioms: On the Philosophical Foundations of Set Theory. Oxford University Press.
+Malmgren, Anna-Sara. (2006). Is There a Priori Knowledge by Testimony? Philosophical Review, 115(2), 199-241.
+Margolis, E. and Laurence, S. (2001). Boghossian on Analyticity. Analysis, 61(4), 293-302.
+Martin, C. B. (1994). Dispositions and Conditionals. Philosophical Quarterly, 44(174), 1-8.
+Martin, C. B. and Heil, John. (1998). Rules and Powers. Noûs, 32(12), 283-312.
+McGee, Vann. (1985). A Counterexample to Modus Ponens. Journal of Philosophy, 82(9), 462-71.
+McGee, Vann. (1997). How We Learn Mathematical Language. Philosophical Review, 106(1), $35-68$.
+McGee, Vann. (2000). Everything. In Gila Sher and Richard Tieszen (eds), Between Logic and Intuition (pp. 54-78). Cambridge University Press.
+McGinn, Colin. (1975). 'A Priori' and 'A Posteriori' Knowledge. Proceedings of the Aristotelian Society, 76, 195-208.
+Melis, Giacomo and Wright, Crispin. (forthcoming). Oxonian Scepticism about the A Priori. In Dylan Dodd and Elia Zardini (eds), Beyond Sense? New Essays on the Significance, Grounds, and Extent of the A Priori. Oxford University Press.
+Moore, G. E. (1903a). Principia Ethica. Dover Publications.
+Moore, G. E. (1903b). The Refutation of Idealism. Mind, 12(48), 433-53.
+Nagel, Jennifer. (forthcoming). Recognizing Knowledge: Intuitive and Reflective Epistemology.
+Oppy, Graham. (1987). Williamson and the Contingent A Priori. Analysis, 47, 188-93.
+Parfit, Derek. (1984). Reasons and Persons. Oxford University Press.
+Parsons, Charles. (1979). Mathematical Intuition. Proceedings of the Aristotelian Society, 80, $145-68$.
+Peacocke, Christopher. (1992). A Study of Concepts. MIT Press.
+Peacocke, Christopher. (1993a). How Are A Priori Truths Possible? European Journal of Philosophy, 1, 2-175.
+Peacocke, Christopher. (1993b). Proof and Truth. In John Haldane and Crispin Wright (eds), Reality, Representation, and Projection (pp. 165-90). Oxford University Press.
+Peacocke, Christopher. (1998). Implicit Conceptions, Understanding and Rationality. Philosophical Issues, 9, 43-88.
+Peacocke, Christopher. (2004). The Realm of Reason. Oxford University Press.
+Peacocke, Christopher. (2008). Truly Understood. Oxford University Press.
+Plantinga, Alvin. (1993). Warrant: The Current Debate. Oxford University Press.
+Priest, Graham. (1995). Beyond the Limits of Thought. Cambridge University Press.
+Prior, A. N. (1960). The Runabout Inference-Ticket. Analysis, 21(2), 38-9.
+Pryor, James. (2000). The Skeptic and the Dogmatist. Noûs, 34(4), 517-49.
+Pryor, James. (2001). Highlights of Recent Epistemology. British Journal for the Philosophy of Science, 52(1), 95-124.
+Pryor, James. (2004). What's Wrong with Moore's Argument? Philosophical Issues, 14(1), $349-78$.
+Pust, Joel. (2000). Intuitions as Evidence. Taylor \& Francis.
+Putnam, Hilary. (1968). Is Logic Empirical? In Robert S. Cohen and Marx W. Wartofsky (eds), Boston Studies in the Philosophy of Science: Proceedings of the Boston Colloquium for the Philosophy of Science 1966/1968 (pp. 216-41). Kluwer Academic.
+
+Putnam, Hilary. (1975a). The Refutation of Conventionalism. In Mind, Language and Reality: Philosophical Papers (vol. 2, pp. 153-91). Cambridge University Press.
+Putnam, Hilary. (1975b). The Meaning of 'Meaning'. Minnesota Studies in the Philosophy of Science, $7,131-93$.
+Quine, W. V. (1936). Truth by Convention. In O. H. Lee (ed.), Philosophical Essays for A. N. Whitehead (pp. 90-124). Russell \& Russell.
+
+Quine, W. V. (1951). Two Dogmas of Empiricism. Philosophical Review, 60(1), 20-43.
+Quine, W. V. (1953). From a Logical Point of View: 9 Logico-Philosophical Essays. Harvard University Press.
+Quine, W. V. (1970). Philosophy of Logic. Harvard University Press.
+Quine, W. V. (1976). The Ways of Paradox, and Other Essays. Harvard University Press.
+Quine, W. V. (1981). Theories and Things. Harvard University Press.
+Quine, W. V. (1986). Reply to Geoffrey Hellman. In The Philosophy of WV Quine (pp. 206-8). Open Court.
+Ramsey, Frank. (1929). Theories, in his Foundations: Essays in Philosophy, Logic, Mathematics and Economics (ed. H Mellor). Routledge and Kegan Paul.
+Rorty, Richard. (1979). Philosophy and the Mirror of Nature. Princeton University Press.
+Rumfitt, Ian. (2000). 'Yes' and 'No'. Mind, 109(436), 781-823.
+Russell, Bertrand. (1919). Introduction to Mathematical Philosophy. Dover Publications.
+Salmon, Nathan. (1993). Analyticity and Apriority. Philosophical Perspectives, 7, 125-33.
+Schechter, Joshua. (2010). The Reliability Challenge and the Epistemology of Logic. Philosophical Perspectives, 24(1), 437-64.
+Schiffer, Stephen. (2003). The Things We Mean. Oxford University Press.
+Searle, John. (1958). Proper Names. Mind, 67(266), 166-73.
+Sextus Empiricus. (2000). Outlines of Empiricism (R. G. Bury, trans.). Harvard University Press.
+Sgaravatti, Daniele. (2018). Experience and Reasoning: Challenging the A Priori/A Posteriori Distinction. Synthese. https://doi.org/10.1007/s11229-018-1718-7.
+Shoenfield, Joseph. (1977). Axioms of Set Theory. In Jon Barwise and H. Jerome Keisler (eds), Handbook of Mathematical Logic (pp. 321-44). North-Holland.
+Siegel, Susanna. (2012). Cognitive Penetrability and Perceptual Justification. Noûs, 46(2).
+Siegel, Susanna. (2017). The Rationality of Perception. Oxford University Press.
+Snowdon, Paul. (2010). On the What-It-is-Like-Ness of Experience. Southern Journal of Philosophy, 48(1), 8-27.
+Sorensen, Roy. (2001). Vagueness and Contradiction. Clarendon Press.
+Sosa, Ernest. (1998). Minimal Intuition. In Michael DePaul and William Ramsey (eds), Rethinking Intuition (pp. 257-69). Rowman \& Littlefield.
+Sosa, Ernest. (2007). A Virtue Epistemology: Apt Belief and Reflective Knowledge. Oxford University Press.
+Stalnaker, Robert. (1968). A Theory of Conditionals. In Nicholas Rescher (ed.), Studies in Logical Theory (pp. 98-112). Blackwell.
+Stalnaker, Robert. (1999). Context and Content. Oxford University Press.
+Strawson, Peter. (1952). Introduction to Logical Theory. Methuen.
+Strawson, Peter. (1971). Logico-Linguistic Papers. Taylor \& Francis.
+Street, Sharon. (2009). In Defense of Future Tuesday Indifference: Ideally Coherent Eccentrics and the Contingency of What Matters. Philosophical Issues, 19, 273-98.
+Tolhurst, William. (1998). Seemings. American Philosophical Quarterly, 35(3), 293-302.
+Wedgwood, Ralph. (2002). Internalism Explained. Philosophy and Phenomenological Research, $65(2), 349-69$.
+Williamson, Timothy. (1986). The Contingent A Priori: Has it Anything to Do with Indexicals? Analysis, 46, 113-17.
+Williamson, Timothy. (1987/88). Equivocation and Existence. Proceedings of the Aristotelian Society, 88, 109-27.
+
+Williamson, Timothy. (1988). The Contingent A Priori: A Reply. Analysis, 48, 218-21.
+Williamson, Timothy. (1994). Vagueness. Routledge.
+Williamson, Timothy. (2000). Knowledge and its Limits. Oxford University Press.
+Williamson, Timothy. (2001). Ethics, Supervenience and Ramsey Sentences. Philosophy and Phenomenological Research, 62(3), 625-30.
+Williamson, Timothy. (2003). Understanding and Inference. Aristotelian Society Supplementary Volume, 77, 249-93.
+Williamson, Timothy. (2005). Philosophical 'Intuitions' and Scepticism about Judgement. Dialectica, 58(1), 109-53.
+Williamson, Timothy. (2006). Conceptual Truth. Aristotelian Society Supplementary Volume, $80,1-41$.
+Williamson, Timothy. (2007a). The Philosophy of Philosophy. Blackwell.
+Williamson, Timothy. (2007b). On Being Justified in One's Head. In John Greco, Alfred Mele, and Mark Timmons (eds), Rationality and the Good: Critical Essays on the Ethics and Epistemology of Robert Audi (pp. 106-22). Oxford University Press.
+Williamson, Timothy. (2009). Reference, Inference, and the Semantics of Pejoratives. In Joseph Almog and Paolo Leonardi (eds), The Philosophy of David Kaplan (pp. 137-58). Oxford University Press.
+Williamson, Timothy. (2011). Reply to Boghossian. Philosophy and Phenomenological Research, $82,498-506$.
+Williamson, Timothy. (2012). Boghossian and Casalegno on Understanding and Inference. Dialectica, 66(2), 237-47.
+Williamson, Timothy. (2013). How Deep is the Distinction between A Priori and A Posteriori Knowledge? In Albert Casullo and Joshua C. Thurow (eds), The A Priori in Philosophy (pp. 291-312). Oxford University Press.
+Williamson, Timothy. (2014). Very Improbable Knowing. Erkenntnis, 79, 971-99.
+Williamson, Timothy. (2016). Knowing by Imagining. In Amy Kind and Peter Kung (eds), Knowledge through Imagination (pp. 113-23). Oxford University Press.
+Williamson, Timothy. (2017). Model-Building in Philosophy. In Russell Blackford and Damien Broderick (eds), Philosophy's Future: The Problem of Philosophical Progress (pp. 159-73). Wiley-Blackwell.
+Williamson, Timothy. (2019). Morally Loaded Cases in Philosophy. Proceedings and Addresses of the American Philosophical Association, 93, 159-72.
+Williamson, Timothy. (2020). Suppose and Tell: The Semantics and Heuristics of Conditionals. Oxford University Press.
+Williamson, Timothy. (forthcoming a). More Oxonian Skepticism about the A Priori. In Dylan Dodd and Elia Zardini (eds), Beyond Sense? New Essays on the Significance, Grounds, and Extent of the A Priori. Oxford University Press.
+Williamson, Timothy. (forthcoming b). Reply to Casullo's Defence of the Significance of the A Priori-A Posteriori Distinction. In Dylan Dodd and Elia Zardini (eds), Beyond Sense? New Essays on the Significance, Grounds, and Extent of the A Priori. Oxford University Press. Wittgenstein, Ludwig. (1953). Philosophical Investigations. Blackwell.
+Wright, Crispin. (1986). Inventing Logical Necessity. In Jeremy Butterfield (ed.), Language, Mind and Logic. Cambridge University Press.
+Wright, Crispin. (2001). On Basic Logical Knowledge: Reflections on Paul Boghossian's 'How Are Objective Epistemic Reasons Possible?' Philosophical Studies, 106(1-2), 41-85.
+Wright, Crispin. (2004). Intuition, Entitlement and the Epistemology of Logical Laws. Dialectica, 58(1), 155-75.
+Yablo, Stephen. (1992). Review of Alan Sidelle, Necessity, Essence, and Individuation. Philosophical Review, 101(4), 878-81.
+
+
+
+
+# Index 
+
+For the benefit of digital users, table entries that span two pages (e.g., 52-53) may, on occasion, appear on only one of those pages.
+a priori
+negative characterization of 200
+relativized notion 220
+a priori-a posteriori distinction
+bottom-up objection $78-9,91-2,120-34$, $146-54,161-7,170-4$
+bottom-up/top-down distinction 117-18, $120,138-9$
+top-down objection 118-20, 139-46, $158-61,168-70$
+abduction (see inference to the best explanation)
+access consciousness 206n. 29
+'actually' operator 226n.8, 241
+analytic philosophy 236, 243
+analyticity
+Carnap analyticity 7
+epistemic analyticity $2-3,6-8,21-3,81$, 85n.5, 91-2, 92n.2, 96, 128-9, 135n.18, 164, 186, 189, 196-8, 208-11, 219, 240-1, 244
+Frege analyticity 6-12, 23, 24nn.14-15, 25n.24, 26n. 28
+metaphysical analyticity $2-6,23,24$ n.12, 26n.33, 96, 186, 208, 244
+'aqua' 39-41
+Aristotelian conception of mental content 32
+armchair knowledge 78-9, 91-2
+aspect switching 195
+Audi, Robert 242n. 3
+Axiom of Choice 136 n. 28
+Axiom of Replacement 136 n. 28
+axioms of set theory $122,126-8,135$ n. $9,183-4$
+
+Bach, Kent 72n.6, 74n. 21
+Bayesianism 131-2, 155n.8, 241-2, 242n. 5
+Bealer, George 205n.8, 206n.28, 225
+belief $2,24 \mathrm{n} .3$
+Belnap, Nuel 63-4, 73n. 14
+Bengson, John 206n.28, 207n.33, 225
+Bermudez, Jose 43 n. 3
+Bird, Alexander 72 n. 7
+blame, epistemic 30, 35-8, 42-3, 44n.17, $46-50,61-2,71$ n. $2,97-8,149$
+Block, Ned 27n.46, 97, 206n.29, 226n. 10
+'Boche' (see pejoratives)
+Bonjour, Lawrence 29, 31-2, 43n.6, 44nn.11,19, 46, 149, 155nn.16,18, 206n.30, 213, 224
+Boolos, George 135 n. 13
+brain in a vat 241
+Brandom, Robert 38, 44n.23, 56, 73n.14, 97
+Broome, John 201-2
+Burge, Tyler 22-3, 27n.45, 62-3, 72n.6, 75n.29, 144-5, 155nn.10-12, 170, 204n.2, 245-6
+Butterfield, Jeremy 24 n. 6
+'but' 54-6, 73n.17, 74n. 21
+Byrne, Alex 242 n. 7
+Cantor, Georg 88
+Cappelen, Herman 201
+Carnap sentence 60-1, 64-5, 67-70, 75n. 32
+Carnap, Rudolf 7, 14-15, 17, 19, 22, 26n.30, 40, 59,64
+Carroll, Lewis 32-5, 44nn.12,14,16
+Casalegno, Paolo 93, 97-101, 105-12, 114-16, 116nn.1,8, 210, 218-20, 230-2
+Casullo, Albert 27n.46, 134n.1, 155nn.6,14, 167n. 2
+charity, principle of 90
+Chisholm, Roderick 155n. 9
+Chrysippus 71 n. 3
+Chudnoff, Elijah 192, 225
+Church, Jennifer 27n. 46
+classical logic 69
+clusters 85n.5, 92n.2, 219-20, 231-2
+Coffa, Alberto 13, 15-16, 25n. 26
+coherence (epistemology) 36, 73n.10, 238, 239n. 4
+concept
+conditionalized vs. unconditionalized 40, 42, $59-70$
+defective $40-3,59-67$
+individuation of $59,115,204$ n. 2,246
+mastery vs. possession 204n.2, 218, 226n.3, $229-30,245-6$
+conceptual-role semantics $7,18-23,72 n .7,83$, 103, 188, 204n.2, 205n.8, 205n.12, 209, 214-15, 218-19, 226n.5, 231, 244-6
+conditional proof $63,67-8,70-1,72$ n. 9,110
+confabulation 236
+conjunction elimination 82-3, 86-7, 89-90, 95, 99-101, 104, 112-14, 188-91, 210, 215-19, $228-30$
+conjunction introduction 99-100, 111, 116n.2, 218
+conservative extension $51-2,63,73$ n.14, 76 n. 43
+conservativism, epistemological 36, 73n. 10
+consistent Nazi/bigot 213, 225-6, 237-8, 239n.4, 241
+
+context of discovery / context of justification 177, 183-4
+contingent a priori 118-19, 125, 241
+conventional implicature 54,57
+conventionalism 5, 14, 16-19
+counterfactual conditionals $79-80$, $91-2,240$
+Creath, Richard 26nn.30,32, 27n. 46
+cumulative hierarchy 135 n. 9
+Darwall, Stephen 197
+Davies, Martin 22nn. 8
+deconstruction 88
+deference, epistemic 159, 169-70
+deference, semantic $62-3,74 \mathrm{n} .28,204 \mathrm{n} .2$, 209-11, 215, 217-18, 230
+Derrida, Jacques 88
+Deutsch, Max 201
+dialetheism $71 \mathrm{n} .4,89$
+division of linguistic labor 48, 230
+Dogramaci, Sinan 85n. 6
+doxastic justification 220, 235
+Dreben, Burton 27n. 46
+Dummett, Michael 12, 22, 25n.25, 38, 44n.22, $50-1,56,73 \mathrm{nn} .12,14,16-17,74 \mathrm{n} .23$, 76n.43, 97, 240
+early modern philosophy 241
+Einstein, Albert 104, 217, 226n. 5
+Elugardo, Reinaldo 72 n .6
+episodic memory $121-3,144,147$
+epistemic logic $241-2,242$ n. 5
+epistemology
+of logic $6-7,12-13,22,25 n .24,30,35$, 85n.1, 86-7, 92, 95, 114, 125, 128, 132
+of normative truths 196-9, 244
+Epstein, Gregory 45n. 27
+Escher, M.C. 150
+Evans, Gareth 58-9, 241
+Evans, Jonathan 116n.6, 239n. 2
+evidence 120,124
+psychologization of 165
+evolution $175-6$
+excluded middle, law of 16
+experience $118-20,124,139-43,153$, $157-8,168$
+enabling role of experience $78-81,85-6$, $91,119-20,123-5,127-8,130-1,135 n .5$, 139-41, 143, 148, 153-4, 155n.11, 156-7, $160,168,170$
+evidential/epistemic role of experience $78-80$, $91,119-20,123-6,128,130-1,139-40$, 153-4, 155nn.4,11, 156-7, 165-6, $168-70$
+inner vs. outer experience $2,24 \mathrm{n} .4,119-20$, $140,142,157-8,168$
+externalism, epistemic $7,29-30,35,43 n .3,46$, $148,150,174,213,235,241-2,242 n n .5-6$, $245-6$
+externalism, semantic $7,62-3,84,90,116 n .7$, $245-6$
+
+Fermat's Last Theorem 29, 39-40, 96, 125, 237
+Field, Hartry 27n. 46
+Fine, Kit 45n.27, 197, 199, 207n. 33
+Flash Grasping 13-14
+'Ifurg' 39-42, 45n.26, 106
+Fodor, Jerry 19-21, 25n.21, 27nn.39-41,46, 97
+Foley, Richard 155n.18, 206n. 30
+folk physics 204
+formal epistemology 241-2
+free logic 136 n .30
+Frege 6-7, 53, 219-20
+Freud, Sigmund 223
+Fricker, Miranda 27n. 46
+functionalism 245
+'furze' and 'gorse' 53, 74n. 24
+garden-path sentences 196
+Gates, Gary 27n. 46
+geometry $13-14,104$
+Gettier, Edmund 187, 192-5, 201-4
+Gibbard, Allan 27n.46, 142, 155n.7, 197
+Goldberg, Sandy 72 n. 6
+Goldman, Alvin 199
+Goodman, Nelson 36, 80
+Grice, Paul 25n.17, 54, 73n.17, 87-8, 102, 104
+Gödel, Kurt 31, 105, 183-4
+Hale, Bob 23n.1, 24n.6, 27n. 46
+Hall, Ned 28, 73 n. 17
+Hallett, Michael 135n. 12
+Harman, Gilbert 4-5, 21, 24nn.7,10-11, 25n.20, 27nn.42,46, 36, 44n.18, 72nn.7,9, 73n.10, 93, 206n. 32
+harmony 51-2, 73 n. 14
+Harris, Paul 63, 136n.30, 242n. 7
+Hawthorne, John 242n. 2
+Heil, John 72 n. 7
+Hellman, Geoffrey 27n. 37
+Hintikka, Jaakko 242n. 5
+holism, confirmation 11, 133
+holism, meaning 11-12, 20, 25 n. 22
+Horwich, Paul 24n.10, 27n.46, 45nn.26-27, 59, $75 \mathrm{n} .32,97,155 \mathrm{n} .20$
+Humberstone, Lloyd 226n. 8
+idealism 127, 175
+imagery, mental 179, 182, 201
+imagination 79-80, 111, 120-31, 146-53, 159-67, 170-4, 193, 241-4
+implicit definition $7-9,13-23$
+
+indeterminacy of translation 1,3
+induction 69-70, 181, 183-4
+inference to the best explanation 125, 128, $145-6,175,181,183-4$
+inferential-role semantics $27 \mathrm{n} .38,58-9,83-4$, $88,97,103-4,112,219$
+intellectual seeming 195-6, 199-202, 204, 211-12, 214, 224, 232-5, 241
+intentional object 141-3, 145
+internalism, epistemic 30, 33-6, 43n.3, 44nn.8,14, 135n.2, 161, 163-4, 166-7, 174, 196, 202, 208, 212-13, 222, 225, 232, 235, 237-8, 241-2, 242nn.3,5, $244-5$
+internalism, semantic 245
+introspection 32, 110, 119, 140-2, 153, 157-8, 163, 169, 212, 222-3, 232-4, $241-2$
+intuition 3, 13, 31-5, 46, 81, 96, 128, 138, 142, 145, 149, 153, 165, 169, 183, 244
+skepticism about distinctive role in explaining a priori justification 211-12, 220-1, 234-7
+skepticism about existence 31-2, 200-4, 211-13, 221-6, 232-4
+skepticism about justificatory power 32-5, 46, 213, 225-6, 237-9
+intuitionistic logic 69, 76n.42, 240
+iterative conception of sets 127, 135n.13
+Jackson, Frank 75n.34, 135n. 6
+Jenkins, Carrie 167 n. 2
+justification
+of action 238
+relative priority vis-à-vis knowledge 154n.1, 156, 213, 241, 242n.5, 245
+vs. entitlement 23
+justifier 142-6, 158-60, 168-9
+Kant, Immanuel 95, 187, 196-7, 208
+Karttunen, Lauri 73nn.18-19
+Kasaki, Masashi 167n. 2
+Kitcher, Philip 155n. 2
+Kleene, Stephen 82, 87-9, 101-2, 114
+knowledge maximization 90
+Kornblith, Hilary 236
+Kripke, Saul 16-17, 53, 118-19, 124-5, 136n.21, 219-20, 231-2, 241, 243, 246
+Kroedel, Thomas 116 n. 5
+language of thought 2, 24n.3, 71 n. 3
+Lehrer, Keith 149, 155n. 15
+Leibniz, Gottfried Wilhelm 16, 31
+Lepore, Ernie 19-21, 25n.21, 27nn.39,41
+Lewis, David 32, 40, 44n.12, 59, 64-8, 72n.7, $75 \mathrm{n} .34,184,246$
+liar paradox $71 \mathrm{n} .4$
+linguistic competence $55,58-9,67,74$ n. 23 , 86-90, 95, 102-3, 113, 123, 128-9, 209-10, 217
+list-like definition 36, 142, 153, 231
+Loewer, Barry 27 n. 46
+logical constants 13-16, 18-21, 23, 27n.38, 37, 42-3, 48-9, 81-3, 86-7, $95-9,105-6,108-10,114-16,116 n .5$, 182, 188, 205n.13, 218-19, 229-31, 244
+logical positivisim 4-5, 134
+Lycan, Bill 1, 27 n. 46
+Maddy, Penelope 135nn.15-16, 136n. 28
+Mallozzi, Antonella 155n.20, 207n. 33
+Malmgren, Anna-Sara 85n.6, 134n.1, 170
+Mathematician 169-70
+McGee, Vann 47-9, 71n.4, 75n.31, 76n.44, 99, 103
+McGinn, Colin 221
+meaning
+meaning change (see also concept, individuation of) 103, 105, 115-16
+meaning indeterminacy/skepticism $1-8,105$
+meaning vs. reference 26 n .29
+meaning-entitlement connection 37-43, 49-63, 188, 219-20, 244
+meaning-postulate $22,65-8$
+Melis, Giacomo 134n.1, 167n. 2
+memory
+meter stick (Kripke's example) 16-17, 26n. 29
+Miller, Alex 43 n. 3
+modality, epistemology of $79,85 \mathrm{n} .1,92$
+model-building 241-2, 242nn.4,6
+modus ponens $12,22,28,30,36,42,46-9$, $60,63,67-8,70-1,71$ n. $4,72$ n. $9,86-7$, 93-7, 99, 103, 105-6, 108, 110, 113-14, 159-60, 162, 169-70, 205n.13, 230-1
+Moore, G.E. 197-9, 223
+multiple realization $65-7$
+Müller-Lyer illusion 223-5, 232-3
+Nagel, Jennifer 239n.5, 242n. 5
+Nagel, Thomas 27 n. 46
+natural deduction 116n.2, 128-9
+natural kind terms 53, 55-6, 206n.26, 208, 230
+naturalism 133, 136n.23, 246
+naïve comprehension principle 201, 205n.14, 224-5, 233
+necessary a posteriori 118-19, 125
+necessity, linguistic theory of $1-2,5,23$
+'neutrino' 40-3, 59-67
+
+Nietzsche, Friedrich 88
+Norman (Bonjour's) 29-30, 149, 224
+Norman (Williamson's) (see a priori-a posteriori distinction, bottom-up objection)
+normative necessity 199
+offline-online distinction 79-80, 91, 111, 121-2, 127, 130, 134, 179-81
+open question 198-9, 206n. 26
+Oxford University 240
+paradox of analysis 81
+Parallels Postulate 104
+Peacocke, Christopher 27nn.38,43,46, 39, 44nn.9,20, 45nn.24,26, 72n.9, 74n.28, 85n.6, 97, 103, 105, 112, 174n.3, 189-90, 214, 221, 226n. 10
+Peano axioms 96
+pejoratives $38-40,49-57$
+Peters, Stanley 73nn.18-19
+phenomenal consciousness 206n. 29
+'phlogiston' 84, 90-1
+Plato $31,132-3,204$
+post hoc rationalization 236
+Power Set Axiom 126-7, 135nn.10,12
+presentation 200, 206n.28, 211
+preservative memory 144-6, 173
+Priest, Graham 71n.4, 89
+primitively compelling 19, 103-4, 112, 214-18, 227-30
+Princeton University 243
+Principia Mathematica 128
+Prior, Arthur 38, 44n.21, 49
+private language 84,90
+projectibility $117,137-8$
+propositional justification 220, 235
+Pryor, Jim 71n.2, 155n. 20
+psychology 134, 241-2, 242nn.5,7
+of reasoning $112-13$
+of the imagination $242-4,242 \mathrm{n} .7$
+pun 195
+Pust, Joel 199
+Putnam, Hilary 26n.32, 48, 55-6, 62-3, 72n.5, 226n.6, 229-30
+
+Quine, W.V. 1-5, 7-13, 15, 17-21, 23, 24nn.2,8,12,15, 25nn.16-17, 26nn.33-34, 27nn.36-38,46, 36, 78, 81, 105, 117-18, 128, 131-3, 136n.24, 155n.2, 240, 243-4
+Quine-Duhem thesis 11
+Ralton, Peter 197
+Ramsey sentence 60, 64, 69-70, 75n. 32
+Ramsey, Frank 40, 59-60, 64-5, 69-70, 75nn.32,34, 179-80
+rationalism 199
+about philosophy 243-4
+rationality $94-5,134,198,243$
+Rawls, John 36
+reference failure $52,56,90-1$
+reflection $23,30,48-9,53-4,71$ n.4, 72n.9, 94, 106, 119, 121-3, 129-30, 140-1, 147, 153, 155n.13, 158, 169, 198, 201, 211-13, 235-6
+reflective equilibrium 36
+Reflexivity of Identity 4, 128-30
+regress $34,73 \mathrm{n} .20,124,129-30,163-4$
+relativism
+about logic 15
+about morality 206 n. 23
+about rationality 94
+relevance logic 71 n. 4
+reliabilism $29-30,35-6,43,46,80,96$, 148-50, 153-4, 155n.18, 161, 163-4, 166, 174, 195, 202-3, 213, 224, 237, 245
+reliability $29-30,46,79-80,96,100,121-5$, 148-9, 153-4, 155n.17, 161, 178-81, 183, 191, 195, 202, 224, 241, 245
+rigid designator 84,130
+Rorty, Richard 243-4
+rule-following 18-19, 48-9, 72n. 8
+rule/pragmatic circularity $12,22,31$
+Rumfitt, Ian 76n. 43
+Russell, Bertrand 40, 128, 135nn.16-17, 204, 233
+Russell's Paradox 233
+safety $79-80,124-5,129-30,241$
+Salmon, Nathan 26n. 31
+Schechter, Joshua 45n. 27
+Schiffer, Stephen 27n.46, 45n.27, 85n.6, 97, 103, 205n.12, 207n. 33
+science $78,83,120,128,131-4,136$ n. $28,183-4$, 204, 241-4
+Searle, John 219-20, 231-2
+sense, Fregean 53
+Sextus Empiricus 71 n. 3
+Sgaravatti, Daniele 167 n. 2
+Shoenfield, Joseph R. 135nn.13-14
+Siegel, Susanna 155n.20, 207n.33, 226, 237-8
+Silins, Nicholas 77 n. 47
+Smithies, Declan 85 n. 6
+Snowdon, Paul 158
+Sorensen, Roy 74n. 23
+sorites paradox 74 n. 23
+Sosa, Ernest 192, 195, 199
+Special Theory of Relativity 104, 217
+Srinivasan, Amia 239n. 5
+Stalnaker, Robert 54, 73n.18, 184
+Stanley, Jason 77 n. 47
+
+Stanovich, Keith 239n. 2
+Steffensen, Asger 134n. 1
+stereotype $55-6$
+stipulation $10-11,57-9,75$ n. 35,106
+Strawson, P.F. 25nn.17,18, 54, 73 n. 18,104
+synonymy 6-12, 25nn.17,23, 53, $55-7,84$
+synthetic a priori 196-9
+system 1/system 2 distinction 112-13, 116n.6, 236, 239n. 2
+system-first approach 246
+tableau method $182-3$
+taking $28-9,37-8,43$ n. 2,202
+Taniyama-Shimura conjecture 39-40
+Tennant, Neil 27 n. 46
+theoretical terms $63-7$
+thought experiment $178,183,193-4,201$, 203-4, 204n.2, 205n.19, 206n.21, 221, 224, 233-4, 245-6
+Thurow, Joshua 134 n. 1
+tolerance principle 74 n. 23
+tone $53,75 \mathrm{n} .16,84$
+'tonk' 38-40, 49-50, 57, 73n. 14
+training in philosophy 67,236
+transparency of meaning $6-7$
+Trolley scenario 138, 194, 201, 212-13, 222, 224
+truth in virtue of meaning (see analyticity, metaphysical analyticity)
+truth, deflationary views of 17
+Twin Earth 187, 192, 194-5
+
+Ullian, J.S. 36
+understanding-assent links 81-3, 85nn.3,5, 86-7, 89-92, 92n.2, 95, 100-1, 189-92, 205n.13, 214-16, 218-20, 226n.2, 227-30, 244
+Casalegno's counterexamples 218-20, 230-2
+expert-based counterexamples $47-9,82-3$, $86,89,100-4,188-92,209-11,214-18$, 227-30, 244
+Unger, Peter 27 n. 46
+unique characterization 63-5, 75nn.31,33-34, 76 nn. 42,45
+unique realization $65,75 \mathrm{n} .34$
+vagueness $74 \mathrm{n} .23,75 \mathrm{n} .30,82,101,104-6$, $111-12,165,231$
+Velleman, J.D. 27n.46, 243-4
+verificationism 11
+Wedgwood, Ralph 71n.2, 77n. 47
+Whitehead, A.N. 128
+Wittgenstein, Ludwig 7, 13-16, 44n.17, 46, $74 \mathrm{n} .25,84,191,195-6$
+Wright, Crispin 23n.1, 24n.6, 27n.46, 34, 43n.3, 44nn.14-15, 45nn.24,26-27, 85n.6, 155n.20, 167n.2, 174n.3, 206n.27, 207n.33, 226n. 10
+
+Yablo, Steve 26n.31, 27n. 46
+Yunez, Norma 27n. 46
+ZF (axiomatic system) 69-70, 76n.44, 126
+ZFC (axiomatic system) 136n. 28
+

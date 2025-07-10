@@ -1,0 +1,8 @@
+## Notes
+
+1. I am very doubtful that knowledge of modal claims can be reduced to knowledge of counterfactuals. It seems to me that, on any plausible account, knowledge of logical, mathematical, and constitutive truths will be presupposed in accounting for our knowledge of counterfactuals. But limitations of space prevent me from discussing this point.
+2. Commitment to such links need involve no commitment to a use-dispositional analysis of meaning.
+3. For convenience, I lump the case of inference under the 'understanding/assent' label. I also won't be fussy about the distinction between meanings and concepts since it won't matter for anything that follows.
+4. At the Joint Session of the Mind Association and the Aristotelian Society held in Belfast in the summer of 2003 .
+5. Even if Williamson were right that there are no atomic understanding-assent links of the form-necessarily, one understands $\mathbf{w}$ only if one accepts $S(\mathbf{w})$-that wouldn't show that there aren't clusters of such links of the form: necessarily, anyone who understands $\mathbf{w}$ accepts $S(\mathbf{w})$ or $S^{\prime}(\mathbf{w}) \ldots$ or $S^{*}(\mathbf{w})$. A friend of epistemological analyticities might well be satisfied with the existence of such clusters. Unfortunately, I can't pursue this thought here either.
+6. For helpful comments I am grateful to Sinan Dogramaci, Anna-Sara Malmgren, Christopher Peacocke, Stephen Schiffer, Declan Smithies, and Crispin Wright.
