@@ -1,5 +1,6 @@
 import unittest
 import os
+import json
 from src.preprocessing.parse import Parser
 import re
 
@@ -252,6 +253,139 @@ class TestParser(unittest.TestCase):
         
         print(f"\nTotal paragraphs found: {total_paragraphs}")
         self.assertTrue(total_paragraphs > 0, "Should find at least some paragraphs")
+
+    def test_parse_apriori(self):
+        """Test the complete parse() method on apriori.txt and write output to test.json"""
+        # Construct the absolute path to the test file
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.abspath(os.path.join(current_dir, '..', '..', '..'))
+        file_path = os.path.join(project_root, 'texts', 'txt', 'apriori.txt')
+        
+        # Read the apriori.txt file
+        with open(file_path, 'r', encoding='utf-8') as f:
+            text = f.read()
+        
+        # Parse the text
+        parser = Parser(text)
+        parsed_document = parser.parse()
+        
+        # Write the result to test.json in the base directory
+        output_path = os.path.join(project_root, 'test.json')
+        with open(output_path, 'w', encoding='utf-8') as f:
+            json.dump(parsed_document, f, indent=2, ensure_ascii=False)
+        
+        print(f"=== PARSE APRIORI TEST RESULTS ===")
+        print(f"Parsed document written to: {output_path}")
+        
+        # Basic structure assertions
+        self.assertIsInstance(parsed_document, dict)
+        self.assertIn('introductions', parsed_document)
+        self.assertIn('chapters', parsed_document)
+        self.assertIn('end_sections', parsed_document)
+        self.assertIn('notes', parsed_document)
+        self.assertIn('linked_notes', parsed_document)
+        self.assertIn('footnotes', parsed_document)
+        self.assertIn('bibliography', parsed_document)
+        
+        # Test bibliography structure
+        bibliography = parsed_document['bibliography']
+        self.assertIsInstance(bibliography, dict)
+        self.assertIn('entries', bibliography)
+        self.assertIn('unlinked_citations', bibliography)
+        
+        # Print summary statistics
+        print(f"Found {len(parsed_document['introductions'])} introduction sections")
+        print(f"Found {len(parsed_document['chapters'])} chapters")
+        print(f"Found {len(parsed_document['end_sections'])} end sections")
+        print(f"Found {len(parsed_document['notes'])} notes")
+        print(f"Found {len(parsed_document['footnotes']['references'])} footnote references")
+        print(f"Found {len(parsed_document['footnotes']['definitions'])} footnote definitions")
+        
+        # Print bibliography statistics
+        bib_entries = bibliography['entries']
+        unlinked_citations = bibliography['unlinked_citations']
+        total_citations = sum(len(entry['citations']) for entry in bib_entries.values())
+        
+        print(f"Found {len(bib_entries)} bibliography entries")
+        print(f"Found {total_citations} linked in-text citations")
+        print(f"Found {len(unlinked_citations)} unlinked citations")
+        
+        # Print sample bibliography entries
+        if bib_entries:
+            print("\nSample bibliography entries:")
+            for i, (key, entry) in enumerate(bib_entries.items()):
+                if i >= 5:  # Show only first 5
+                    break
+                print(f"  - {key}: {entry['author']} ({entry['year']}) - {len(entry['citations'])} citations")
+        
+        # Print chapter titles
+        if parsed_document['chapters']:
+            print("\nChapter titles:")
+            for chapter_title in parsed_document['chapters'].keys():
+                print(f"  - {chapter_title}")
+        
+        # Print introduction section titles
+        if parsed_document['introductions']:
+            print("\nIntroduction section titles:")
+            for intro in parsed_document['introductions']:
+                print(f"  - {intro['title']}")
+        
+        # Print end section titles
+        if parsed_document['end_sections']:
+            print("\nEnd section titles:")
+            for end_section in parsed_document['end_sections']:
+                print(f"  - {end_section['title']}")
+        
+        # Count total paragraphs
+        total_paragraphs = 0
+        
+        # Count paragraphs in introductions
+        for intro in parsed_document['introductions']:
+            if 'paragraphs' in intro:
+                total_paragraphs += len(intro['paragraphs'])
+        
+        # Count paragraphs in chapters
+        for chapter_data in parsed_document['chapters'].values():
+            if chapter_data['paragraphs']:
+                total_paragraphs += len(chapter_data['paragraphs'])
+            for subsection in chapter_data['subsections']:
+                if 'paragraphs' in subsection:
+                    total_paragraphs += len(subsection['paragraphs'])
+        
+        # Count paragraphs in end sections
+        for end_section in parsed_document['end_sections']:
+            if 'paragraphs' in end_section:
+                total_paragraphs += len(end_section['paragraphs'])
+        
+        print(f"\nTotal paragraphs found: {total_paragraphs}")
+        
+        # Verify the document has content
+        self.assertTrue(total_paragraphs > 0, "Should find at least some paragraphs")
+        
+        # Verify bibliography functionality
+        if bib_entries:
+            print("\nBibliography validation:")
+            # Check that bibliography entries have the required fields
+            for key, entry in bib_entries.items():
+                self.assertIn('key', entry)
+                self.assertIn('author', entry)
+                self.assertIn('year', entry)
+                self.assertIn('full_text', entry)
+                self.assertIn('citations', entry)
+                self.assertIsInstance(entry['citations'], list)
+            
+            # Check that citations have the required fields
+            for citation in unlinked_citations:
+                self.assertIn('author', citation)
+                self.assertIn('year', citation)
+                self.assertIn('start_offset', citation)
+                self.assertIn('page_info', citation)
+                self.assertIn('full_text', citation)
+            
+            print(f"  - All bibliography entries have required fields")
+            print(f"  - All citations have required fields")
+        
+        print(f"\nTest completed successfully. Output saved to {output_path}")
 
 
 if __name__ == '__main__':

@@ -492,3 +492,166 @@ class Parser:
                 })
 
         return chapters_with_notes
+    
+    def parse_bibliography_entries(self, bibliography_content, bib_start_offset):
+        bib_map = {}
+        bib_pattern = re.compile(r"^([A-Z][\w\s,.\-&]+?)\.\s*\((\d{4}[a-z]?|forthcoming)\)\.\s*(.*)", re.MULTILINE)
+
+        for match in bib_pattern.finditer(bibliography_content):
+            author_str = match.group(1).strip()
+            year_str = match.group(2).strip()
+
+            primary_author_last_name = author_str.split(',')[0].split()[-1].lower()
+            key = f"{primary_author_last_name}_{year_str}"
+
+            entry_start = match.start()
+            next_match = bib_pattern.search(bibliography_content, pos=match.end())
+            entry_end = next_match.start() if next_match else len(bibliography_content)
+
+            full_text = bibliography_content[entry_start:entry_end].strip()
+
+            bib_map[key] = {
+                "key": key,
+                "author": author_str,
+                "year": year_str,
+                "full_text": full_text,
+                "start_offset": bib_start_offset + entry_start,
+                "end_offset": bib_start_offset + entry_end,
+                "citations": []
+            }
+
+        return bib_map
+    
+    def find_intext_citations(self, text_to_search, paragraphs):
+        citations = []
+
+        # Pattern 1: Standard parenthetical citation, e.g., (Williamson 2007a: 99-105) or (2004: 407)
+        # This is intentionally broad to capture contents for later parsing.
+        citation_pattern = re.compile(r'\(([^)]+?)\)')
+
+        # heuristic -- keep track of last author in paragraph
+        last_author_in_paragraph = None
+
+        for paragraph in paragraphs:
+            last_author_in_paragraph = None # reset for each paragraph
+
+            explicit_authors = list(re.finditer(r'\b([A-Z][a-z]+)\s+\(?(?:\d{4}|forthcoming)', paragraph['text']))
+            if explicit_authors:
+                last_author_in_paragraph = explicit_authors[-1].group(1).lower()
+
+            for match in citation_pattern.finditer(paragraph['text']):
+                content = match.group(1)
+                page_info = None
+
+                page_match = re.search(r':\s*([0-9\-]+)$', content)
+                if page_match:
+                    page_info = page_match.group(1)
+                    content = content[:page_match.start()].strip() # remove page info for easier parsing
+
+                # Split by comma or semicolon to handle multiple citations like (Boghossian 1996, 2003b)
+                parts = re.split(r'\s*[,;]\s*', content)
+
+                for part in parts:
+                    author = None
+                    year = None
+
+                    # try to parse author/year format
+                    author_year_match = re.match(r'([A-Za-z\s,]+?)\s+(\d{4}[a-z]?|forthcoming)', part)
+                    if author_year_match:
+                        author = author_year_match.group(1).strip().split(',')[-1].strip().lower()
+                        year = author_year_match.group(2)
+                        last_author_in_paragraph = author
+
+                    else:
+                        # try to parse just year format
+                        year_match = re.match(r'(\d{4}[a-z]?|forthcoming)', part)
+                        if year_match and last_author_in_paragraph:
+                            author = last_author_in_paragraph
+                            year = year_match.group(1)
+
+                    if author and year:
+                        key = f"{author}_{year}"
+                        citations.append({
+                            'author': author,
+                            'year': year,
+                            'key': key,
+                            'page_info': page_info,
+                            'start_offset': paragraph['start_offset'] + match.start(),
+                            'end_offset': paragraph['start_offset'] + match.end(),
+                            'full_text': match.group(0)
+                        })
+
+        return citations
+    
+    def link_citations_to_bibliography(self, bibliography_section):
+        if not bibliography_section:
+            return {"entries": {}, "unlinked_citations": []}
+        
+        bib_text = bibliography_section.get('content', '')
+        bib_offset = bibliography_section.get('content_start', 0)
+
+        bib_map = self.parse_bibliography_entries(bib_text, bib_offset)
+
+        all_paragraphs = []
+        # for intro in self.find_intro_sections():
+        #     all_paragraphs.extend(intro.get('paragraphs', []))
+
+        chapters_data = self.find_paragraphs()['chapters']
+        for chapter in chapters_data.values():
+            all_paragraphs.extend(chapter.get('paragraphs', []))
+            for subsection in chapter.get('subsections', []):
+                all_paragraphs.extend(subsection.get('paragraphs', []))
+
+        intext_citations = self.find_intext_citations(self.text, all_paragraphs)
+
+        # link citations to bibliography
+        unlinked_citations = []
+        for citation in intext_citations:
+            key = citation.get('key')
+            if key and key in bib_map:
+                citation_copy = citation.copy()
+                citation_copy.pop('key', None)  # Remove key from citation before adding
+                bib_map[key]['citations'].append(citation_copy)
+            else:
+                unlinked_citations.append(citation)
+
+        return {
+            "entries": bib_map,
+            "unlinked_citations": unlinked_citations
+        }
+    
+    def parse(self):
+        main_content = self.find_paragraphs()
+        end_sections = self.find_end_sections()
+
+        bibliography_section = None
+        other_end_sections = []
+        for section in end_sections:
+            if section['title'].lower() == 'bibliography':
+                bibliography_section = section
+            else:
+                section['paragraphs'] = self.find_paragraphs_in_block(
+                    content_text=section.get('content', ''),
+                    content_start_offset=section.get('content_start', 0)
+                )
+                other_end_sections.append(section)
+
+
+        # parse annotations
+        notes_map = self.find_notes()
+        linked_notes_map = self.link_notes_to_text()
+        footnotes = self.find_footnotes()
+
+        bibliography_data = self.link_citations_to_bibliography(bibliography_section)
+
+        doc = {
+            "introductions": main_content.get('introductions', []),
+            "chapters": main_content.get('chapters', []),
+            "end_sections": end_sections,
+            "notes": notes_map,
+            "linked_notes": linked_notes_map,
+            "footnotes": footnotes,
+            "bibliography": bibliography_data
+        }
+
+        return doc
