@@ -43,7 +43,7 @@ class OCR:
                 include_image_base64=False
             )
 
-            output_dir = "../../processed_pdfs"
+            output_dir = "../../texts/txt/processed_pdfs"
             os.makedirs(output_dir, exist_ok=True)
             
             file_name = os.path.basename(self.pdf_path)
