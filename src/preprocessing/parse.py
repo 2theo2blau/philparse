@@ -6,7 +6,7 @@ class Parser:
     def __init__(self, text):
         self.text = text
 
-    def find_footnotes(self):
+    def find_notes(self):
         notes_map = {}
         
         header_pattern = re.compile(r'^#{0,4}\s*Notes\s*$', re.MULTILINE | re.IGNORECASE) # check for headers with "Notes" (e.g. "## Notes")
@@ -60,6 +60,44 @@ class Parser:
         
         return notes_map
     
+    def find_footnotes(self):
+        reference_pattern = re.compile(r'\[\^([^\]]+)\](?!:)')
+        definition_pattern = re.compile(r'\[\^([^\]]+)\]:\s*(.+?)(?=\n\n|\[\^|$)', re.DOTALL)
+        
+        references = []
+        ref_id = 1
+
+        for match in reference_pattern.finditer(self.text):
+            reference = {
+                'id': ref_id,
+                'identifier': match.group(1),
+                'start_offset': match.start(),
+                'end_offset': match.end()
+            }
+
+            references.append(reference)
+            ref_id += 1
+
+        definitions = []
+        def_id = 1
+
+        for match in definition_pattern.finditer(self.text):
+            definition = {
+                'id': def_id,
+                'identifier': match.group(1),
+                'content': match.group(2).strip(),
+                'start_offset': match.start(),
+                'end_offset': match.end()
+            }
+            
+            definitions.append(definition)
+            def_id += 1
+
+        return {
+            'references': references,
+            'definitions': definitions
+        }
+
     def find_chapters(self):
         chapter_pattern = re.compile(
             # Pattern 1: Markdown style: # NUM \n ## TITLE
@@ -290,7 +328,7 @@ class Parser:
     
     def link_notes_to_text(self):
         chapters = self.find_chapters()
-        notes_map = self.find_footnotes()
+        notes_map = self.find_notes()
         references = self.find_note_references()
 
         if not chapters or not notes_map:

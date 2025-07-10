@@ -8,7 +8,7 @@ class TestParser(unittest.TestCase):
         # Construct the absolute path to the test file
         current_dir = os.path.dirname(os.path.abspath(__file__))
         project_root = os.path.abspath(os.path.join(current_dir, '..', '..', '..'))
-        file_path = os.path.join(project_root, 'texts', 'txt', 'unit-tests', 'footnotes.txt')
+        file_path = os.path.join(project_root, 'texts', 'txt', 'unit-tests', 'notes.txt')
 
         with open(file_path, 'r') as f:
             text = f.read()
@@ -22,6 +22,48 @@ class TestParser(unittest.TestCase):
 
         # Example assertion: Check if any footnotes were found
         self.assertTrue(len(footnotes) > 0)
+
+    def test_find_footnotes_from_file(self):
+        # Construct the absolute path to the test file
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.abspath(os.path.join(current_dir, '..', '..', '..'))
+        file_path = os.path.join(project_root, 'texts', 'txt', 'unit-tests', 'footnotes.txt')
+
+        with open(file_path, 'r') as f:
+            text = f.read()
+
+        parser = Parser(text)
+        footnotes = parser.find_footnotes()
+        
+        print("Detected footnotes from footnotes.txt:", footnotes)
+        
+        # Test that we get the expected structure
+        self.assertIsInstance(footnotes, dict)
+        self.assertIn('references', footnotes)
+        self.assertIn('definitions', footnotes)
+        
+        references = footnotes['references']
+        definitions = footnotes['definitions']
+        
+        # Test that we found at least one reference and one definition
+        self.assertTrue(len(references) > 0, "Should find at least one footnote reference")
+        self.assertTrue(len(definitions) > 0, "Should find at least one footnote definition")
+        
+        # Test the specific footnote reference [^0]
+        self.assertEqual(references[0]['identifier'], '0')
+        self.assertEqual(references[0]['id'], 1)
+        
+        # Test the specific footnote definition [^0]: ...
+        self.assertEqual(definitions[0]['identifier'], '0')
+        self.assertEqual(definitions[0]['id'], 1)
+        self.assertIn('This paper was published', definitions[0]['content'])
+        self.assertIn('Williamson on the A Priori and the Analytic', definitions[0]['content'])
+        
+        print(f"Found {len(references)} references and {len(definitions)} definitions")
+        for ref in references:
+            print(f"Reference {ref['id']}: [^{ref['identifier']}] at offset {ref['start_offset']}")
+        for defn in definitions:
+            print(f"Definition {defn['id']}: [^{defn['identifier']}] - {defn['content'][:50]}...")
 
     def test_find_chapters(self):
         # Construct the absolute path to the test file
