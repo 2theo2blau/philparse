@@ -183,6 +183,76 @@ class TestParser(unittest.TestCase):
         self.assertIn('Bibliography', section_titles)
         self.assertIn('Index', section_titles)
 
+    def test_find_paragraphs(self):
+        # Construct the absolute path to the test file
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.abspath(os.path.join(current_dir, '..', '..', '..'))
+        file_path = os.path.join(project_root, 'texts', 'txt', 'unit-tests', 'chapters.txt')
+        
+        with open(file_path, 'r') as f:
+            text = f.read()
+
+        parser = Parser(text)
+        paragraphs_data = parser.find_paragraphs()
+        
+        print("=== FIND_PARAGRAPHS TEST RESULTS ===")
+        
+        # Test that we get the expected structure
+        self.assertIsInstance(paragraphs_data, dict)
+        self.assertIn('introductions', paragraphs_data)
+        self.assertIn('chapters', paragraphs_data)
+        
+        # Print introduction paragraphs
+        if paragraphs_data['introductions']:
+            print("\n--- INTRODUCTION SECTIONS ---")
+            for intro in paragraphs_data['introductions']:
+                print(f"Introduction: {intro['title']}")
+                if 'paragraphs' in intro:
+                    for para in intro['paragraphs']:
+                        print(f"  Paragraph {para['id']}: offset {para['start_offset']}-{para['end_offset']}")
+        
+        # Print chapter paragraphs
+        print("\n--- CHAPTERS ---")
+        for chapter_title, chapter_data in paragraphs_data['chapters'].items():
+            print(f"\nChapter: {chapter_title}")
+            print(f"  Chapter offset: {chapter_data['start_offset']}-{chapter_data['end_offset']}")
+            
+            # Print direct chapter paragraphs (if no subsections)
+            if chapter_data['paragraphs']:
+                print("  Direct chapter paragraphs:")
+                for para in chapter_data['paragraphs']:
+                    print(f"    Paragraph {para['id']}: offset {para['start_offset']}-{para['end_offset']}")
+            
+            # Print subsection paragraphs
+            if chapter_data['subsections']:
+                print("  Subsections:")
+                for subsection in chapter_data['subsections']:
+                    print(f"    Subsection: {subsection['title']}")
+                    print(f"      Subsection offset: {subsection['start_offset']}-{subsection['end_offset']}")
+                    if 'paragraphs' in subsection:
+                        for para in subsection['paragraphs']:
+                            print(f"      Paragraph {para['id']}: offset {para['start_offset']}-{para['end_offset']}")
+        
+        # Basic assertions
+        self.assertIsInstance(paragraphs_data['introductions'], list)
+        self.assertIsInstance(paragraphs_data['chapters'], dict)
+        
+        # Check that at least some paragraphs were found
+        total_paragraphs = 0
+        for intro in paragraphs_data['introductions']:
+            if 'paragraphs' in intro:
+                total_paragraphs += len(intro['paragraphs'])
+        
+        for chapter_data in paragraphs_data['chapters'].values():
+            if chapter_data['paragraphs']:
+                total_paragraphs += len(chapter_data['paragraphs'])
+            for subsection in chapter_data['subsections']:
+                if 'paragraphs' in subsection:
+                    total_paragraphs += len(subsection['paragraphs'])
+        
+        print(f"\nTotal paragraphs found: {total_paragraphs}")
+        self.assertTrue(total_paragraphs > 0, "Should find at least some paragraphs")
+
 
 if __name__ == '__main__':
     unittest.main() 

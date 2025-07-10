@@ -312,8 +312,108 @@ class Parser:
 
         return end_sections
     
+    def find_paragraphs_in_block(self, content_text, content_start_offset):
+        paragraphs = []
+        if not content_text:
+            return paragraphs
+
+        # Find all paragraph breaks (double newlines)
+        paragraph_breaks = list(re.finditer(r'\n\n+', content_text))
+        
+        current_pos = 0
+        para_id = 1
+        
+        # Iterate through the breaks to identify paragraphs
+        for p_break in paragraph_breaks:
+            para_end = p_break.start()
+            para_text = content_text[current_pos:para_end]
+            
+            stripped_text = para_text.strip()
+            if stripped_text:
+                paragraphs.append({
+                    'id': para_id,
+                    'text': stripped_text,
+                    'start_offset': content_start_offset + current_pos,
+                    'end_offset': content_start_offset + para_end,
+                })
+                para_id += 1
+            
+            current_pos = p_break.end()
+
+        # Handle the last paragraph after the final break
+        last_para_text = content_text[current_pos:]
+        stripped_last_para = last_para_text.strip()
+        if stripped_last_para:
+            paragraphs.append({
+                'id': para_id,
+                'text': stripped_last_para,
+                'start_offset': content_start_offset + current_pos,
+                'end_offset': content_start_offset + len(content_text),
+            })
+            
+        return paragraphs
+
     def find_paragraphs(self):
-        return
+        # Process introduction sections
+        intro_sections = self.find_intro_sections()
+        for intro in intro_sections:
+            content_text = intro.get('content', '')
+            content_start_offset = intro.get('content_start', 0)
+            intro['paragraphs'] = self.find_paragraphs_in_block(content_text, content_start_offset)
+
+        # Process chapters and subsections
+        chapter_subsections = self.find_chapter_subsections()
+        chapters_data = self.find_chapters()
+        chapter_offset_map = {title: {'start_offset': start, 'end_offset': end} for title, start, end in chapters_data}
+
+        processed_chapters = {}
+        for chapter_title, subsections in chapter_subsections.items():
+            chapter_info = chapter_offset_map.get(chapter_title, {})
+            processed_chapter = {
+                'title': chapter_title,
+                'start_offset': chapter_info.get('start_offset'),
+                'end_offset': chapter_info.get('end_offset'),
+                'subsections': [],
+                'paragraphs': []
+            }
+
+            if not subsections:
+                # Find chapter content if there are no subsections
+                chapter_header_pattern_str = (
+                    r"^\s*#+\s*(?:Chapter\s+)?(?:\d+|[IVXLC]+)\s*\n+\s*#+\s*[^#\n].*$"
+                    r"|^\s*Chapter\s+(?:\d+|[IVXLC]+)\s*$"
+                )
+                chapter_header_pattern = re.compile(chapter_header_pattern_str, re.MULTILINE | re.IGNORECASE)
+                
+                if chapter_info:
+                    start_offset = chapter_info['start_offset']
+                    end_offset = chapter_info['end_offset']
+                    
+                    header_match = chapter_header_pattern.search(self.text, pos=start_offset, endpos=end_offset)
+                    content_start = header_match.end() if header_match else start_offset
+                    
+                    if content_start < len(self.text) and self.text[content_start] == '\n':
+                        content_start += 1
+                    
+                    content_text = self.text[content_start:end_offset]
+                    processed_chapter['paragraphs'] = self.find_paragraphs_in_block(content_text, content_start)
+            else:
+                for subsection in subsections:
+                    subsection_content = subsection.get('content', '')
+                    
+                    header_end = self.text.find(subsection_content, subsection['start_offset'])
+                    if header_end == -1:
+                        header_end = subsection['start_offset']
+
+                    subsection['paragraphs'] = self.find_paragraphs_in_block(subsection_content, header_end)
+                    processed_chapter['subsections'].append(subsection)
+            
+            processed_chapters[chapter_title] = processed_chapter
+
+        return {
+            "introductions": intro_sections,
+            "chapters": processed_chapters
+        }
     
     def find_note_references(self):
         reference_pattern = re.compile(r'\$\{\s*\}\^\{(\d+(?:,\d+)*)\}\$')
