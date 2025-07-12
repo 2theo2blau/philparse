@@ -7,6 +7,7 @@ from llm.llm_client import LLMClient
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import sys
 from threading import Lock
+import time
 
 # Download required NLTK data
 try:
@@ -59,7 +60,6 @@ class GraphConstructor:
         return atoms
     
     def _process_chapter(self, chapter_idx: int, chapter_title: str, chapter_data: dict, num_chapters: int):
-        """Processes all paragraphs and subsections for a single chapter."""
         # First, calculate total atoms for progress bar
         total_atoms = 0
         all_paragraphs = []
@@ -81,11 +81,14 @@ class GraphConstructor:
         processed_atoms = 0
         chapter_components = []
         context_window = deque(maxlen=self.context_window_size)
+        progress_lock = Lock()
 
         def update_progress():
-            percent = 100 * (processed_atoms / float(total_atoms))
+            # Reading processed_atoms is atomic, but for correctness in displaying progress,
+            # we rely on this being called right after an update.
+            percent = 100 * (processed_atoms / float(total_atoms)) if total_atoms > 0 else 0
             bar_length = 30
-            filled_length = int(bar_length * processed_atoms // total_atoms)
+            filled_length = int(bar_length * processed_atoms // total_atoms) if total_atoms > 0 else 0
             bar = '█' * filled_length + '-' * (bar_length - filled_length)
             percent_str = "{:.1f}".format(percent)
             
@@ -106,7 +109,7 @@ class GraphConstructor:
 
         update_progress() # Initial progress bar at 0%
 
-        # Process chapter-level paragraphs
+        # Process chapter-level paragraphs sequentially
         for paragraph in chapter_data.get("paragraphs", []):
             paragraph_text = paragraph["text"]
             atoms = self.decompose_paragraph(paragraph_text)
@@ -114,6 +117,7 @@ class GraphConstructor:
                 atom_id = f"chap{chapter_idx}_par{paragraph['id']}_atom{atom_idx+1}"
                 target_component = {"id": atom_id, "text": atom_text}
                 context = list(context_window)
+                time.sleep(0.2) # Avoid overwhelming the API
                 llm_response = self.llm_client.process_atom(target_component, context)
                 annotated_component = {
                     "id": atom_id, "chapter_title": chapter_title, "section_id": None,
@@ -126,30 +130,55 @@ class GraphConstructor:
                 context_window.append(target_component)
                 processed_atoms += 1
                 update_progress()
+        
+        # Define a nested function to process one subsection
+        def _process_subsection(subsection_data: dict, initial_context: deque):
+            nonlocal processed_atoms
+            subsection_components = []
+            local_context_window = initial_context.copy()
 
-        # Process subsections
-        for subsection in chapter_data.get("subsections", []):
-            if subsection.get("title") == "Notes": continue
-            for paragraph in subsection.get("paragraphs", []):
+            for paragraph in subsection_data.get("paragraphs", []):
                 paragraph_text = paragraph["text"]
                 atoms = self.decompose_paragraph(paragraph_text)
                 for atom_idx, atom_text in enumerate(atoms):
-                    atom_id = f"chap{chapter_idx}_sec{subsection['id']}_par{paragraph['id']}_atom{atom_idx+1}"
+                    atom_id = f"chap{chapter_idx}_sec{subsection_data['id']}_par{paragraph['id']}_atom{atom_idx+1}"
                     target_component = {"id": atom_id, "text": atom_text}
-                    context = list(context_window)
+                    context = list(local_context_window)
+                    time.sleep(0.2) # Avoid overwhelming the API
                     llm_response = self.llm_client.process_atom(target_component, context)
                     annotated_component = {
-                        "id": atom_id, "chapter_title": chapter_title, "section_id": subsection['id'],
+                        "id": atom_id, "chapter_title": chapter_title, "section_id": subsection_data['id'],
                         "paragraph_id": paragraph['id'], "text": atom_text,
                         "start_offset": paragraph.get("start_offset", -1), "end_offset": paragraph.get("end_offset", -1),
                         "classification": llm_response.get("classification", "Error"),
                         "relationships": llm_response.get("relationships", [])
                     }
-                    chapter_components.append(annotated_component)
-                    context_window.append(target_component)
-                    processed_atoms += 1
+                    subsection_components.append(annotated_component)
+                    local_context_window.append(target_component)
+                    with progress_lock:
+                        processed_atoms += 1
                     update_progress()
+            return subsection_components
+
+        # Process subsections in parallel
+        subsections_to_process = [
+            s for s in chapter_data.get("subsections", []) if s.get("title") != "Notes"
+        ]
         
+        if subsections_to_process:
+            with ThreadPoolExecutor() as executor:
+                future_to_subsection = {
+                    executor.submit(_process_subsection, s, context_window.copy()): s
+                    for s in subsections_to_process
+                }
+                for future in as_completed(future_to_subsection):
+                    subsection_data = future_to_subsection[future]
+                    try:
+                        subsection_components = future.result()
+                        chapter_components.extend(subsection_components)
+                    except Exception as exc:
+                        print(f"Subsection '{subsection_data.get('title')}' in chapter '{chapter_title}' generated an exception: {exc}")
+
         return chapter_components
 
     def build_graph(self):
@@ -182,25 +211,29 @@ class GraphConstructor:
         
         print("\nFiltering graph based on ontology...")
         filtered_graph = self.prune_by_ontology(raw_graph)
-        print(f"Graph filtering complete. {len(filtered_graph['components'])} components remain.")
+        print(f"Graph filtering complete. {len(raw_graph['components'])} components remain.")
         
-        return filtered_graph
+        return raw_graph
     
     def prune_by_ontology(self, graph: dict) -> dict:
         """
         Filters the graph by removing components with invalid classifications
         and relationships that are not compliant with the ontology.
         """
-        # Load the ontology
+        # Load the ontology and taxonomy
         ontology_path = os.path.join(os.path.dirname(__file__), "..", "models", "ontology.json")
+        taxonomy_path = os.path.join(os.path.dirname(__file__), "..", "models", "taxonomy.json")
+        
         with open(ontology_path, "r") as f:
             ontology = json.load(f)
+        with open(taxonomy_path, "r") as f:
+            taxonomy = json.load(f)
 
         # First pass: Filter components with invalid classifications
         valid_components_by_id = {}
         for component in graph["components"]:
             classification = component.get("classification")
-            if classification in ontology:
+            if classification in taxonomy["valid_classes"]:
                 valid_components_by_id[component["id"]] = component
             else:
                 print(f"Warning: Filtering out component '{component.get('id')}' with invalid classification: '{classification}'")
@@ -214,6 +247,7 @@ class GraphConstructor:
             if "relationships" in component:
                 for relationship in component["relationships"]:
                     target_id = relationship.get("target_id")
+                    relationship_type = relationship.get("type")
                     direction = relationship.get("direction")
 
                     # Check if target component is valid
@@ -226,20 +260,31 @@ class GraphConstructor:
                         print(f"Warning: Filtering relationship from '{component_id}' with invalid direction '{direction}'")
                         continue
 
+                    if relationship_type not in ontology["relationships"]:
+                        print(f"Warning: Filtering relationship from '{component_id}' with invalid relationship type '{relationship_type}'")
+                        continue
+
                     target_class = target_component["classification"]
                     
+                    # Check if the relationship is valid according to ontology
                     is_valid = False
+                    relationship_rules = ontology["relationships"][relationship_type]
+                    
                     if direction == "outgoing":
-                        if target_class in ontology[source_class].get("can_connect_to", []):
+                        # Source connects to target
+                        if (source_class in relationship_rules["valid_sources"] and 
+                            target_class in relationship_rules["valid_targets"]):
                             is_valid = True
                     elif direction == "incoming":
-                        if target_class in ontology[source_class].get("can_receive_from", []):
+                        # Target connects to source (so source receives from target)
+                        if (target_class in relationship_rules["valid_sources"] and 
+                            source_class in relationship_rules["valid_targets"]):
                             is_valid = True
                     
                     if is_valid:
                         valid_relationships.append(relationship)
                     else:
-                        print(f"Warning: Filtering invalid ontology relationship: {source_class} --({direction})--> {target_class}")
+                        print(f"Warning: Filtering invalid ontology relationship: {source_class} --({relationship_type}, {direction})--> {target_class}")
             
             # Update component with filtered relationships
             component['relationships'] = valid_relationships

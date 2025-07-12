@@ -1,70 +1,67 @@
 {
-    "Claim": {
-        "can_connect_to": ["Implication", "Conclusion", "Problem Statement"],
-        "can_receive_from": ["Premise", "Quotation", "Example", "Rebuttal", "Conclusion", "Definition", "Distinction", "Concession"]
+    "relationships": {
+        "Supports": {
+            "description": "Provides evidence or justification for",
+            "valid_sources": ["Premise", "Quotation", "Example"],
+            "valid_targets": ["Claim", "Conclusion", "Thesis"]
+        },
+        "Rebuts": {
+            "description": "Directly contradicts or argues against",
+            "valid_sources": ["Rebuttal", "Conclusion"],
+            "valid_targets": ["Claim", "Position Statement"]
+        },
+        "Clarifies": {
+            "description": "Makes a concept or statement clearer",
+            "valid_sources": ["Definition", "Distinction", "Example"],
+            "valid_targets": ["Claim", "Premise", "Stipulation"]
+        },
+        "Illustrates": {
+            "description": "Provides a concrete example of",
+            "valid_sources": ["Example"],
+            "valid_targets": ["Definition", "Claim", "Distinction"]
+        },
+        "Implies": {
+            "description": "Logically leads to a consequence",
+            "valid_sources": ["Claim", "Premise"],
+            "valid_targets": ["Implication", "Conclusion"]
+        },
+        "Quantifies": {
+            "description": "Narrows the scope or concedes a point",
+            "valid_sources": ["Concession"],
+            "valid_targets": ["Claim", "Thesis"]
+        },
+        "Addresses": {
+            "description": "Attempts to answer or solve",
+            "valid_sources": ["Thesis", "Claim"],
+            "valid_targets": ["Problem Statement", "Inquiry"]
+        },
+        "Outlines": {
+            "description": "Describes the structure of",
+            "valid_sources": ["Roadmap"],
+            "valid_targets": ["Thesis"]
+        },
+        "Attributes": {
+            "description": "Assigns an idea to a source",
+            "valid_sources": ["Position Statement", "Quotation"],
+            "valid_targets": ["Position Statement", "Quotation"]
+        },
+        "Cites": {
+            "description": "Provides a reference for",
+            "valid_sources": ["Citation"],
+            "valid_targets": ["Position Statement", "Quotation", "Claim", "Premise", "Conclusion"]
+        },
+        "Continues": {
+            "description": "Follows sequentially in a description or argument",
+            "valid_sources": ["Claim", "Premise", "Conclusion", "Rebuttal", "Concession", "Implication", "Definition", "Stipulation", "Example", "Distinction", "Position Statement", "Quotation", "Citation", "Roadmap", "Thesis", "Problem Statement", "Inquiry", "Error"],
+            "valid_targets": ["Claim", "Premise", "Conclusion", "Rebuttal", "Concession", "Implication", "Definition", "Stipulation", "Example", "Distinction", "Position Statement", "Quotation", "Citation", "Roadmap", "Thesis", "Problem Statement", "Inquiry", "Error"]
+        }
     },
-    "Premise": {
-        "can_connect_to": ["Claim", "Conclusion", "Thesis", "Implication"],
-        "can_receive_from": ["Definition", "Distinction", "Example"]
-    },
-    "Conclusion": {
-        "can_connect_to": ["Claim", "Position Statement"],
-        "can_receive_from": ["Premise", "Quotation", "Example", "Claim"]
-    },
-    "Rebuttal": {
-        "can_connect_to": ["Claim", "Position Statement"],
-        "can_receive_from": []
-    },
-    "Concession": {
-        "can_connect_to": ["Claim", "Thesis"],
-        "can_receive_from": []
-    },
-    "Implication": {
-        "can_connect_to": [],
-        "can_receive_from": ["Claim", "Premise"]
-    },
-    "Definition": {
-        "can_connect_to": ["Claim", "Premise", "Stipulation"],
-        "can_receive_from": ["Example"]
-    },
-    "Stipulation": {
-        "can_connect_to": [],
-        "can_receive_from": ["Definition", "Distinction", "Example"]
-    },
-    "Example": {
-        "can_connect_to": ["Claim", "Conclusion", "Thesis", "Premise", "Stipulation", "Definition", "Distinction"],
-        "can_receive_from": []
-    },
-    "Distinction": {
-        "can_connect_to": ["Claim", "Premise", "Stipulation"],
-        "can_receive_from": ["Example"]
-    },
-    "Position Statement": {
-        "can_connect_to": [],
-        "can_receive_from": ["Rebuttal", "Conclusion"]
-    },
-    "Quotation": {
-        "can_connect_to": ["Claim", "Conclusion", "Thesis"],
-        "can_receive_from": []
-    },
-    "Citation": {
-        "can_connect_to": [],
-        "can_receive_from": []
-    },
-    "Roadmap": {
-        "can_connect_to": ["Thesis"],
-        "can_receive_from": []
-    },
-    "Thesis": {
-        "can_connect_to": ["Problem Statement"],
-        "can_receive_from": ["Premise", "Quotation", "Example", "Concession", "Roadmap"]
-    },
-    "Problem Statement": {
-        "can_connect_to": [],
-        "can_receive_from": ["Thesis", "Claim"]
-    },
-    "Inquiry": {
-        "can_connect_to": [],
-        "can_receive_from": []
+    "notes": {
+        "design_principles": [
+            "The 'Continues' relationship allows any component to connect to any other component for sequential flow",
+            "Attributes and Cites relationships are simplified for internal component connections",
+            "All component types from taxonomy.json are supported",
+            "Relationship types match the ontology.md specification"
+        ]
     }
 }

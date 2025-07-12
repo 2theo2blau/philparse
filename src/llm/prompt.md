@@ -11,18 +11,18 @@ You are an expert in linguistic analysis and argumentation theory. Your task is 
 ## Classification Taxonomy
 
 ### Argumentative Components
-- Claim/Assertion: A statement presented as a fact or truth that the author intends to support.
-- Premise/Justification: A statement offered as a reason, evidence, or justification in support of a Claim or Conclusion.
+- Claim: A statement or assertion presented as a fact or truth that the author intends to support.
+- Premise: A statement offered as a reason, evidence, or justification in support of a Claim or Conclusion.
 - Conclusion: A claim that is explicitly presented as the result of a line of reasoning (premises).
-- Rebuttal/Counter-Claim: A statement that directly opposes or refutes a previously mentioned claim.
+- Rebuttal: A statement or counter-claim that directly opposes or refutes a previously mentioned claim.
 - Concession: A statement that acknowledges a point from an opposing view.
-- Implication/Consequence: A statement describing what logically follows from a preceding claim or event.
+- Implication: A statement describing what logically follows from a preceding claim or event as a consequence.
 
 ### Definitional & Expository Components
-- Formal Definition: A sentence that explicitly states the meaning of a term.
-- Term Introduction/Stipulation: A statement where the author introduces a new term or stipulates a specific use.
+- Definition: A sentence that explicitly states the formal meaning of a term.
+- Stipulation: A statement where the author introduces a new term or stipulates a specific use.
 - Example: A concrete case used to clarify an abstract concept, definition, or claim.
-- Distinction/Disambiguation: A statement that explicitly draws a boundary or highlights the difference between two concepts.
+- Distinction: A statement that explicitly draws a boundary or highlights the difference between two concepts through disambiguation.
 
 ### Attributive Components
 - Position Statement: A summary or statement of a belief, theory, or argument held by another person or group.
@@ -31,25 +31,76 @@ You are an expert in linguistic analysis and argumentation theory. Your task is 
 
 ### Structural & Meta-Components
 - Thesis: A high-level claim that encapsulates the central argument of the entire paper or a major section.
-- Roadmap/Structural Statement: A sentence that outlines the structure of the argument or the steps the author will take.
+- Roadmap: A sentence that outlines the structure of the argument or the steps the author will take.
 - Problem Statement: A sentence that poses the central question or problem the text aims to address.
+- Inquiry: A sentence that poses a question or investigative statement to explore a topic.
 
 ---
 ## Relationship Ontology
 
-| Relationship Type | Description | Valid Source Nodes | Valid Target Nodes |
-|---|---|---|---|
-| Supports | Provides evidence or justification for | `Premise`, `Quotation`, `Example` | `Claim`, `Conclusion`, `Thesis` |
-| Rebuts | Directly contradicts or argues against | `Rebuttal`, `Conclusion` | `Claim`, `Position Statement` |
-| Clarifies | Makes a concept or statement clearer | `Definition`, `Distinction`, `Example` | `Claim`, `Premise`, `Term Introduction`|
-| Illustrates | Provides a concrete example of | `Example` | `Definition`, `Claim`, `Distinction` |
-| Implies | Logically leads to a consequence | `Claim`, `Premise` | `Implication`, `Conclusion` |
-| Quantifies/Limits | Narrows the scope or concedes a point | `Concession` | `Claim`, `Thesis` |
-| Addresses | Attempts to answer or solve | `Thesis`, `Claim` | `Problem Statement` |
-| Outlines | Describes the structure of | `Roadmap` | `Thesis`, `Section` |
-| Attributes | Assigns an idea to a source | `Position Statement`, `Quotation` | External Entity/Bibliography entry |
-| Cites | Provides a reference for | Citation | External Document, Note |
-| Continues | Follows sequentially in a description | any | any |
+Each relationship has a **type** and a **direction**. The direction indicates whether the Target Component is the source or target of the relationship:
+
+### Relationship Types
+
+**Supports**: Provides evidence or justification for
+- Valid Sources: `Premise`, `Quotation`, `Example`
+- Valid Targets: `Claim`, `Conclusion`, `Thesis`
+- Example: A premise supports a claim
+
+**Rebuts**: Directly contradicts or argues against
+- Valid Sources: `Rebuttal`, `Conclusion`
+- Valid Targets: `Claim`, `Position Statement`
+- Example: A rebuttal rebuts a position statement
+
+**Clarifies**: Makes a concept or statement clearer
+- Valid Sources: `Definition`, `Distinction`, `Example`
+- Valid Targets: `Claim`, `Premise`, `Stipulation`
+- Example: A definition clarifies a claim
+
+**Illustrates**: Provides a concrete example of
+- Valid Sources: `Example`
+- Valid Targets: `Definition`, `Claim`, `Distinction`
+- Example: An example illustrates a definition
+
+**Implies**: Logically leads to a consequence
+- Valid Sources: `Claim`, `Premise`
+- Valid Targets: `Implication`, `Conclusion`
+- Example: A claim implies an implication
+
+**Quantifies**: Narrows the scope or concedes a point
+- Valid Sources: `Concession`
+- Valid Targets: `Claim`, `Thesis`
+- Example: A concession quantifies a thesis
+
+**Addresses**: Attempts to answer or solve
+- Valid Sources: `Thesis`, `Claim`
+- Valid Targets: `Problem Statement`, `Inquiry`
+- Example: A thesis addresses a problem statement
+
+**Outlines**: Describes the structure of
+- Valid Sources: `Roadmap`
+- Valid Targets: `Thesis`
+- Example: A roadmap outlines a thesis
+
+**Attributes**: Assigns an idea to a source
+- Valid Sources: `Position Statement`, `Quotation`
+- Valid Targets: `Position Statement`, `Quotation`
+- Example: A position statement attributes a view to another position statement
+
+**Cites**: Provides a reference for
+- Valid Sources: `Citation`
+- Valid Targets: `Position Statement`, `Quotation`, `Claim`, `Premise`, `Conclusion`
+- Example: A citation cites a claim
+
+**Continues**: Follows sequentially in a description or argument
+- Valid Sources: **Any component type**
+- Valid Targets: **Any component type**
+- Example: A premise continues another premise; an example continues another example
+
+### Important Notes:
+- The "Continues" relationship is the most flexible - any component can continue any other component
+- Use "Continues" when components follow each other in sequence, even if they're the same type
+- Multiple relationships can exist between the same two components if they serve different functions
 
 ---
 ## Analysis Task
@@ -92,7 +143,7 @@ You are an expert in linguistic analysis and argumentation theory. Your task is 
 
 **Output:**
 {
-  "classification": "Roadmap/Structural Statement",
+  "classification": "Roadmap",
   "justification": "The author is stating the structure of the upcoming text, indicating they will address preliminary concerns first.",
   "relationships": [
     {
@@ -121,7 +172,7 @@ You are an expert in linguistic analysis and argumentation theory. Your task is 
 
 **Output:**
 {
-  "classification": "Rebuttal/Counter-Claim",
+  "classification": "Rebuttal",
   "justification": "This sentence introduces an objection or counter-argument to the line of reasoning developed in the preceding sentences.",
   "relationships": [
     {
@@ -146,7 +197,7 @@ You are an expert in linguistic analysis and argumentation theory. Your task is 
 
 **Output:**
 {
-  "classification": "Premise/Justification",
+  "classification": "Premise",
   "justification": "This sentence provides a reason why the conclusion in the previous sentence ('not a happy result') is true.",
   "relationships": [
     {

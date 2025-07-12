@@ -11,11 +11,13 @@ class Cleaner:
 
         return text
     
+    # handle hyphenated words from line breaks
     def dehyphenate(self):
         text = re.sub(r'(\w+)-\n(\w+)', r'\1\2', self.text) # remove newlines between words
 
         return text
     
+    # remove markdown references
     def remove_markdown_images(self):
         text = re.sub(r'!\[(img-\d+\.[a-zA-Z0-9]+)\]\(\1\)', self.text) # remove markdown images
 

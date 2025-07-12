@@ -3,6 +3,7 @@ import os
 import json
 import numpy as np
 import dotenv
+import time
 
 class LLMClient:
     def __init__(self):
@@ -41,42 +42,63 @@ class LLMClient:
         system_prompt = system_prompt_template.replace("{{CONTEXT_JSON}}", context_json)
         system_prompt = system_prompt.replace("{{TARGET_COMPONENT_JSON}}", target_component_json)
         
-        # Make the API call with the properly formatted prompt
-        response = self.client.chat.complete(
-            model=self.model_name,
-            response_format= { "type": "json_object" },
-            temperature=0.1,
-            messages=[
-                {
-                    "role": "system",
-                    "content": system_prompt
-                },
-                {
-                    "role": "user",
-                    "content": "Please analyze the target component according to the instructions provided."
-                }
-            ]
-        )
+        retries = 3
+        backoff_factor = 0.5
+
+        for i in range(retries):
+            try:
+                response = self.client.chat.complete(
+                    model=self.model_name,
+                    response_format={"type": "json_object"},
+                    temperature=0.1,
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": "Please analyze the target component according to the instructions provided."}
+                    ]
+                )
+
+                if not response.choices:
+                    raise ValueError("LLM response has no choices.")
+
+                response_text = response.choices[0].message.content
+                
+                if response_text:
+                    try:
+                        parsed_response = json.loads(response_text)
+                        
+                        # Validate the response structure
+                        if self.check_taxonomy(parsed_response):
+                            return parsed_response
+                        else:
+                            print(f"Warning: LLM response failed validation. Retrying attempt {i+1}/{retries}...")
+                            print(f"Response: {response_text}")
+                    except json.JSONDecodeError:
+                        print(f"Warning: Failed to parse LLM JSON response. Retrying attempt {i+1}/{retries}...")
+                        print(f"Response: {response_text}")
+                else:
+                    print(f"Warning: Empty response from LLM. Retrying attempt {i+1}/{retries}...")
+            
+            except Exception as e:
+                print(f"Warning: An unexpected error occurred: {e}. Retrying attempt {i+1}/{retries}...")
+
+            if i < retries - 1:
+                time.sleep(backoff_factor * (2 ** i))
         
-        response_text = response.choices[0].message.content
-        
-        # Parse the JSON response
-        try:
-            parsed_response = json.loads(response_text)
-            return parsed_response
-        except json.JSONDecodeError:
-            # If parsing fails, return a default structure
-            return {
-                "classification": "Error",
-                "relationships": [],
-                "error": "Failed to parse LLM response",
-                "raw_response": response_text
-            }
+        # If all retries fail, return a default structure
+        return {
+            "classification": "Error",
+            "justification": "LLM API call failed after multiple retries.",
+            "relationships": []
+        }
     
     def check_taxonomy(self, response: dict) -> bool:
         taxonomy_path = os.path.join(os.path.dirname(__file__), "..", "models", "taxonomy.json")
+        ontology_path = os.path.join(os.path.dirname(__file__), "..", "models", "ontology.json")
+        
         with open(taxonomy_path, "r") as f:
             taxonomy = json.load(f)
+        with open(ontology_path, "r") as f:
+            ontology = json.load(f)
 
         try:
             # Check if classification field is present and valid
@@ -84,7 +106,36 @@ class LLMClient:
                 return False
             
             # Check if classification is valid
-            return response["classification"] in taxonomy["valid_classes"]
+            if response["classification"] not in taxonomy["valid_classes"]:
+                return False
+            
+            # Check if relationships field is present and properly structured
+            if "relationships" not in response:
+                return False
+            
+            if not isinstance(response["relationships"], list):
+                return False
+            
+            # Validate each relationship
+            for relationship in response["relationships"]:
+                if not isinstance(relationship, dict):
+                    return False
+                
+                # Check required fields
+                required_fields = ["target_id", "type", "direction", "justification"]
+                for field in required_fields:
+                    if field not in relationship:
+                        return False
+                
+                # Check if relationship type is valid
+                if relationship["type"] not in ontology["relationships"]:
+                    return False
+                
+                # Check if direction is valid
+                if relationship["direction"] not in ["outgoing", "incoming"]:
+                    return False
+            
+            return True
             
         except (KeyError, TypeError):
             return False
