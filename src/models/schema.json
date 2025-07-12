@@ -3,16 +3,64 @@
     "description": "A schema for storing structured data extracted from a text document, maintaining original content order through offsets.",
     "type": "object",
     "properties": {
-      "introductions": { "...": "..." },
-      "chapters": { "...": "..." },
+      "title": {
+        "description": "The document title extracted from the first line if it's a markdown header",
+        "type": ["string", "null"]
+      },
+      "introductions": {
+        "description": "An array of introductory sections that appear before the first chapter",
+        "type": "array",
+        "items": { "$ref": "#/$defs/introSection" }
+      },
+      "chapters": {
+        "description": "A map of all chapters, keyed by chapter title",
+        "type": "object",
+        "patternProperties": {
+          "^.*$": { "$ref": "#/$defs/chapter" }
+        }
+      },
       "end_sections": {
         "description": "An array of concluding sections like 'Index' that appear after the last chapter. The Bibliography is handled separately.",
         "type": "array",
-        "items": { "$ref": "#/$defs/contentBlock" }
+        "items": { "$ref": "#/$defs/endSection" }
       },
-      "notes": { "...": "..." },
-      "linked_notes": { "...": "..." },
-      "footnotes": { "...": "..." },
+      "notes": {
+        "description": "A map of all parsed notes, keyed by note number",
+        "type": "object",
+        "patternProperties": {
+          "^[0-9]+$": {
+            "type": "string",
+            "description": "The text content of the note"
+          }
+        }
+      },
+      "linked_notes": {
+        "description": "A map of notes organized by chapter, showing which notes appear in which chapters",
+        "type": "object",
+        "patternProperties": {
+          "^.*$": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/linkedNote" }
+          }
+        }
+      },
+      "footnotes": {
+        "description": "A structured representation of footnotes with references and definitions",
+        "type": "object",
+        "properties": {
+          "references": {
+            "description": "An array of footnote references found in the text",
+            "type": "array",
+            "items": { "$ref": "#/$defs/footnoteReference" }
+          },
+          "definitions": {
+            "description": "An array of footnote definitions",
+            "type": "array",
+            "items": { "$ref": "#/$defs/footnoteDefinition" }
+          }
+        },
+        "required": ["references", "definitions"]
+      },
       "bibliography": {
         "description": "A structured representation of the bibliography and its links to in-text citations.",
         "type": "object",
@@ -33,26 +81,235 @@
         "required": ["entries", "unlinked_citations"]
       }
     },
-    "required": ["introductions", "chapters", "end_sections", "notes", "linked_notes", "footnotes", "bibliography"],
+    "required": ["title", "introductions", "chapters", "end_sections", "notes", "linked_notes", "footnotes", "bibliography"],
     "$defs": {
-      "...": "...",
-      "bibliographyEntry": {
+      "offsetObject": {
         "type": "object",
         "properties": {
-          "key": {
-            "description": "A unique key for the entry, typically 'authorlastname_year'.",
-            "type": "string"
+          "start_offset": {
+            "description": "The starting character position in the original text",
+            "type": "integer"
           },
-          "author": { "type": "string" },
-          "year": { "type": "string" },
-          "full_text": { "type": "string" },
-          "citations": {
-            "description": "An array of all in-text citations that link to this entry.",
-            "type": "array",
-            "items": { "$ref": "#/$defs/inTextCitation" }
+          "end_offset": {
+            "description": "The ending character position in the original text",
+            "type": "integer"
           }
         },
-        "required": ["key", "author", "year", "full_text", "citations"]
+        "required": ["start_offset", "end_offset"]
+      },
+      "paragraph": {
+        "allOf": [
+          { "$ref": "#/$defs/offsetObject" },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Unique identifier for the paragraph within its section",
+                "type": "integer"
+              },
+              "text": {
+                "description": "The text content of the paragraph",
+                "type": "string"
+              }
+            },
+            "required": ["id", "text"]
+          }
+        ]
+      },
+      "introSection": {
+        "allOf": [
+          { "$ref": "#/$defs/offsetObject" },
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "description": "The title of the introduction section",
+                "type": "string"
+              },
+              "content_start": {
+                "description": "The starting position of the content (after the title)",
+                "type": "integer"
+              },
+              "content": {
+                "description": "The full text content of the section",
+                "type": "string"
+              },
+              "paragraphs": {
+                "description": "An array of paragraphs within this section",
+                "type": "array",
+                "items": { "$ref": "#/$defs/paragraph" }
+              }
+            },
+            "required": ["title", "content_start", "content", "paragraphs"]
+          }
+        ]
+      },
+      "subsection": {
+        "allOf": [
+          { "$ref": "#/$defs/offsetObject" },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Unique identifier for the subsection within its chapter",
+                "type": "integer"
+              },
+              "title": {
+                "description": "The title of the subsection",
+                "type": "string"
+              },
+              "content": {
+                "description": "The full text content of the subsection",
+                "type": "string"
+              },
+              "paragraphs": {
+                "description": "An array of paragraphs within this subsection",
+                "type": "array",
+                "items": { "$ref": "#/$defs/paragraph" }
+              }
+            },
+            "required": ["id", "title", "content", "paragraphs"]
+          }
+        ]
+      },
+      "chapter": {
+        "allOf": [
+          { "$ref": "#/$defs/offsetObject" },
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "description": "The title of the chapter",
+                "type": "string"
+              },
+              "subsections": {
+                "description": "An array of subsections within this chapter",
+                "type": "array",
+                "items": { "$ref": "#/$defs/subsection" }
+              },
+              "paragraphs": {
+                "description": "An array of paragraphs directly within this chapter (not in subsections)",
+                "type": "array",
+                "items": { "$ref": "#/$defs/paragraph" }
+              }
+            },
+            "required": ["title", "subsections", "paragraphs"]
+          }
+        ]
+      },
+      "endSection": {
+        "allOf": [
+          { "$ref": "#/$defs/offsetObject" },
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "description": "The title of the end section",
+                "type": "string"
+              },
+              "content_start": {
+                "description": "The starting position of the content (after the title)",
+                "type": "integer"
+              },
+              "content": {
+                "description": "The full text content of the section",
+                "type": "string"
+              },
+              "paragraphs": {
+                "description": "An array of paragraphs within this section",
+                "type": "array",
+                "items": { "$ref": "#/$defs/paragraph" }
+              }
+            },
+            "required": ["title", "content_start", "content", "paragraphs"]
+          }
+        ]
+      },
+      "linkedNote": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The note identifier/number",
+            "type": "string"
+          },
+          "text": {
+            "description": "The text content of the note",
+            "type": "string"
+          },
+          "reference_offsets": {
+            "description": "Array of character offsets where this note is referenced",
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": ["id", "text", "reference_offsets"]
+      },
+      "footnoteReference": {
+        "allOf": [
+          { "$ref": "#/$defs/offsetObject" },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Unique identifier for this reference",
+                "type": "integer"
+              },
+              "identifier": {
+                "description": "The footnote identifier (e.g., '1', 'a', etc.)",
+                "type": "string"
+              }
+            },
+            "required": ["id", "identifier"]
+          }
+        ]
+      },
+      "footnoteDefinition": {
+        "allOf": [
+          { "$ref": "#/$defs/offsetObject" },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Unique identifier for this definition",
+                "type": "integer"
+              },
+              "identifier": {
+                "description": "The footnote identifier (e.g., '1', 'a', etc.)",
+                "type": "string"
+              },
+              "content": {
+                "description": "The text content of the footnote definition",
+                "type": "string"
+              }
+            },
+            "required": ["id", "identifier", "content"]
+          }
+        ]
+      },
+      "bibliographyEntry": {
+        "allOf": [
+          { "$ref": "#/$defs/offsetObject" },
+          {
+            "type": "object",
+            "properties": {
+              "key": {
+                "description": "A unique key for the entry, typically 'authorlastname_year'.",
+                "type": "string"
+              },
+              "author": { "type": "string" },
+              "year": { "type": "string" },
+              "full_text": { "type": "string" },
+              "citations": {
+                "description": "An array of all in-text citations that link to this entry.",
+                "type": "array",
+                "items": { "$ref": "#/$defs/inTextCitation" }
+              }
+            },
+            "required": ["key", "author", "year", "full_text", "citations"]
+          }
+        ]
       },
       "inTextCitation": {
         "allOf": [
@@ -60,6 +317,14 @@
           {
             "type": "object",
             "properties": {
+              "author": {
+                "description": "The author name from the citation",
+                "type": "string"
+              },
+              "year": {
+                "description": "The year from the citation",
+                "type": "string"
+              },
               "page_info": {
                 "description": "Page numbers or other locators from the citation, if present.",
                 "type": ["string", "null"]
@@ -69,7 +334,7 @@
                 "type": "string"
               }
             },
-            "required": ["page_info", "full_text"]
+            "required": ["author", "year", "page_info", "full_text"]
           }
         ]
       }

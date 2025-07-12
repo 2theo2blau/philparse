@@ -6,6 +6,13 @@ class Parser:
     def __init__(self, text):
         self.text = text
 
+    def find_title(self):
+        title_pattern = re.compile(r"^\s*#+\s*([^\n]+)")
+        match = title_pattern.match(self.text)
+        if match:
+            return match.group(1).strip()
+        return None
+
     def find_notes(self):
         notes_map = {}
         
@@ -621,6 +628,7 @@ class Parser:
         }
     
     def parse(self):
+        title = self.find_title()
         main_content = self.find_paragraphs()
         end_sections = self.find_end_sections()
 
@@ -645,6 +653,7 @@ class Parser:
         bibliography_data = self.link_citations_to_bibliography(bibliography_section)
 
         doc = {
+            "title": title,
             "introductions": main_content.get('introductions', []),
             "chapters": main_content.get('chapters', []),
             "end_sections": end_sections,
