@@ -2,11 +2,22 @@ from mistralai import Mistral
 import os
 import json
 import numpy as np
+import dotenv
 
 class LLMClient:
-    def __init__(self, model_name: str, api_key: str):
+    def __init__(self):
+        # Load .env file from the project root (one level above src/)
+        env_path = os.path.join(os.path.dirname(__file__), "..", "..", ".env")
+        dotenv.load_dotenv(env_path)
+        
         self.model_name = os.getenv("MISTRAL_MODEL")
         self.api_key = os.getenv("MISTRAL_API_KEY")
+        
+        if not self.api_key:
+            raise ValueError("MISTRAL_API_KEY not found in environment variables")
+        if not self.model_name:
+            raise ValueError("MISTRAL_MODEL not found in environment variables")
+            
         self.client = Mistral(api_key=self.api_key)
 
     def embed_mistral(self, text: str) -> np.ndarray:
@@ -33,6 +44,8 @@ class LLMClient:
         # Make the API call with the properly formatted prompt
         response = self.client.chat.complete(
             model=self.model_name,
+            response_format= { "type": "json_object" },
+            temperature=0.1,
             messages=[
                 {
                     "role": "system",
@@ -60,22 +73,20 @@ class LLMClient:
                 "raw_response": response_text
             }
     
-    def check_taxonomy(self, response: str) -> bool:
-        with open("models/taxonomy.json", "r") as f:
+    def check_taxonomy(self, response: dict) -> bool:
+        taxonomy_path = os.path.join(os.path.dirname(__file__), "..", "models", "taxonomy.json")
+        with open(taxonomy_path, "r") as f:
             taxonomy = json.load(f)
 
         try:
-            # Parse the response as JSON
-            parsed_response = json.loads(response)
-            
             # Check if classification field is present and valid
-            if "classification" not in parsed_response:
+            if "classification" not in response:
                 return False
             
             # Check if classification is valid
-            return parsed_response["classification"] in taxonomy["valid_classes"]
+            return response["classification"] in taxonomy["valid_classes"]
             
-        except (json.JSONDecodeError, KeyError, TypeError):
+        except (KeyError, TypeError):
             return False
 
     

@@ -33,15 +33,15 @@
 
 ## Relationship Ontology
 
-| Relationship Type | Description | Valid Source Nodes | Valid Target Nodes | Example
-| Supports | Provides evidence or justification for | `Premise`, `Quotation`, `Example` | `Claim`, `Conclusion`, `Thesis` | A `premise` supports a `claim`
-| Rebuts | Directly contradicts or argues against | `Rebuttal`, `Conclusion` | `Claim`, `Position Statement` | A `rebuttal` rebuts a `position statement`
-| Clarifies | Makes a concept or statement clearer | `Definition`, `Distinction`, `Example` | `Claim`, `Premise`, `Term Introduction`| A `definition` clarifies a `claim`
-| Illustrates | Provides a concrete example of | `Example` | `Definition`, `Claim`, `Distinction` | an `example` illustrates a `definition`
-| Implies | Logically leads to a consequence | `Claim`, `Premise` | `Implication`, `Conclusion` | A `claim` implies a `consequence`
-| Quantifies/Limits | Narrows the scope or concedes a point | `Concession` | `Claim`, `Thesis` | A `concession` quantifies a `Thesis`
-| Addresses | Attempts to answer or solve | `Thesis`, `Claim` | `Problem Statement`, `Inquiry` | A `Thesis Statement` addresses a `Problem Statement`
-| Outlines | Describes the structure of | `Roadmap` | `Thesis`, `Section` | A `roadmap` outlines the paper's argument
-| Attributes | Assigns an idea to a source | `Position Statement`, `Quotation` | External Entity/Bibliography entry | A `position statement` attributes a view to Quine
-| Cites | Provides a reference for | Citation | External Document, **Note** | A citation cites a note 
-| Continues | Follows sequentially in a description | any | any | A premise continues another premise
+| Relationship Type | Description | Valid Source Nodes | Valid Target Nodes | Example |
+| Supports | Provides evidence or justification for | `Premise`, `Quotation`, `Example` | `Claim`, `Conclusion`, `Thesis` | A `premise` supports a `claim` |
+| Rebuts | Directly contradicts or argues against | `Rebuttal`, `Conclusion` | `Claim`, `Position Statement` | A `rebuttal` rebuts a `position statement` |
+| Clarifies | Makes a concept or statement clearer | `Definition`, `Distinction`, `Example` | `Claim`, `Premise`, `Term Introduction`| A `definition` clarifies a `claim` |
+| Illustrates | Provides a concrete example of | `Example` | `Definition`, `Claim`, `Distinction` | an `example` illustrates a `definition` |
+| Implies | Logically leads to a consequence | `Claim`, `Premise` | `Implication`, `Conclusion` | A `claim` implies a `consequence` |
+| Quantifies/Limits | Narrows the scope or concedes a point | `Concession` | `Claim`, `Thesis` | A `concession` quantifies a `Thesis` |
+| Addresses | Attempts to answer or solve | `Thesis`, `Claim` | `Problem Statement`, `Inquiry` | A `Thesis Statement` addresses a `Problem Statement` |
+| Outlines | Describes the structure of | `Roadmap` | `Thesis`, `Section` | A `roadmap` outlines the paper's argument |
+| Attributes | Assigns an idea to a source | `Position Statement`, `Quotation` | External Entity/Bibliography entry | A `position statement` attributes a view to Quine |
+| Cites | Provides a reference for | Citation | External Document, **Note** | A citation cites a note |
+| Continues | Follows sequentially in a description | any | any | A premise continues another premise |
