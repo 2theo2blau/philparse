@@ -55,7 +55,37 @@ class GraphConstructor:
             # otherwise, tokenize as regular sentence
             else:
                 sentences = nltk.sent_tokenize(part)
-                atoms.extend(s.strip() for s in sentences if s.strip())
+                for sentence in sentences:
+                    sentence = sentence.strip()
+                    if not sentence:
+                        continue
+
+                    if ':' not in sentence:
+                        atoms.append(sentence)
+                        continue
+                    
+                    # If a sentence contains a colon, we might want to split it.
+                    # However, we should not split if the colon is inside parentheses,
+                    # as this is common in citations or asides.
+                    paren_level = 0
+                    colon_index = -1
+                    for i, char in enumerate(sentence):
+                        if char == '(':
+                            paren_level += 1
+                        elif char == ')':
+                            paren_level = max(0, paren_level - 1) # handle malformed
+                        elif char == ':' and paren_level == 0:
+                            # Found a colon outside of parentheses, split here
+                            colon_index = i
+                            break
+                    
+                    if colon_index != -1:
+                        # Split the sentence at the first valid colon
+                        sub_parts = [sentence[:colon_index].strip(), sentence[colon_index+1:].strip()]
+                        atoms.extend(p for p in sub_parts if p)
+                    else:
+                        # All colons are inside parentheses, so don't split
+                        atoms.append(sentence)
 
         return atoms
     
@@ -144,7 +174,7 @@ class GraphConstructor:
                     atom_id = f"chap{chapter_idx}_sec{subsection_data['id']}_par{paragraph['id']}_atom{atom_idx+1}"
                     target_component = {"id": atom_id, "text": atom_text}
                     context = list(local_context_window)
-                    time.sleep(0.2) # Avoid overwhelming the API
+                    time.sleep(0.1) # Avoid overwhelming the API
                     llm_response = self.llm_client.process_atom(target_component, context)
                     annotated_component = {
                         "id": atom_id, "chapter_title": chapter_title, "section_id": subsection_data['id'],
