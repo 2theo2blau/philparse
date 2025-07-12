@@ -41,7 +41,7 @@ class GraphConstructor:
         self.print_lock = Lock()
 
     def decompose_paragraph(self, paragraph_text: str):
-        citation_pattern = r'(\s*\([^)]+\d{4}[^)]*\)|\s*\[\^?\d+\]|\s*\$\{\}\^\d+\})'
+        citation_pattern = r'(\s*\([^)]+\d{4}[^)]*\)|\s*\[\^?\d+\]|\s*\$\{\s*\}\^\{\d+\}\$)' # matches 
 
         parts = re.split(citation_pattern, paragraph_text)
 
