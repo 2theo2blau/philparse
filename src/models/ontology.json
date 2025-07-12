@@ -1,0 +1,70 @@
+{
+    "Claim": {
+        "can_connect_to": ["Implication", "Conclusion", "Problem Statement"],
+        "can_receive_from": ["Premise", "Quotation", "Example", "Rebuttal", "Conclusion", "Definition", "Distinction", "Concession"]
+    },
+    "Premise": {
+        "can_connect_to": ["Claim", "Conclusion", "Thesis", "Implication"],
+        "can_receive_from": ["Definition", "Distinction", "Example"]
+    },
+    "Conclusion": {
+        "can_connect_to": ["Claim", "Position Statement"],
+        "can_receive_from": ["Premise", "Quotation", "Example", "Claim"]
+    },
+    "Rebuttal": {
+        "can_connect_to": ["Claim", "Position Statement"],
+        "can_receive_from": []
+    },
+    "Concession": {
+        "can_connect_to": ["Claim", "Thesis"],
+        "can_receive_from": []
+    },
+    "Implication": {
+        "can_connect_to": [],
+        "can_receive_from": ["Claim", "Premise"]
+    },
+    "Definition": {
+        "can_connect_to": ["Claim", "Premise", "Stipulation"],
+        "can_receive_from": ["Example"]
+    },
+    "Stipulation": {
+        "can_connect_to": [],
+        "can_receive_from": ["Definition", "Distinction", "Example"]
+    },
+    "Example": {
+        "can_connect_to": ["Claim", "Conclusion", "Thesis", "Premise", "Stipulation", "Definition", "Distinction"],
+        "can_receive_from": []
+    },
+    "Distinction": {
+        "can_connect_to": ["Claim", "Premise", "Stipulation"],
+        "can_receive_from": ["Example"]
+    },
+    "Position Statement": {
+        "can_connect_to": [],
+        "can_receive_from": ["Rebuttal", "Conclusion"]
+    },
+    "Quotation": {
+        "can_connect_to": ["Claim", "Conclusion", "Thesis"],
+        "can_receive_from": []
+    },
+    "Citation": {
+        "can_connect_to": [],
+        "can_receive_from": []
+    },
+    "Roadmap": {
+        "can_connect_to": ["Thesis"],
+        "can_receive_from": []
+    },
+    "Thesis": {
+        "can_connect_to": ["Problem Statement"],
+        "can_receive_from": ["Premise", "Quotation", "Example", "Concession", "Roadmap"]
+    },
+    "Problem Statement": {
+        "can_connect_to": [],
+        "can_receive_from": ["Thesis", "Claim"]
+    },
+    "Inquiry": {
+        "can_connect_to": [],
+        "can_receive_from": []
+    }
+}

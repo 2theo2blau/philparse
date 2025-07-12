@@ -1,0 +1,21 @@
+{
+    "valid_classes": [
+        "Claim",
+        "Premise",
+        "Conclusion",
+        "Rebuttal",
+        "Concession",
+        "Implication",
+        "Definition",
+        "Stipulation",
+        "Example",
+        "Distinction",
+        "Position Statement",
+        "Quotation",
+        "Citation",
+        "Roadmap",
+        "Thesis",
+        "Problem Statement",
+        "Inquiry"
+    ]
+}
