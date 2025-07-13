@@ -423,7 +423,7 @@ class Parser:
         }
     
     def find_note_references(self):
-        reference_pattern = re.compile(r'\$\{\s*\}\^\{(\d+(?:,\d+)*)\}\$')
+        reference_pattern = re.compile(r'\$\{\s*\}\^\{(\d+(?:,\d+)*)\}\$') # matches on note references like ${ }^{(1,2,3)} $
         references = []
         for match in reference_pattern.finditer(self.text):
             note_ids = match.group(1).split(',')
