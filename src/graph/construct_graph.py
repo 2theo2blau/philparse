@@ -8,6 +8,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import sys
 from threading import Lock
 import time
+from typing import Any, Dict, List
 
 # Download required NLTK data
 try:
@@ -325,3 +326,75 @@ class GraphConstructor:
             "components": final_components
         }
                     
+    def get_atoms_from_graph(self, pruned_graph: Dict[str, Any], document_id: int) -> List[Dict[str, Any]]:
+        """
+        Extracts atoms from the pruned graph and formats them for database insertion.
+        It returns a list of dictionaries, each representing an atom.
+        The original string ID from the graph is included as 'graph_id' for mapping purposes.
+        """
+        atoms_for_db = []
+        components = pruned_graph.get("components", [])
+        for component in components:
+            atom_data = {
+                "graph_id": component["id"],  # Temporary field for mapping
+                "document_id": document_id,
+                "paragraph_id": component.get("paragraph_id"),
+                "text": component.get("text"),
+                "classification": component.get("classification"),
+                "start_offset": component.get("start_offset", -1),
+                "end_offset": component.get("end_offset", -1),
+            }
+            atoms_for_db.append(atom_data)
+        
+        return atoms_for_db
+
+    def get_relationships_from_graph(self, pruned_graph: Dict[str, Any], document_id: int, atom_id_map: Dict[str, int]) -> List[Dict[str, Any]]:
+        """
+        Extracts relationships from the pruned graph and formats them for database insertion.
+        It uses the provided atom_id_map to resolve string IDs to database integer IDs.
+        """
+        relationships_for_db = []
+        components = pruned_graph.get("components", [])
+        
+        for component in components:
+            source_id_str = component.get("id")
+            if "relationships" in component:
+                for rel in component["relationships"]:
+                    target_id_str = rel.get("target_id")
+                    direction = rel.get("direction")
+                    
+                    if direction == "outgoing":
+                        source_graph_id = source_id_str
+                        target_graph_id = target_id_str
+                    elif direction == "incoming":
+                        source_graph_id = target_id_str
+                        target_graph_id = source_id_str
+                    else:
+                        continue
+                    
+                    source_atom_id = atom_id_map.get(source_graph_id)
+                    target_atom_id = atom_id_map.get(target_graph_id)
+                    
+                    if source_atom_id is None or target_atom_id is None:
+                        continue
+
+                    rel_data = {
+                        "document_id": document_id,
+                        "source_atom_id": source_atom_id,
+                        "target_atom_id": target_atom_id,
+                        "type": rel.get("type"),
+                        "justification": rel.get("justification")
+                    }
+                    relationships_for_db.append(rel_data)
+        
+        # Deduplicate relationships to handle cases where they might be defined from both ends
+        unique_relationships = []
+        seen_relationships = set()
+        for rel in relationships_for_db:
+            # A directed relationship is unique by (source, target, type)
+            rel_tuple = (rel["source_atom_id"], rel["target_atom_id"], rel["type"])
+            if rel_tuple not in seen_relationships:
+                unique_relationships.append(rel)
+                seen_relationships.add(rel_tuple)
+
+        return unique_relationships
