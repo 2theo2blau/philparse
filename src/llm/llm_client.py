@@ -4,6 +4,7 @@ import json
 import numpy as np
 import dotenv
 import time
+import asyncio
 
 class LLMClient:
     def __init__(self):
@@ -30,7 +31,7 @@ class LLMClient:
 
     def process_atom(self, target_component: dict, context_components: list):
         # Read the prompt template
-        prompt_path = os.path.join(os.path.dirname(__file__), "prompt.md")
+        prompt_path = os.path.join(os.path.dirname(__file__), "prompts", "atom_graph.md")
         with open(prompt_path, "r") as f:
             system_prompt_template = f.read()
         
@@ -139,5 +140,52 @@ class LLMClient:
             
         except (KeyError, TypeError):
             return False
+        
+    async def get_summary(self, text: str):
+        prompt_path = os.path.join(os.path.dirname(__file__), "prompts", "summarize.md")
+        with open(prompt_path, "r") as f:
+            system_prompt = f.read()
+
+        retries = 3
+        backoff_factor = 0.5
+
+        for i in range(retries):
+            try:
+                response = await self.client.chat.complete(
+                    model=self.model_name,
+                    response_format={"type": "json_object"},
+                    temperature=0.1,
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": text}
+                    ]
+                )
+
+                if not response.choices:
+                    raise ValueError("LLM response has no choices.")
+
+                response_text = response.choices[0].message.content
+                
+                if response_text:
+                    try:
+                        json.loads(response_text)
+                        return response_text
+                    except json.JSONDecodeError:
+                        print(f"Warning: Failed to parse summary JSON response. Retrying attempt {i+1}/{retries}...")
+                        print(f"Response: {response_text}")
+                else:
+                    print(f"Warning: Empty summary response from LLM. Retrying attempt {i+1}/{retries}...")
+            
+            except Exception as e:
+                print(f"Warning: An unexpected error occurred during summarization: {e}. Retrying attempt {i+1}/{retries}...")
+
+            if i < retries - 1:
+                await asyncio.sleep(backoff_factor * (2 ** i))
+        
+        return json.dumps({
+            "summary": "Error: Failed to generate summary.",
+            "theme": "Error",
+            "keywords": []
+        })
 
     

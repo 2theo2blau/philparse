@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+
+pydantic
+nltk
+numpy
+scipy
+
+mistralai
+python-dotenv
+
+asyncpg
+pgvector

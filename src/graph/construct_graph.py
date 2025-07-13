@@ -8,6 +8,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import sys
 from threading import Lock
 import time
+from typing import Any, Dict, List
 
 # Download required NLTK data
 try:
@@ -41,7 +42,7 @@ class GraphConstructor:
         self.print_lock = Lock()
 
     def decompose_paragraph(self, paragraph_text: str):
-        citation_pattern = r'(\s*\([^)]+\d{4}[^)]*\)|\s*\[\^?\d+\]|\s*\$\{\}\^\d+\})'
+        citation_pattern = r'(\s*\([^)]+\d{4}[^)]*\)|\s*\[\^?\d+\]|\s*\$\{\s*\}\^\{\d+\}\$)' # matches 
 
         parts = re.split(citation_pattern, paragraph_text)
 
@@ -55,7 +56,37 @@ class GraphConstructor:
             # otherwise, tokenize as regular sentence
             else:
                 sentences = nltk.sent_tokenize(part)
-                atoms.extend(s.strip() for s in sentences if s.strip())
+                for sentence in sentences:
+                    sentence = sentence.strip()
+                    if not sentence:
+                        continue
+
+                    if ':' not in sentence:
+                        atoms.append(sentence)
+                        continue
+                    
+                    # If a sentence contains a colon, we might want to split it.
+                    # However, we should not split if the colon is inside parentheses,
+                    # as this is common in citations or asides.
+                    paren_level = 0
+                    colon_index = -1
+                    for i, char in enumerate(sentence):
+                        if char == '(':
+                            paren_level += 1
+                        elif char == ')':
+                            paren_level = max(0, paren_level - 1) # handle malformed
+                        elif char == ':' and paren_level == 0:
+                            # Found a colon outside of parentheses, split here
+                            colon_index = i
+                            break
+                    
+                    if colon_index != -1:
+                        # Split the sentence at the first valid colon
+                        sub_parts = [sentence[:colon_index].strip(), sentence[colon_index+1:].strip()]
+                        atoms.extend(p for p in sub_parts if p)
+                    else:
+                        # All colons are inside parentheses, so don't split
+                        atoms.append(sentence)
 
         return atoms
     
@@ -144,7 +175,7 @@ class GraphConstructor:
                     atom_id = f"chap{chapter_idx}_sec{subsection_data['id']}_par{paragraph['id']}_atom{atom_idx+1}"
                     target_component = {"id": atom_id, "text": atom_text}
                     context = list(local_context_window)
-                    time.sleep(0.2) # Avoid overwhelming the API
+                    time.sleep(0.1) # Avoid overwhelming the API
                     llm_response = self.llm_client.process_atom(target_component, context)
                     annotated_component = {
                         "id": atom_id, "chapter_title": chapter_title, "section_id": subsection_data['id'],
@@ -295,3 +326,75 @@ class GraphConstructor:
             "components": final_components
         }
                     
+    def get_atoms_from_graph(self, pruned_graph: Dict[str, Any], document_id: int) -> List[Dict[str, Any]]:
+        """
+        Extracts atoms from the pruned graph and formats them for database insertion.
+        It returns a list of dictionaries, each representing an atom.
+        The original string ID from the graph is included as 'graph_id' for mapping purposes.
+        """
+        atoms_for_db = []
+        components = pruned_graph.get("components", [])
+        for component in components:
+            atom_data = {
+                "graph_id": component["id"],  # Temporary field for mapping
+                "document_id": document_id,
+                "paragraph_id": component.get("paragraph_id"),
+                "text": component.get("text"),
+                "classification": component.get("classification"),
+                "start_offset": component.get("start_offset", -1),
+                "end_offset": component.get("end_offset", -1),
+            }
+            atoms_for_db.append(atom_data)
+        
+        return atoms_for_db
+
+    def get_relationships_from_graph(self, pruned_graph: Dict[str, Any], document_id: int, atom_id_map: Dict[str, int]) -> List[Dict[str, Any]]:
+        """
+        Extracts relationships from the pruned graph and formats them for database insertion.
+        It uses the provided atom_id_map to resolve string IDs to database integer IDs.
+        """
+        relationships_for_db = []
+        components = pruned_graph.get("components", [])
+        
+        for component in components:
+            source_id_str = component.get("id")
+            if "relationships" in component:
+                for rel in component["relationships"]:
+                    target_id_str = rel.get("target_id")
+                    direction = rel.get("direction")
+                    
+                    if direction == "outgoing":
+                        source_graph_id = source_id_str
+                        target_graph_id = target_id_str
+                    elif direction == "incoming":
+                        source_graph_id = target_id_str
+                        target_graph_id = source_id_str
+                    else:
+                        continue
+                    
+                    source_atom_id = atom_id_map.get(source_graph_id)
+                    target_atom_id = atom_id_map.get(target_graph_id)
+                    
+                    if source_atom_id is None or target_atom_id is None:
+                        continue
+
+                    rel_data = {
+                        "document_id": document_id,
+                        "source_atom_id": source_atom_id,
+                        "target_atom_id": target_atom_id,
+                        "type": rel.get("type"),
+                        "justification": rel.get("justification")
+                    }
+                    relationships_for_db.append(rel_data)
+        
+        # Deduplicate relationships to handle cases where they might be defined from both ends
+        unique_relationships = []
+        seen_relationships = set()
+        for rel in relationships_for_db:
+            # A directed relationship is unique by (source, target, type)
+            rel_tuple = (rel["source_atom_id"], rel["target_atom_id"], rel["type"])
+            if rel_tuple not in seen_relationships:
+                unique_relationships.append(rel)
+                seen_relationships.add(rel_tuple)
+
+        return unique_relationships
