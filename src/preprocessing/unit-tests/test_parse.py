@@ -287,7 +287,7 @@ class TestParser(unittest.TestCase):
         self.assertIn('introductions', paragraphs_data)
         self.assertIn('chapters', paragraphs_data)
         
-        # Print introduction paragraphs
+        # Print introduction paragraphs (should NOT have atoms)
         if paragraphs_data['introductions']:
             print("\n--- INTRODUCTION SECTIONS ---")
             for intro in paragraphs_data['introductions']:
@@ -295,8 +295,10 @@ class TestParser(unittest.TestCase):
                 if 'paragraphs' in intro:
                     for para in intro['paragraphs']:
                         print(f"  Paragraph {para['id']}: offset {para['start_offset']}-{para['end_offset']}")
+                        # Verify intro paragraphs don't have atoms
+                        self.assertNotIn('atoms', para, "Introduction paragraphs should not have atoms")
         
-        # Print chapter paragraphs
+        # Print chapter paragraphs (should HAVE atoms)
         print("\n--- CHAPTERS ---")
         for chapter_title, chapter_data in paragraphs_data['chapters'].items():
             print(f"\nChapter: {chapter_title}")
@@ -307,8 +309,20 @@ class TestParser(unittest.TestCase):
                 print("  Direct chapter paragraphs:")
                 for para in chapter_data['paragraphs']:
                     print(f"    Paragraph {para['id']}: offset {para['start_offset']}-{para['end_offset']}")
+                    # Verify chapter paragraphs have atoms
+                    self.assertIn('atoms', para, "Chapter paragraphs should have atoms")
+                    self.assertIsInstance(para['atoms'], list)
+                    if para['atoms']:
+                        print(f"      Atoms: {len(para['atoms'])}")
+                        # Verify atom structure
+                        for atom in para['atoms']:
+                            self.assertIn('id', atom)
+                            self.assertIn('text', atom)
+                            self.assertIn('start_offset', atom)
+                            self.assertIn('end_offset', atom)
+                            self.assertIn('type', atom)
             
-            # Print subsection paragraphs
+            # Print subsection paragraphs (should HAVE atoms)
             if chapter_data['subsections']:
                 print("  Subsections:")
                 for subsection in chapter_data['subsections']:
@@ -317,6 +331,18 @@ class TestParser(unittest.TestCase):
                     if 'paragraphs' in subsection:
                         for para in subsection['paragraphs']:
                             print(f"      Paragraph {para['id']}: offset {para['start_offset']}-{para['end_offset']}")
+                            # Verify subsection paragraphs have atoms
+                            self.assertIn('atoms', para, "Subsection paragraphs should have atoms")
+                            self.assertIsInstance(para['atoms'], list)
+                            if para['atoms']:
+                                print(f"        Atoms: {len(para['atoms'])}")
+                                # Verify atom structure
+                                for atom in para['atoms']:
+                                    self.assertIn('id', atom)
+                                    self.assertIn('text', atom)
+                                    self.assertIn('start_offset', atom)
+                                    self.assertIn('end_offset', atom)
+                                    self.assertIn('type', atom)
         
         # Basic assertions
         self.assertIsInstance(paragraphs_data['introductions'], list)
@@ -324,6 +350,7 @@ class TestParser(unittest.TestCase):
         
         # Check that at least some paragraphs were found
         total_paragraphs = 0
+        total_atoms = 0
         for intro in paragraphs_data['introductions']:
             if 'paragraphs' in intro:
                 total_paragraphs += len(intro['paragraphs'])
@@ -331,12 +358,22 @@ class TestParser(unittest.TestCase):
         for chapter_data in paragraphs_data['chapters'].values():
             if chapter_data['paragraphs']:
                 total_paragraphs += len(chapter_data['paragraphs'])
+                # Count atoms in chapter paragraphs
+                for para in chapter_data['paragraphs']:
+                    if 'atoms' in para:
+                        total_atoms += len(para['atoms'])
             for subsection in chapter_data['subsections']:
                 if 'paragraphs' in subsection:
                     total_paragraphs += len(subsection['paragraphs'])
+                    # Count atoms in subsection paragraphs
+                    for para in subsection['paragraphs']:
+                        if 'atoms' in para:
+                            total_atoms += len(para['atoms'])
         
         print(f"\nTotal paragraphs found: {total_paragraphs}")
+        print(f"Total atoms found: {total_atoms}")
         self.assertTrue(total_paragraphs > 0, "Should find at least some paragraphs")
+        self.assertTrue(total_atoms > 0, "Should find at least some atoms in chapter paragraphs")
 
     def test_parse_apriori(self):
         """Test the complete parse() method on apriori.txt and write output to test.json"""
@@ -420,31 +457,69 @@ class TestParser(unittest.TestCase):
             for end_section in parsed_document['end_sections']:
                 print(f"  - {end_section['title']}")
         
-        # Count total paragraphs
+        # Count total paragraphs and atoms, and verify atom structure
         total_paragraphs = 0
+        total_atoms = 0
         
-        # Count paragraphs in introductions
+        # Count paragraphs in introductions (should NOT have atoms)
         for intro in parsed_document['introductions']:
             if 'paragraphs' in intro:
-                total_paragraphs += len(intro['paragraphs'])
+                for para in intro['paragraphs']:
+                    total_paragraphs += 1
+                    self.assertNotIn('atoms', para, f"Introduction paragraph {para['id']} should not have atoms")
         
-        # Count paragraphs in chapters
+        # Count paragraphs in chapters (should HAVE atoms)
         for chapter_data in parsed_document['chapters'].values():
             if chapter_data['paragraphs']:
-                total_paragraphs += len(chapter_data['paragraphs'])
+                for para in chapter_data['paragraphs']:
+                    total_paragraphs += 1
+                    self.assertIn('atoms', para, f"Chapter paragraph {para['id']} should have atoms")
+                    self.assertIsInstance(para['atoms'], list)
+                    atom_count = len(para['atoms'])
+                    total_atoms += atom_count
+                    
+                    # Verify atom structure if atoms exist
+                    if atom_count > 0:
+                        for atom in para['atoms']:
+                            self.assertIn('id', atom)
+                            self.assertIn('text', atom)
+                            self.assertIn('start_offset', atom)
+                            self.assertIn('end_offset', atom)
+                            self.assertIn('type', atom)
+                            self.assertIn(atom['type'], ['sentence', 'citation'])
+                            
             for subsection in chapter_data['subsections']:
                 if 'paragraphs' in subsection:
-                    total_paragraphs += len(subsection['paragraphs'])
+                    for para in subsection['paragraphs']:
+                        total_paragraphs += 1
+                        self.assertIn('atoms', para, f"Subsection paragraph {para['id']} should have atoms")
+                        self.assertIsInstance(para['atoms'], list)
+                        atom_count = len(para['atoms'])
+                        total_atoms += atom_count
+                        
+                        # Verify atom structure if atoms exist
+                        if atom_count > 0:
+                            for atom in para['atoms']:
+                                self.assertIn('id', atom)
+                                self.assertIn('text', atom)
+                                self.assertIn('start_offset', atom)
+                                self.assertIn('end_offset', atom)
+                                self.assertIn('type', atom)
+                                self.assertIn(atom['type'], ['sentence', 'citation'])
         
-        # Count paragraphs in end sections
+        # Count paragraphs in end sections (should NOT have atoms)
         for end_section in parsed_document['end_sections']:
             if 'paragraphs' in end_section:
-                total_paragraphs += len(end_section['paragraphs'])
+                for para in end_section['paragraphs']:
+                    total_paragraphs += 1
+                    self.assertNotIn('atoms', para, f"End section paragraph {para['id']} should not have atoms")
         
         print(f"\nTotal paragraphs found: {total_paragraphs}")
+        print(f"Total atoms found: {total_atoms}")
         
         # Verify the document has content
         self.assertTrue(total_paragraphs > 0, "Should find at least some paragraphs")
+        self.assertTrue(total_atoms > 0, "Should find at least some atoms in chapter paragraphs")
         
         # Verify bibliography functionality
         if bib_entries:
@@ -571,6 +646,244 @@ This is a paragraph with some content and a note reference ${ }^{2,3}$.
         self.assertGreater(len(chapter_with_notes), 0, "At least one chapter should have linked notes")
         
         print("Note reference integration test passed!")
+
+    def test_decompose_paragraph_independent(self):
+        """Test the decompose_paragraph method independently"""
+        
+        # Create a test paragraph with various elements
+        test_paragraph = "This is a simple sentence. Here's another one: it has a colon. This contains a citation (Author 2023: 45-67). And here's a note reference ${ }^{1}$. Finally, a regular sentence."
+        
+        # Initialize parser (we need the original text for the method to work)
+        parser = Parser("Some text with the test paragraph: " + test_paragraph)
+        
+        # Test decompose_paragraph method directly
+        paragraph_start_offset = 100  # arbitrary offset for testing
+        atoms = parser.decompose_paragraph(test_paragraph, paragraph_start_offset)
+        
+        print("\n=== DECOMPOSE_PARAGRAPH INDEPENDENT TEST ===")
+        print(f"Test paragraph: {test_paragraph}")
+        print(f"Decomposed into {len(atoms)} atoms:")
+        
+        for atom in atoms:
+            print(f"  Atom {atom['id']}: [{atom['start_offset']}-{atom['end_offset']}] ({atom['type']}) '{atom['text']}'")
+        
+        # Verify structure
+        self.assertIsInstance(atoms, list)
+        self.assertGreater(len(atoms), 0, "Should decompose into at least one atom")
+        
+        # Verify each atom has required fields
+        for atom in atoms:
+            self.assertIn('id', atom)
+            self.assertIn('text', atom)
+            self.assertIn('start_offset', atom)
+            self.assertIn('end_offset', atom)
+            self.assertIn('type', atom)
+            self.assertIn(atom['type'], ['sentence', 'citation'])
+        
+        # Verify atoms are properly ordered by id
+        for i, atom in enumerate(atoms):
+            self.assertEqual(atom['id'], i + 1)
+        
+        # Verify offsets are logical
+        for atom in atoms:
+            self.assertGreaterEqual(atom['start_offset'], paragraph_start_offset)
+            self.assertGreater(atom['end_offset'], atom['start_offset'])
+        
+        # Check that we get different atom types
+        atom_types = {atom['type'] for atom in atoms}
+        self.assertIn('sentence', atom_types, "Should have sentence atoms")
+        
+        # Verify colon splitting - the sentence "Here's another one: it has a colon" should be split
+        # Look for the two parts: "Here's another one" and "it has a colon"
+        first_part = any("Here's another one" in atom['text'] for atom in atoms)
+        second_part = any("it has a colon" in atom['text'] for atom in atoms)
+        self.assertTrue(first_part and second_part, "Colon sentence should be split into two parts")
+        
+        # Check for citation detection
+        citation_atoms = [atom for atom in atoms if atom['type'] == 'citation']
+        expected_citations = ['(Author 2023: 45-67)', '${ }^{1}$']
+        
+        print(f"Citation atoms found: {[atom['text'] for atom in citation_atoms]}")
+        
+        for expected_citation in expected_citations:
+            citation_found = any(expected_citation == atom['text'] for atom in citation_atoms)
+            self.assertTrue(citation_found, f"Should find exact citation: {expected_citation}")
+        
+        print("Independent decomposition test passed!")
+
+    def test_decompose_paragraph_in_full_parser(self):
+        """Test that paragraph decomposition works correctly in the full parser"""
+        
+        # Use the actual apriori.txt file for full document testing
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.abspath(os.path.join(current_dir, '..', '..', '..'))
+        file_path = os.path.join(project_root, 'texts', 'txt', 'apriori.txt')
+        
+        with open(file_path, 'r', encoding='utf-8') as f:
+            test_document = f.read()
+        
+        parser = Parser(test_document)
+        parsed_doc = parser.parse()
+        
+        print("\n=== DECOMPOSE_PARAGRAPH IN FULL PARSER TEST ===")
+        
+        # Verify structure
+        self.assertIn('introductions', parsed_doc)
+        self.assertIn('chapters', parsed_doc)
+        self.assertIn('end_sections', parsed_doc)
+        
+        # Test that introduction sections do NOT have atoms (as intended)
+        print("Checking introduction sections (should NOT have atoms):")
+        intro_paragraph_count = 0
+        for intro in parsed_doc['introductions']:
+            if 'paragraphs' in intro:
+                for paragraph in intro['paragraphs']:
+                    intro_paragraph_count += 1
+                    print(f"  Intro '{intro['title']}' paragraph {paragraph['id']}: has atoms = {'atoms' in paragraph}")
+                    self.assertNotIn('atoms', paragraph, "Introduction paragraphs should not have atoms")
+        
+        print(f"Total intro paragraphs checked: {intro_paragraph_count}")
+        
+        # Test that chapter paragraphs DO have atoms
+        print("\nChecking chapter paragraphs (should HAVE atoms):")
+        found_chapter_with_atoms = False
+        total_chapter_paragraphs = 0
+        total_atoms_found = 0
+        
+        for chapter_title, chapter_data in parsed_doc['chapters'].items():
+            print(f"Chapter: {chapter_title}")
+            
+            # Check direct chapter paragraphs
+            for paragraph in chapter_data.get('paragraphs', []):
+                total_chapter_paragraphs += 1
+                has_atoms = 'atoms' in paragraph
+                print(f"  Chapter paragraph {paragraph['id']}: has atoms = {has_atoms}")
+                if has_atoms:
+                    found_chapter_with_atoms = True
+                    atoms = paragraph['atoms']
+                    total_atoms_found += len(atoms)
+                    print(f"    Atoms: {len(atoms)}")
+                    
+                    # Verify atom structure (check first few atoms to avoid too much output)
+                    for i, atom in enumerate(atoms[:3]):  # Only check first 3 atoms
+                        self.assertIn('id', atom)
+                        self.assertIn('text', atom)
+                        self.assertIn('start_offset', atom)
+                        self.assertIn('end_offset', atom)
+                        self.assertIn('type', atom)
+                        print(f"      Atom {atom['id']}: ({atom['type']}) '{atom['text'][:100]}...'")
+                    
+                    if len(atoms) > 3:
+                        print(f"      ... and {len(atoms) - 3} more atoms")
+                    
+                    # Verify atoms are properly ordered
+                    for i, atom in enumerate(atoms):
+                        self.assertEqual(atom['id'], i + 1)
+                    
+                    # Check for citations in atoms
+                    citation_atoms = [atom for atom in atoms if atom['type'] == 'citation']
+                    if citation_atoms:
+                        print(f"    Found {len(citation_atoms)} citation atoms")
+            
+            # Check subsection paragraphs
+            for subsection in chapter_data.get('subsections', []):
+                print(f"  Subsection: {subsection['title']}")
+                for paragraph in subsection.get('paragraphs', []):
+                    total_chapter_paragraphs += 1
+                    has_atoms = 'atoms' in paragraph
+                    print(f"    Subsection paragraph {paragraph['id']}: has atoms = {has_atoms}")
+                    if has_atoms:
+                        found_chapter_with_atoms = True
+                        atoms = paragraph['atoms']
+                        total_atoms_found += len(atoms)
+                        print(f"      Atoms: {len(atoms)}")
+                        
+                        # Verify atom structure
+                        self.assertIsInstance(atoms, list)
+                        self.assertGreater(len(atoms), 0)
+                        
+                        # Check first atom for structure
+                        if atoms:
+                            atom = atoms[0]
+                            self.assertIn('id', atom)
+                            self.assertIn('text', atom)
+                            self.assertIn('start_offset', atom)
+                            self.assertIn('end_offset', atom)
+                            self.assertIn('type', atom)
+        
+        print(f"Total chapter paragraphs checked: {total_chapter_paragraphs}")
+        print(f"Total atoms found: {total_atoms_found}")
+        self.assertTrue(found_chapter_with_atoms, "Should find at least one chapter paragraph with atoms")
+        
+        # Test that end sections do NOT have atoms
+        print("\nChecking end sections (should NOT have atoms):")
+        for end_section in parsed_doc['end_sections']:
+            if 'paragraphs' in end_section:
+                for paragraph in end_section['paragraphs']:
+                    print(f"  End section '{end_section['title']}' paragraph {paragraph['id']}: has atoms = {'atoms' in paragraph}")
+                    self.assertNotIn('atoms', paragraph, "End section paragraphs should not have atoms")
+        
+        # Test specific atom content and types
+        print("\nDetailed atom analysis:")
+        for chapter_title, chapter_data in parsed_doc['chapters'].items():
+            for paragraph in chapter_data.get('paragraphs', []):
+                if 'atoms' in paragraph:
+                    atoms = paragraph['atoms']
+                    
+                    # Check that we have both sentence and citation types
+                    atom_types = {atom['type'] for atom in atoms}
+                    if len(atoms) > 1:  # Only check if there are multiple atoms
+                        print(f"    Atom types in paragraph: {atom_types}")
+                        
+                        # Look for citations
+                        citation_atoms = [atom for atom in atoms if atom['type'] == 'citation']
+                        if citation_atoms:
+                            print(f"    Citations found: {[atom['text'] for atom in citation_atoms]}")
+                        
+                        # Check for colon splitting
+                        colon_sentences = [atom for atom in atoms if ':' in atom['text'] and atom['type'] == 'sentence']
+                        if colon_sentences:
+                            print(f"    Colon-split sentences: {[atom['text'] for atom in colon_sentences]}")
+        
+        print("Full parser decomposition test passed!")
+
+    def test_decompose_paragraph_edge_cases(self):
+        """Test edge cases for paragraph decomposition"""
+        
+        parser = Parser("Test document")
+        
+        # Test empty paragraph
+        atoms = parser.decompose_paragraph("", 0)
+        self.assertEqual(len(atoms), 0, "Empty paragraph should produce no atoms")
+        
+        # Test paragraph with only whitespace
+        atoms = parser.decompose_paragraph("   \n\t  ", 0)
+        self.assertEqual(len(atoms), 0, "Whitespace-only paragraph should produce no atoms")
+        
+        # Test paragraph with only citations
+        citation_only = "(Author 2023) ${ }^{1}$"
+        atoms = parser.decompose_paragraph(citation_only, 0)
+        self.assertGreater(len(atoms), 0, "Citation-only paragraph should produce atoms")
+        
+        citation_atoms = [atom for atom in atoms if atom['type'] == 'citation']
+        self.assertEqual(len(citation_atoms), len(atoms), "All atoms should be citations")
+        
+        # Test paragraph with nested parentheses (should not split on colons inside)
+        nested_parens = "This sentence has a colon inside (like this: example) and should not split there."
+        atoms = parser.decompose_paragraph(nested_parens, 0)
+        
+        # Should be one atom since colon is inside parentheses
+        self.assertEqual(len(atoms), 1, "Colon inside parentheses should not cause splitting")
+        self.assertEqual(atoms[0]['type'], 'sentence')
+        
+        # Test paragraph with multiple citations in sequence
+        multi_citation = "Text before (Author1 2020) and (Author2 2021) and more text."
+        atoms = parser.decompose_paragraph(multi_citation, 0)
+        
+        citation_atoms = [atom for atom in atoms if atom['type'] == 'citation']
+        self.assertGreaterEqual(len(citation_atoms), 2, "Should find multiple citations")
+        
+        print("Edge cases test passed!")
 
 
 if __name__ == '__main__':
