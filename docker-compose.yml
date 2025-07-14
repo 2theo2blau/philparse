@@ -1,0 +1,53 @@
+services:
+  philparse-postgres:
+    image: postgres:17
+    build:
+      context: .
+      dockerfile: postgres/docker/Dockerfile
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST:-philparse-postgres}
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
+      - POSTGRES_DB=${POSTGRES_DB:-philparse}
+    volumes:
+      - ${PGDATA_PATH}:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - philparse-network
+
+      
+  philparse-app:
+    build:
+      context: .
+    ports:
+      - "${APP_PORT}:8000"
+    env_file:
+      - .env
+    depends_on:
+      philparse-postgres:
+        condition: service_healthy
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST:-philparse-postgres}
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+      - POSTGRES_USER=${POSTGRES_USER:-pgvector}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
+      - POSTGRES_DB=${POSTGRES_DB:-documents}
+      - MISTRAL_API_KEY=${MISTRAL_API_KEY}
+      - MISTRAL_MODEL=${MISTRAL_MODEL}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - philparse-network
+
+networks:
+  philparse-network:
+    driver: bridge
