@@ -165,15 +165,8 @@ class Parser:
         self._cache['footnotes'] = result
         return result
 
-    def find_chapters(self):
-        if 'chapters' in self._cache:
-            return self._cache['chapters']
-
-        # First, find intro and end sections independently
-        intro_sections = self.find_intro_sections()
-        end_sections = self.find_end_sections()
-        
-        # Calculate the search boundaries
+    def find_chapters(self, intro_sections, end_sections):
+        # Calculate the search boundaries from arguments
         intro_end_offset = 0
         if intro_sections:
             intro_end_offset = max(section['end_offset'] for section in intro_sections)
@@ -263,7 +256,6 @@ class Parser:
                     
                     main_chapters.append((title, start_offset, end_offset))
             
-            self._cache['chapters'] = main_chapters
             return main_chapters
 
         # Process the main pattern matches
@@ -310,7 +302,6 @@ class Parser:
                 # If no chapter number found, include it anyway
                 filtered_chapters.append((title, start, end))
 
-        self._cache['chapters'] = filtered_chapters
         return filtered_chapters
 
     def find_intro_sections(self):
@@ -456,13 +447,8 @@ class Parser:
         self._cache['end_sections'] = end_sections
         return end_sections
 
-    def find_chapter_subsections(self):
-        if 'chapter_subsections' in self._cache:
-            return self._cache['chapter_subsections']
-
-        chapters = self.find_chapters()
+    def find_chapter_subsections(self, chapters):
         if not chapters:
-            self._cache['chapter_subsections'] = {}
             return {}
 
         chapter_map = {}
@@ -510,7 +496,6 @@ class Parser:
                     'content': sub_content
                 })
 
-        self._cache['chapter_subsections'] = chapter_map
         return chapter_map
     
     def find_paragraphs_in_block(self, content_text, content_start_offset):
@@ -554,20 +539,15 @@ class Parser:
             
         return paragraphs
 
-    def find_paragraphs(self):
-        if 'paragraphs' in self._cache:
-            return self._cache['paragraphs']
-
-        # Process introduction sections
-        intro_sections = self.find_intro_sections()
+    def find_paragraphs(self, intro_sections, chapters, chapter_subsections):
+        # Process introduction sections from arguments
         for intro in intro_sections:
             content_text = intro.get('content', '')
             content_start_offset = intro.get('content_start', 0)
             intro['paragraphs'] = self.find_paragraphs_in_block(content_text, content_start_offset)
 
-        # Process chapters and subsections
-        chapter_subsections = self.find_chapter_subsections()
-        chapters_data = self.find_chapters()
+        # Process chapters and subsections from arguments
+        chapters_data = chapters
         chapter_offset_map = {title: {'start_offset': start, 'end_offset': end} for title, start, end in chapters_data}
 
         processed_chapters = {}
@@ -614,17 +594,12 @@ class Parser:
             
             processed_chapters[chapter_title] = processed_chapter
 
-        result = {
+        return {
             "introductions": intro_sections,
             "chapters": processed_chapters
         }
-        self._cache['paragraphs'] = result
-        return result
     
     def find_note_references(self):
-        if 'note_references' in self._cache:
-            return self._cache['note_references']
-
         reference_pattern = re.compile(r'\$\{\s*\}\^\{(\d+(?:,\d+)*)\}\$') # matches on note references like ${ }^{(1,2,3)} $
         references = []
         for match in reference_pattern.finditer(self.original_text):
@@ -633,17 +608,9 @@ class Parser:
             for note_id in note_ids:
                 references.append((note_id.strip(), offset))
 
-        self._cache['note_references'] = references
         return references
     
-    def link_notes_to_text(self):
-        if 'linked_notes' in self._cache:
-            return self._cache['linked_notes']
-
-        chapters = self.find_chapters()
-        notes_map = self.find_notes()
-        references = self.find_note_references()
-
+    def link_notes_to_text(self, chapters, notes_map, note_references):
         if not chapters or not notes_map:
             return {"error": "Could not find chapters or notes to link."}
 
@@ -667,18 +634,18 @@ class Parser:
                 notes_section_end = next_section_match.start()
 
         # Group references by note_id to collect all offsets for each note
-        note_references = {}
-        for note_id, ref_offset in references:
+        references_by_id = {}
+        for note_id, ref_offset in note_references:
             # Ignore references found within the notes section itself
             if notes_section_start <= ref_offset < notes_section_end:
                 continue
                 
-            if note_id not in note_references:
-                note_references[note_id] = []
-            note_references[note_id].append(ref_offset)
+            if note_id not in references_by_id:
+                references_by_id[note_id] = []
+            references_by_id[note_id].append(ref_offset)
 
         # Associate notes with chapters based on where their references appear
-        for note_id, ref_offsets in note_references.items():
+        for note_id, ref_offsets in references_by_id.items():
             note_text = notes_map.get(note_id)
             if not note_text:
                 continue # skip if there is no corresponding note text
@@ -704,7 +671,6 @@ class Parser:
                     'reference_offsets': ref_offsets
                 })
 
-        self._cache['linked_notes'] = chapters_with_notes
         return chapters_with_notes
     
     def parse_bibliography_entries(self, bibliography_content, bib_start_offset):
@@ -797,10 +763,7 @@ class Parser:
 
         return citations
     
-    def link_citations_to_bibliography(self, bibliography_section):
-        if 'linked_citations' in self._cache:
-            return self._cache['linked_citations']
-
+    def link_citations_to_bibliography(self, bibliography_section, all_paragraphs):
         if not bibliography_section:
             return {"entries": {}, "unlinked_citations": []}
         
@@ -808,16 +771,6 @@ class Parser:
         bib_offset = bibliography_section.get('content_start', 0)
 
         bib_map = self.parse_bibliography_entries(bib_text, bib_offset)
-
-        all_paragraphs = []
-        # for intro in self.find_intro_sections():
-        #     all_paragraphs.extend(intro.get('paragraphs', []))
-
-        chapters_data = self.find_paragraphs()['chapters']
-        for chapter in chapters_data.values():
-            all_paragraphs.extend(chapter.get('paragraphs', []))
-            for subsection in chapter.get('subsections', []):
-                all_paragraphs.extend(subsection.get('paragraphs', []))
 
         intext_citations = self.find_intext_citations(self.original_text, all_paragraphs)
 
@@ -832,12 +785,10 @@ class Parser:
             else:
                 unlinked_citations.append(citation)
 
-        result = {
+        return {
             "entries": bib_map,
             "unlinked_citations": unlinked_citations
         }
-        self._cache['linked_citations'] = result
-        return result
     
     def decompose_paragraph(self, paragraph_text: str):
         citation_pattern = r'(\s*\([^)]+\d{4}[^)]*\)|\s*\[\^?\d+\]|\s*\$\{\s*\}\^\{(\d+(?:,\d+)*)\}\$)' # matches 
@@ -889,35 +840,53 @@ class Parser:
         return atoms
     
     def parse(self):
+        # 1. Identify Structure
         title = self.find_title()
-        main_content = self.find_paragraphs()
+        intro_sections = self.find_intro_sections()
         end_sections = self.find_end_sections()
+        chapters = self.find_chapters(intro_sections, end_sections)
+        chapter_subsections = self.find_chapter_subsections(chapters)
 
+        # 2. Extract Content (Paragraphs)
+        main_content = self.find_paragraphs(intro_sections, chapters, chapter_subsections)
+
+        # 3. Handle End Sections & Bibliography
         bibliography_section = None
         other_end_sections = []
         for section in end_sections:
             if section['title'].lower() == 'bibliography':
                 bibliography_section = section
             else:
+                # Add paragraph data to other end sections
                 section['paragraphs'] = self.find_paragraphs_in_block(
                     content_text=section.get('content', ''),
                     content_start_offset=section.get('content_start', 0)
                 )
                 other_end_sections.append(section)
 
-
-        # parse annotations
+        # 4. Handle Annotations
         notes_map = self.find_notes()
-        linked_notes_map = self.link_notes_to_text()
+        note_references = self.find_note_references()
+        linked_notes_map = self.link_notes_to_text(chapters, notes_map, note_references)
         footnotes = self.find_footnotes()
 
-        bibliography_data = self.link_citations_to_bibliography(bibliography_section)
+        # 5. Handle Citations
+        all_paragraphs = []
+        for intro in main_content.get('introductions', []):
+            all_paragraphs.extend(intro.get('paragraphs', []))
+        for chapter in main_content.get('chapters', {}).values():
+            all_paragraphs.extend(chapter.get('paragraphs', []))
+            for subsection in chapter.get('subsections', []):
+                all_paragraphs.extend(subsection.get('paragraphs', []))
+        
+        bibliography_data = self.link_citations_to_bibliography(bibliography_section, all_paragraphs)
 
+        # 6. Assemble Document
         doc = {
             "title": title,
             "introductions": main_content.get('introductions', []),
             "chapters": main_content.get('chapters', []),
-            "end_sections": end_sections,
+            "end_sections": other_end_sections,
             "notes": notes_map,
             "linked_notes": linked_notes_map,
             "footnotes": footnotes,

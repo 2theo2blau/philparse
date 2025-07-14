@@ -5,7 +5,7 @@ from src.preprocessing.parse import Parser
 import re
 
 class TestParser(unittest.TestCase):
-    def test_find_footnotes(self):
+    def test_find_notes(self):
         # Construct the absolute path to the test file
         current_dir = os.path.dirname(os.path.abspath(__file__))
         project_root = os.path.abspath(os.path.join(current_dir, '..', '..', '..'))
@@ -15,14 +15,14 @@ class TestParser(unittest.TestCase):
             text = f.read()
 
         parser = Parser(text)
-        footnotes = parser.find_footnotes()
+        notes = parser.find_notes()
         
-        print("Detected footnotes:", footnotes)
-        for note_num, note_text in footnotes.items():
+        print("Detected notes:", notes)
+        for note_num, note_text in notes.items():
             print(f"Note {note_num}: {note_text}")
 
-        # Example assertion: Check if any footnotes were found
-        self.assertTrue(len(footnotes) > 0)
+        # Example assertion: Check if any notes were found
+        self.assertTrue(len(notes) > 0)
 
     def test_find_footnotes_from_file(self):
         # Construct the absolute path to the test file
@@ -76,7 +76,10 @@ class TestParser(unittest.TestCase):
             text = f.read()
 
         parser = Parser(text)
-        chapters = parser.find_chapters()
+        # Get intro and end sections first as required by the new method signature
+        intro_sections = parser.find_intro_sections()
+        end_sections = parser.find_end_sections()
+        chapters = parser.find_chapters(intro_sections, end_sections)
 
         print(f"Found {len(chapters)} chapters in apriori.txt.")
         for i, chapter in enumerate(chapters):
@@ -153,7 +156,13 @@ class TestParser(unittest.TestCase):
             text = f.read()
 
         parser = Parser(text)
-        chapters_with_notes = parser.link_notes_to_text()
+        # Get the required inputs in the correct sequential order
+        intro_sections = parser.find_intro_sections()
+        end_sections = parser.find_end_sections()
+        chapters = parser.find_chapters(intro_sections, end_sections)
+        notes_map = parser.find_notes()
+        note_references = parser.find_note_references()
+        chapters_with_notes = parser.link_notes_to_text(chapters, notes_map, note_references)
         
         print("Linked notes to chapters:", chapters_with_notes)
         
@@ -171,7 +180,11 @@ class TestParser(unittest.TestCase):
             text = f.read()
 
         parser = Parser(text)
-        chapter_subsections = parser.find_chapter_subsections()
+        # Get the required inputs in the correct order
+        intro_sections = parser.find_intro_sections()
+        end_sections = parser.find_end_sections()
+        chapters = parser.find_chapters(intro_sections, end_sections)
+        chapter_subsections = parser.find_chapter_subsections(chapters)
         
         print("Detected chapter subsections:", chapter_subsections)
         
@@ -260,7 +273,12 @@ class TestParser(unittest.TestCase):
             text = f.read()
 
         parser = Parser(text)
-        paragraphs_data = parser.find_paragraphs()
+        # Get the required inputs in the correct sequential order
+        intro_sections = parser.find_intro_sections()
+        end_sections = parser.find_end_sections()
+        chapters = parser.find_chapters(intro_sections, end_sections)
+        chapter_subsections = parser.find_chapter_subsections(chapters)
+        paragraphs_data = parser.find_paragraphs(intro_sections, chapters, chapter_subsections)
         
         print("=== FIND_PARAGRAPHS TEST RESULTS ===")
         
@@ -325,7 +343,7 @@ class TestParser(unittest.TestCase):
         # Construct the absolute path to the test file
         current_dir = os.path.dirname(os.path.abspath(__file__))
         project_root = os.path.abspath(os.path.join(current_dir, '..', '..', '..'))
-        file_path = os.path.join(project_root, 'texts', 'txt', 'unit-tests', 'chapters.txt')
+        file_path = os.path.join(project_root, 'texts', 'txt', 'apriori.txt')
         
         # Read the apriori.txt file
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -336,7 +354,7 @@ class TestParser(unittest.TestCase):
         parsed_document = parser.parse()
         
         # Write the result to test.json in the base directory
-        output_path = os.path.join(project_root, 'test-smol.json')
+        output_path = os.path.join(project_root, 'test-lg.json')
         with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(parsed_document, f, indent=2, ensure_ascii=False)
         
@@ -539,8 +557,14 @@ This is a paragraph with some content and a note reference ${ }^{2,3}$.
         note_refs = parser.find_note_references()
         self.assertEqual(len(note_refs), 3)  # Should find references to notes 1, 2, and 3
         
-        # Verify the notes are properly linked
-        linked_notes = parser.link_notes_to_text()
+        # Verify the notes are properly linked - need to get required inputs
+        intro_sections = parser.find_intro_sections()
+        end_sections = parser.find_end_sections()
+        chapters = parser.find_chapters(intro_sections, end_sections)
+        notes_map = parser.find_notes()
+        note_references = parser.find_note_references()
+        linked_notes = parser.link_notes_to_text(chapters, notes_map, note_references)
+        
         chapter_titles = list(linked_notes.keys())
         # Should have at least one chapter with linked notes
         chapter_with_notes = [title for title in chapter_titles if title != 'Unlinked Notes' and linked_notes[title]]
