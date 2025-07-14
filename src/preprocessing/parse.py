@@ -1,5 +1,6 @@
 import re
 import os
+import nltk
 
 
 class Parser:
@@ -48,6 +49,77 @@ class Parser:
                     processed_text = processed_text[:start_pos] + replacement + processed_text[end_pos:]
         
         return processed_text
+    
+    def _remove_extraneous_newlines(self, text):
+        """
+        Remove newlines that appear mid-sentence, but preserve justified newlines
+        like those after titles, notes, or at natural paragraph breaks.
+        """
+        if not text:
+            return text
+        
+        # First, preserve double newlines (paragraph breaks) by replacing with placeholder
+        placeholder = "<<<PARAGRAPH_BREAK>>>"
+        text = re.sub(r'\n\n+', placeholder, text)
+        
+        # Split into lines for processing
+        lines = text.split('\n')
+        processed_lines = []
+        
+        i = 0
+        while i < len(lines):
+            current_line = lines[i].strip()
+            
+            # Always preserve empty lines
+            if not current_line:
+                processed_lines.append(lines[i])
+                i += 1
+                continue
+            
+            # Check if we should join this line with the next one
+            should_join = False
+            
+            if i + 1 < len(lines):
+                next_line = lines[i + 1].strip()
+                
+                # Join if:
+                # 1. Current line doesn't end with sentence-ending punctuation
+                # 2. Next line exists and is not empty
+                # 3. Neither line looks like a structural element (header, note, etc.)
+                
+                if (next_line and  # Next line exists and is not empty
+                    not re.search(r'[.!?]\s*$', current_line) and  # Current line doesn't end with sentence punctuation
+                    not re.match(r'^\s*#+\s', current_line) and  # Current line is not a header (consistent with title_pattern)
+                    not re.match(r'^\s*#+\s', next_line) and  # Next line is not a header
+                    not re.match(r'^\s*#+\s*(?:\d+|[IVXLC]+)\s*$', current_line, re.IGNORECASE) and  # Current line is not a numbered chapter (consistent with main_content_pattern)
+                    not re.match(r'^\s*#+\s*(?:\d+|[IVXLC]+)\s*$', next_line, re.IGNORECASE) and  # Next line is not a numbered chapter
+                    not re.match(r'^(?:\[?(\d+|[ivxlc]+)\]?\.?\s+)', next_line) and  # Next line is not a numbered list item (consistent with listitem_pattern)
+                    not re.match(r'^\[\^([^\]]+)\](?!:)', next_line) and  # Next line is not a footnote reference (consistent with footnote reference_pattern)
+                    not re.match(r'^\[\^([^\]]+)\]:\s*', next_line) and  # Next line is not a footnote definition (consistent with footnote definition_pattern)
+                    not re.search(r'\$\{\s*\}\^\{(\d+(?:,\d+)*)\}\$', current_line) and  # Current line doesn't have note reference (consistent with note reference_pattern)
+                    not re.search(r'\$\{\s*\}\^\{(\d+(?:,\d+)*)\}\$', next_line) and  # Next line doesn't have note reference
+                    not re.match(r'^#{0,4}\s*Notes\s*$', current_line, re.IGNORECASE) and  # Current line is not "Notes" header (consistent with header_pattern)
+                    not re.match(r'^#{0,4}\s*Notes\s*$', next_line, re.IGNORECASE) and  # Next line is not "Notes" header
+                    not re.match(r'^\s*#*\s*(?:Bibliography|Index|References|Appendix|Appendices|Glossary|(?:Publisher\'?s?\s*)?Acknowledgements?|Endnotes|Afterword|Notes)\s*$', current_line, re.IGNORECASE) and  # Current line is not end section (consistent with end_pattern)
+                    not re.match(r'^\s*#*\s*(?:Bibliography|Index|References|Appendix|Appendices|Glossary|(?:Publisher\'?s?\s*)?Acknowledgements?|Endnotes|Afterword|Notes)\s*$', next_line, re.IGNORECASE) and  # Next line is not end section
+                    not re.match(r'^#+\s*(?:Contents|Introduction|Preface|Prologue|(?:Publisher\'?s?\s*)?Acknowledgements?)\s*$', current_line, re.IGNORECASE) and  # Current line is not intro section (consistent with intro_pattern)
+                    not re.match(r'^#+\s*(?:Contents|Introduction|Preface|Prologue|(?:Publisher\'?s?\s*)?Acknowledgements?)\s*$', next_line, re.IGNORECASE)):  # Next line is not intro section
+                    should_join = True
+            
+            if should_join:
+                # Join current line with next line, adding a space
+                joined_line = lines[i].rstrip() + ' ' + lines[i + 1].lstrip()
+                processed_lines.append(joined_line)
+                i += 2  # Skip the next line since we've joined it
+            else:
+                processed_lines.append(lines[i])
+                i += 1
+        
+        # Join the lines back and restore paragraph breaks
+        result = '\n'.join(processed_lines)
+        result = result.replace(placeholder, '\n\n')
+        
+        return result
 
     def find_title(self):
         if 'title' in self._cache:
@@ -498,10 +570,13 @@ class Parser:
 
         return chapter_map
     
-    def find_paragraphs_in_block(self, content_text, content_start_offset):
+    def find_paragraphs_in_block(self, content_text, content_start_offset, decompose_into_atoms=False):
         paragraphs = []
         if not content_text:
             return paragraphs
+        
+        # Clean up extraneous newlines before processing
+        content_text = self._remove_extraneous_newlines(content_text)
 
         # Find all paragraph breaks (double newlines)
         paragraph_breaks = list(re.finditer(r'\n\n+', content_text))
@@ -516,12 +591,21 @@ class Parser:
             
             stripped_text = para_text.strip()
             if stripped_text:
-                paragraphs.append({
+                paragraph = {
                     'id': para_id,
                     'text': stripped_text,
                     'start_offset': content_start_offset + current_pos,
                     'end_offset': content_start_offset + para_end,
-                })
+                }
+                
+                # Add atoms if decomposition is requested
+                if decompose_into_atoms:
+                    paragraph['atoms'] = self.decompose_paragraph(
+                        stripped_text, 
+                        content_start_offset + current_pos
+                    )
+                
+                paragraphs.append(paragraph)
                 para_id += 1
             
             current_pos = p_break.end()
@@ -530,12 +614,21 @@ class Parser:
         last_para_text = content_text[current_pos:]
         stripped_last_para = last_para_text.strip()
         if stripped_last_para:
-            paragraphs.append({
+            paragraph = {
                 'id': para_id,
                 'text': stripped_last_para,
                 'start_offset': content_start_offset + current_pos,
                 'end_offset': content_start_offset + len(content_text),
-            })
+            }
+            
+            # Add atoms if decomposition is requested
+            if decompose_into_atoms:
+                paragraph['atoms'] = self.decompose_paragraph(
+                    stripped_last_para, 
+                    content_start_offset + current_pos
+                )
+            
+            paragraphs.append(paragraph)
             
         return paragraphs
 
@@ -580,7 +673,7 @@ class Parser:
                         content_start += 1
                     
                     content_text = self.text[content_start:end_offset]
-                    processed_chapter['paragraphs'] = self.find_paragraphs_in_block(content_text, content_start)
+                    processed_chapter['paragraphs'] = self.find_paragraphs_in_block(content_text, content_start, decompose_into_atoms=True)
             else:
                 for subsection in subsections:
                     subsection_content = subsection.get('content', '')
@@ -589,7 +682,7 @@ class Parser:
                     if header_end == -1:
                         header_end = subsection['start_offset']
 
-                    subsection['paragraphs'] = self.find_paragraphs_in_block(subsection_content, header_end)
+                    subsection['paragraphs'] = self.find_paragraphs_in_block(subsection_content, header_end, decompose_into_atoms=True)
                     processed_chapter['subsections'].append(subsection)
             
             processed_chapters[chapter_title] = processed_chapter
@@ -790,28 +883,69 @@ class Parser:
             "unlinked_citations": unlinked_citations
         }
     
-    def decompose_paragraph(self, paragraph_text: str):
+    def decompose_paragraph(self, paragraph_text: str, paragraph_start_offset: int) -> list[dict]:
         citation_pattern = r'(\s*\([^)]+\d{4}[^)]*\)|\s*\[\^?\d+\]|\s*\$\{\s*\}\^\{(\d+(?:,\d+)*)\}\$)' # matches 
 
-        parts = re.split(citation_pattern, paragraph_text)
-
         atoms = []
+        atom_id = 1
+        
+        # Split by citation pattern and track where each part starts
+        parts = re.split(citation_pattern, paragraph_text)
+        current_offset = 0
+        
         for part in parts:
             if not part or part.isspace():
+                current_offset += len(part) if part else 0
                 continue
+                
+            # Find the actual start position of this part in the original text
+            part_start = paragraph_text.find(part, current_offset)
+            if part_start == -1:
+                part_start = current_offset
+                
             # if part is a citation, add it after skipping whitespace
             if re.fullmatch(citation_pattern, part):
-                atoms.append(part.strip())
-            # otherwise, tokenize as regular sentence
+                clean_part = part.strip()
+                if clean_part:
+                    # Find where the cleaned part starts within the original part
+                    clean_start = part.find(clean_part)
+                    atom_start = part_start + clean_start
+                    atom_end = atom_start + len(clean_part)
+                    
+                    atoms.append({
+                        'id': atom_id,
+                        'text': clean_part,
+                        'start_offset': paragraph_start_offset + atom_start,
+                        'end_offset': paragraph_start_offset + atom_end,
+                        'type': 'citation'
+                    })
+                    atom_id += 1
             else:
+                # otherwise, tokenize as regular sentence
                 sentences = nltk.sent_tokenize(part)
+                sentence_offset = 0
+                
                 for sentence in sentences:
                     sentence = sentence.strip()
                     if not sentence:
                         continue
 
+                    # Find where this sentence starts in the part
+                    sentence_start = part.find(sentence, sentence_offset)
+                    if sentence_start == -1:
+                        sentence_start = sentence_offset
+                    
+                    sentence_offset = sentence_start + len(sentence)
+                    
                     if ':' not in sentence:
-                        atoms.append(sentence)
+                        atoms.append({
+                            'id': atom_id,
+                            'text': sentence,
+                            'start_offset': paragraph_start_offset + part_start + sentence_start,
+                            'end_offset': paragraph_start_offset + part_start + sentence_start + len(sentence),
+                            'type': 'sentence'
+                        })
+                        atom_id += 1
                         continue
                     
                     # If a sentence contains a colon, we might want to split it.
@@ -832,10 +966,34 @@ class Parser:
                     if colon_index != -1:
                         # Split the sentence at the first valid colon
                         sub_parts = [sentence[:colon_index].strip(), sentence[colon_index+1:].strip()]
-                        atoms.extend(p for p in sub_parts if p)
+                        sub_offset = 0
+                        for sub_part in sub_parts:
+                            if sub_part:
+                                sub_start = sentence.find(sub_part, sub_offset)
+                                if sub_start == -1:
+                                    sub_start = sub_offset
+                                sub_offset = sub_start + len(sub_part)
+                                
+                                atoms.append({
+                                    'id': atom_id,
+                                    'text': sub_part,
+                                    'start_offset': paragraph_start_offset + part_start + sentence_start + sub_start,
+                                    'end_offset': paragraph_start_offset + part_start + sentence_start + sub_start + len(sub_part),
+                                    'type': 'sentence'
+                                })
+                                atom_id += 1
                     else:
                         # All colons are inside parentheses, so don't split
-                        atoms.append(sentence)
+                        atoms.append({
+                            'id': atom_id,
+                            'text': sentence,
+                            'start_offset': paragraph_start_offset + part_start + sentence_start,
+                            'end_offset': paragraph_start_offset + part_start + sentence_start + len(sentence),
+                            'type': 'sentence'
+                        })
+                        atom_id += 1
+                        
+            current_offset = part_start + len(part)
 
         return atoms
     
