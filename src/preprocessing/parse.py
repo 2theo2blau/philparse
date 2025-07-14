@@ -10,7 +10,7 @@ class Parser:
         self.offset_map = []  # Track original offsets for reference mapping
         self._cache = {}
 
-    def _preprocess_note_references(self, text):
+    def _preprocess_note_references(self, text) -> str:
         reference_pattern = re.compile(r'\$\{\s*\}\^\{(\d+(?:,\d+)*)\}\$')
         
         # Find all note references
@@ -50,7 +50,7 @@ class Parser:
         
         return processed_text
     
-    def _remove_extraneous_newlines(self, text):
+    def _remove_extraneous_newlines(self, text) -> str:
         """
         Remove newlines that appear mid-sentence, but preserve justified newlines
         like those after titles, notes, or at natural paragraph breaks.
@@ -121,7 +121,7 @@ class Parser:
         
         return result
 
-    def find_title(self):
+    def find_title(self) -> str:
         if 'title' in self._cache:
             return self._cache['title']
         
@@ -135,7 +135,7 @@ class Parser:
         self._cache['title'] = None
         return None
 
-    def find_notes(self):
+    def find_notes(self) -> dict:
         if 'notes' in self._cache:
             return self._cache['notes']
 
@@ -194,7 +194,7 @@ class Parser:
         self._cache['notes'] = notes_map
         return notes_map
     
-    def find_footnotes(self):
+    def find_footnotes(self) -> dict:
         if 'footnotes' in self._cache:
             return self._cache['footnotes']
 
@@ -222,7 +222,7 @@ class Parser:
             definition = {
                 'id': def_id,
                 'identifier': match.group(1),
-                'content': match.group(2).strip(),
+                'text': match.group(2).strip(),
                 'start_offset': match.start(),
                 'end_offset': match.end()
             }
@@ -237,7 +237,7 @@ class Parser:
         self._cache['footnotes'] = result
         return result
 
-    def find_chapters(self, intro_sections, end_sections):
+    def find_chapters(self, intro_sections, end_sections) -> list[tuple[str, int, int]]:
         # Calculate the search boundaries from arguments
         intro_end_offset = 0
         if intro_sections:
@@ -376,7 +376,7 @@ class Parser:
 
         return filtered_chapters
 
-    def find_intro_sections(self):
+    def find_intro_sections(self) -> list[dict]:
         if 'intro_sections' in self._cache:
             return self._cache['intro_sections']
 
@@ -437,13 +437,13 @@ class Parser:
                 'start_offset': start_offset,
                 'content_start': content_start,
                 'end_offset': end_offset,
-                'content': self.text[content_start:end_offset].strip()
+                'text': self.text[content_start:end_offset].strip()
             })
         
         self._cache['intro_sections'] = intro_sections
         return intro_sections
 
-    def find_end_sections(self):
+    def find_end_sections(self) -> list[dict]:
         if 'end_sections' in self._cache:
             return self._cache['end_sections']
 
@@ -513,13 +513,13 @@ class Parser:
                 'start_offset': start_offset,
                 'content_start': content_start,
                 'end_offset': end_offset,
-                'content': self.text[content_start:end_offset].strip()
+                'text': self.text[content_start:end_offset].strip()
             })
 
         self._cache['end_sections'] = end_sections
         return end_sections
 
-    def find_chapter_subsections(self, chapters):
+    def find_chapter_subsections(self, chapters) -> dict:
         if not chapters:
             return {}
 
@@ -565,12 +565,12 @@ class Parser:
                     'title': sub_title,
                     'start_offset': sub_start_offset,
                     'end_offset': sub_end_offset,
-                    'content': sub_content
+                    'text': sub_content
                 })
 
         return chapter_map
     
-    def find_paragraphs_in_block(self, content_text, content_start_offset, decompose_into_atoms=False):
+    def find_paragraphs_in_block(self, content_text, content_start_offset, decompose_into_atoms=False) -> list[dict]:
         paragraphs = []
         if not content_text:
             return paragraphs
@@ -632,10 +632,10 @@ class Parser:
             
         return paragraphs
 
-    def find_paragraphs(self, intro_sections, chapters, chapter_subsections):
+    def find_paragraphs(self, intro_sections, chapters, chapter_subsections) -> dict:
         # Process introduction sections from arguments
         for intro in intro_sections:
-            content_text = intro.get('content', '')
+            content_text = intro.get('text', '')
             content_start_offset = intro.get('content_start', 0)
             intro['paragraphs'] = self.find_paragraphs_in_block(content_text, content_start_offset)
 
@@ -676,7 +676,7 @@ class Parser:
                     processed_chapter['paragraphs'] = self.find_paragraphs_in_block(content_text, content_start, decompose_into_atoms=True)
             else:
                 for subsection in subsections:
-                    subsection_content = subsection.get('content', '')
+                    subsection_content = subsection.get('text', '')
                     
                     header_end = self.text.find(subsection_content, subsection['start_offset'])
                     if header_end == -1:
@@ -692,7 +692,7 @@ class Parser:
             "chapters": processed_chapters
         }
     
-    def find_note_references(self):
+    def find_note_references(self) -> list[tuple[str, int]]:
         reference_pattern = re.compile(r'\$\{\s*\}\^\{(\d+(?:,\d+)*)\}\$') # matches on note references like ${ }^{(1,2,3)} $
         references = []
         for match in reference_pattern.finditer(self.original_text):
@@ -703,7 +703,7 @@ class Parser:
 
         return references
     
-    def link_notes_to_text(self, chapters, notes_map, note_references):
+    def link_notes_to_text(self, chapters, notes_map, note_references) -> dict:
         if not chapters or not notes_map:
             return {"error": "Could not find chapters or notes to link."}
 
@@ -766,7 +766,7 @@ class Parser:
 
         return chapters_with_notes
     
-    def parse_bibliography_entries(self, bibliography_content, bib_start_offset):
+    def parse_bibliography_entries(self, bibliography_content, bib_start_offset) -> dict:
         bib_map = {}
         bib_pattern = re.compile(r"^([A-Z][\w\s,.\-&]+?)\.\s*\((\d{4}[a-z]?|forthcoming)\)\.\s*(.*)", re.MULTILINE)
 
@@ -795,7 +795,7 @@ class Parser:
 
         return bib_map
     
-    def find_intext_citations(self, text_to_search, paragraphs):
+    def find_intext_citations(self, paragraphs) -> list[dict]:
         citations = []
 
         # Pattern 1: Standard parenthetical citation, e.g., (Williamson 2007a: 99-105) or (2004: 407)
@@ -856,11 +856,11 @@ class Parser:
 
         return citations
     
-    def link_citations_to_bibliography(self, bibliography_section, all_paragraphs):
+    def link_citations_to_bibliography(self, bibliography_section, all_paragraphs) -> dict:
         if not bibliography_section:
             return {"entries": {}, "unlinked_citations": []}
         
-        bib_text = bibliography_section.get('content', '')
+        bib_text = bibliography_section.get('text', '')
         bib_offset = bibliography_section.get('content_start', 0)
 
         bib_map = self.parse_bibliography_entries(bib_text, bib_offset)
@@ -997,7 +997,7 @@ class Parser:
 
         return atoms
     
-    def parse(self):
+    def parse(self) -> dict:
         # 1. Identify Structure
         title = self.find_title()
         intro_sections = self.find_intro_sections()
@@ -1017,7 +1017,7 @@ class Parser:
             else:
                 # Add paragraph data to other end sections
                 section['paragraphs'] = self.find_paragraphs_in_block(
-                    content_text=section.get('content', ''),
+                    content_text=section.get('text', ''),
                     content_start_offset=section.get('content_start', 0)
                 )
                 other_end_sections.append(section)
@@ -1043,7 +1043,7 @@ class Parser:
         doc = {
             "title": title,
             "introductions": main_content.get('introductions', []),
-            "chapters": main_content.get('chapters', []),
+            "chapters": main_content.get('chapters', {}),
             "end_sections": other_end_sections,
             "notes": notes_map,
             "linked_notes": linked_notes_map,
