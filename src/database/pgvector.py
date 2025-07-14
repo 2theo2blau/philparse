@@ -227,7 +227,6 @@ class PGVector:
             await conn.executemany(query, data_to_insert)
 
     # --- Note & Citation Operations (notes, bibliography_entries, etc.) ---
-    # (Implementing basic CRUD for completeness)
 
     async def add_note(self, document_id: int, identifier: str, text: str) -> int:
         query = "INSERT INTO notes (document_id, note_identifier, text_content) VALUES ($1, $2, $3) RETURNING id"
@@ -286,12 +285,22 @@ class PGVector:
             records = await conn.fetch(query, structure_id)
         return [dict(r) for r in records]
 
-    async def get_local_graph_context(self, structure_id: int) -> Dict[str, List[Dict[str, Any]]]:
+    async def get_local_graph_context(self, document_id: int, structure_id: int) -> Optional[Dict[str, List[Dict[str, Any]]]]:
         """
         A high-level method to fetch all atoms and their interconnecting relationships
         for a specific part of the document (e.g., a chapter or section).
+        Verifies that the structure ID belongs to the given document ID to prevent data leakage.
         Ideal for powering frontend visualizations.
         """
+        # First, verify that the structure_id belongs to the document_id.
+        query = "SELECT EXISTS(SELECT 1 FROM document_structure WHERE id = $1 AND document_id = $2)"
+        async with self.pool.acquire() as conn:
+            is_valid_request = await conn.fetchval(query, structure_id, document_id)
+
+        if not is_valid_request:
+            logger.warning(f"Access denied: structure_id {structure_id} does not belong to document_id {document_id}.")
+            return None
+
         atoms = await self.get_atoms_in_structure(structure_id)
         relationships = await self.get_relationships_in_structure(structure_id)
         return {"atoms": atoms, "relationships": relationships}
