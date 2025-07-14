@@ -7,6 +7,7 @@ class Parser:
         self.original_text = text
         self.text = self._preprocess_note_references(text)
         self.offset_map = []  # Track original offsets for reference mapping
+        self._cache = {}
 
     def _preprocess_note_references(self, text):
         reference_pattern = re.compile(r'\$\{\s*\}\^\{(\d+(?:,\d+)*)\}\$')
@@ -49,13 +50,23 @@ class Parser:
         return processed_text
 
     def find_title(self):
+        if 'title' in self._cache:
+            return self._cache['title']
+        
         title_pattern = re.compile(r"^\s*#+\s*([^\n]+)")
         match = title_pattern.match(self.text)
         if match:
-            return match.group(1).strip()
+            title = match.group(1).strip()
+            self._cache['title'] = title
+            return title
+        
+        self._cache['title'] = None
         return None
 
     def find_notes(self):
+        if 'notes' in self._cache:
+            return self._cache['notes']
+
         notes_map = {}
         
         header_pattern = re.compile(r'^#{0,4}\s*Notes\s*$', re.MULTILINE | re.IGNORECASE) # check for headers with "Notes" (e.g. "## Notes")
@@ -105,11 +116,16 @@ class Parser:
                 notes_map[note_num] = note_text
 
             if notes_map:
+                self._cache['notes'] = notes_map
                 return notes_map
         
+        self._cache['notes'] = notes_map
         return notes_map
     
     def find_footnotes(self):
+        if 'footnotes' in self._cache:
+            return self._cache['footnotes']
+
         reference_pattern = re.compile(r'\[\^([^\]]+)\](?!:)')
         definition_pattern = re.compile(r'\[\^([^\]]+)\]:\s*(.+?)(?=\n\n|\[\^|$)', re.DOTALL)
         
@@ -142,15 +158,20 @@ class Parser:
             definitions.append(definition)
             def_id += 1
 
-        return {
+        result = {
             'references': references,
             'definitions': definitions
         }
+        self._cache['footnotes'] = result
+        return result
 
     def find_chapters(self):
+        if 'chapters' in self._cache:
+            return self._cache['chapters']
+
         # First, find intro and end sections independently
-        intro_sections = self._find_intro_sections_independent()
-        end_sections = self._find_end_sections_independent()
+        intro_sections = self.find_intro_sections()
+        end_sections = self.find_end_sections()
         
         # Calculate the search boundaries
         intro_end_offset = 0
@@ -242,6 +263,7 @@ class Parser:
                     
                     main_chapters.append((title, start_offset, end_offset))
             
+            self._cache['chapters'] = main_chapters
             return main_chapters
 
         # Process the main pattern matches
@@ -288,9 +310,13 @@ class Parser:
                 # If no chapter number found, include it anyway
                 filtered_chapters.append((title, start, end))
 
+        self._cache['chapters'] = filtered_chapters
         return filtered_chapters
 
-    def find_intro_sections_independent(self):
+    def find_intro_sections(self):
+        if 'intro_sections' in self._cache:
+            return self._cache['intro_sections']
+
         # First, find where the main content (numbered chapters) starts
         main_content_pattern = re.compile(
             r'^\s*#+\s*(?:\d+|[IVXLC]+)\s*$',  # Numbered headers
@@ -316,6 +342,7 @@ class Parser:
         # Find all intro section headers within the search range
         intro_matches = list(intro_pattern.finditer(intro_search_text))
         if not intro_matches:
+            self._cache['intro_sections'] = []
             return []
         
         # Extract full sections with their content
@@ -350,9 +377,13 @@ class Parser:
                 'content': self.text[content_start:end_offset].strip()
             })
         
+        self._cache['intro_sections'] = intro_sections
         return intro_sections
 
     def find_end_sections(self):
+        if 'end_sections' in self._cache:
+            return self._cache['end_sections']
+
         # Look for end sections like Bibliography, Index, etc.
         end_pattern = re.compile(
             r"^\s*#*\s*(?:Bibliography|Index|References|Appendix|Appendices|Glossary|(?:Publisher\'?s?\s*)?Acknowledgements?|Endnotes|Afterword|Notes)\s*$",
@@ -361,6 +392,7 @@ class Parser:
 
         end_matches = list(end_pattern.finditer(self.text))
         if not end_matches:
+            self._cache['end_sections'] = []
             return []
 
         # Find the last numbered chapter to determine where main content ends
@@ -396,6 +428,7 @@ class Parser:
                 valid_end_matches.append(match)
 
         if not valid_end_matches:
+            self._cache['end_sections'] = []
             return []
 
         end_sections = []
@@ -420,11 +453,16 @@ class Parser:
                 'content': self.text[content_start:end_offset].strip()
             })
 
+        self._cache['end_sections'] = end_sections
         return end_sections
 
     def find_chapter_subsections(self):
+        if 'chapter_subsections' in self._cache:
+            return self._cache['chapter_subsections']
+
         chapters = self.find_chapters()
         if not chapters:
+            self._cache['chapter_subsections'] = {}
             return {}
 
         chapter_map = {}
@@ -472,6 +510,7 @@ class Parser:
                     'content': sub_content
                 })
 
+        self._cache['chapter_subsections'] = chapter_map
         return chapter_map
     
     def find_paragraphs_in_block(self, content_text, content_start_offset):
@@ -516,6 +555,9 @@ class Parser:
         return paragraphs
 
     def find_paragraphs(self):
+        if 'paragraphs' in self._cache:
+            return self._cache['paragraphs']
+
         # Process introduction sections
         intro_sections = self.find_intro_sections()
         for intro in intro_sections:
@@ -572,12 +614,17 @@ class Parser:
             
             processed_chapters[chapter_title] = processed_chapter
 
-        return {
+        result = {
             "introductions": intro_sections,
             "chapters": processed_chapters
         }
+        self._cache['paragraphs'] = result
+        return result
     
     def find_note_references(self):
+        if 'note_references' in self._cache:
+            return self._cache['note_references']
+
         reference_pattern = re.compile(r'\$\{\s*\}\^\{(\d+(?:,\d+)*)\}\$') # matches on note references like ${ }^{(1,2,3)} $
         references = []
         for match in reference_pattern.finditer(self.original_text):
@@ -586,9 +633,13 @@ class Parser:
             for note_id in note_ids:
                 references.append((note_id.strip(), offset))
 
+        self._cache['note_references'] = references
         return references
     
     def link_notes_to_text(self):
+        if 'linked_notes' in self._cache:
+            return self._cache['linked_notes']
+
         chapters = self.find_chapters()
         notes_map = self.find_notes()
         references = self.find_note_references()
@@ -653,6 +704,7 @@ class Parser:
                     'reference_offsets': ref_offsets
                 })
 
+        self._cache['linked_notes'] = chapters_with_notes
         return chapters_with_notes
     
     def parse_bibliography_entries(self, bibliography_content, bib_start_offset):
@@ -746,6 +798,9 @@ class Parser:
         return citations
     
     def link_citations_to_bibliography(self, bibliography_section):
+        if 'linked_citations' in self._cache:
+            return self._cache['linked_citations']
+
         if not bibliography_section:
             return {"entries": {}, "unlinked_citations": []}
         
@@ -777,10 +832,61 @@ class Parser:
             else:
                 unlinked_citations.append(citation)
 
-        return {
+        result = {
             "entries": bib_map,
             "unlinked_citations": unlinked_citations
         }
+        self._cache['linked_citations'] = result
+        return result
+    
+    def decompose_paragraph(self, paragraph_text: str):
+        citation_pattern = r'(\s*\([^)]+\d{4}[^)]*\)|\s*\[\^?\d+\]|\s*\$\{\s*\}\^\{(\d+(?:,\d+)*)\}\$)' # matches 
+
+        parts = re.split(citation_pattern, paragraph_text)
+
+        atoms = []
+        for part in parts:
+            if not part or part.isspace():
+                continue
+            # if part is a citation, add it after skipping whitespace
+            if re.fullmatch(citation_pattern, part):
+                atoms.append(part.strip())
+            # otherwise, tokenize as regular sentence
+            else:
+                sentences = nltk.sent_tokenize(part)
+                for sentence in sentences:
+                    sentence = sentence.strip()
+                    if not sentence:
+                        continue
+
+                    if ':' not in sentence:
+                        atoms.append(sentence)
+                        continue
+                    
+                    # If a sentence contains a colon, we might want to split it.
+                    # However, we should not split if the colon is inside parentheses,
+                    # as this is common in citations or asides.
+                    paren_level = 0
+                    colon_index = -1
+                    for i, char in enumerate(sentence):
+                        if char == '(':
+                            paren_level += 1
+                        elif char == ')':
+                            paren_level = max(0, paren_level - 1) # handle malformed
+                        elif char == ':' and paren_level == 0:
+                            # Found a colon outside of parentheses, split here
+                            colon_index = i
+                            break
+                    
+                    if colon_index != -1:
+                        # Split the sentence at the first valid colon
+                        sub_parts = [sentence[:colon_index].strip(), sentence[colon_index+1:].strip()]
+                        atoms.extend(p for p in sub_parts if p)
+                    else:
+                        # All colons are inside parentheses, so don't split
+                        atoms.append(sentence)
+
+        return atoms
     
     def parse(self):
         title = self.find_title()
