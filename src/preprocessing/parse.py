@@ -4,7 +4,49 @@ import os
 
 class Parser:
     def __init__(self, text):
-        self.text = text
+        self.original_text = text
+        self.text = self._preprocess_note_references(text)
+        self.offset_map = []  # Track original offsets for reference mapping
+
+    def _preprocess_note_references(self, text):
+        reference_pattern = re.compile(r'\$\{\s*\}\^\{(\d+(?:,\d+)*)\}\$')
+        
+        # Find all note references
+        matches = list(reference_pattern.finditer(text))
+        if not matches:
+            return text
+        
+        # Process matches in reverse order to maintain correct offsets
+        processed_text = text
+        for match in reversed(matches):
+            start_pos = match.start()
+            end_pos = match.end()
+            note_ref = match.group(0)
+            
+            # Check if the note reference is on the same line as other text
+            line_start = processed_text.rfind('\n', 0, start_pos) + 1
+            line_end = processed_text.find('\n', end_pos)
+            if line_end == -1:
+                line_end = len(processed_text)
+            
+            # Check if there's other non-whitespace text on the same line
+            before_text = processed_text[line_start:start_pos].strip()
+            after_text = processed_text[end_pos:line_end].strip()
+            
+            if before_text or after_text:
+                # There's other text on the same line, so isolate the note reference
+                replacement = f"\n\n{note_ref}\n\n"
+                processed_text = processed_text[:start_pos] + replacement + processed_text[end_pos:]
+            else:
+                # Note reference is already on its own line, just ensure proper spacing
+                if start_pos > 0 and processed_text[start_pos-1] != '\n':
+                    replacement = f"\n{note_ref}"
+                    processed_text = processed_text[:start_pos] + replacement + processed_text[end_pos:]
+                if end_pos < len(processed_text) and processed_text[end_pos] != '\n':
+                    replacement = f"{note_ref}\n"
+                    processed_text = processed_text[:start_pos] + replacement + processed_text[end_pos:]
+        
+        return processed_text
 
     def find_title(self):
         title_pattern = re.compile(r"^\s*#+\s*([^\n]+)")
@@ -106,103 +148,190 @@ class Parser:
         }
 
     def find_chapters(self):
-        chapter_pattern = re.compile(
-            # Pattern 1: Markdown style: # NUM \n ## TITLE
-            r"^\s*#+\s*(?:Chapter\s+)?(?:\d+|[IVXLC]+)\s*\n+\s*#+\s*[^#\n].*$"
-            # Pattern 2: Simple style: Chapter NUM
-            r"|^\s*Chapter\s+(?:\d+|[IVXLC]+)\s*$",
+        # First, find intro and end sections independently
+        intro_sections = self._find_intro_sections_independent()
+        end_sections = self._find_end_sections_independent()
+        
+        # Calculate the search boundaries
+        intro_end_offset = 0
+        if intro_sections:
+            intro_end_offset = max(section['end_offset'] for section in intro_sections)
+        
+        end_start_offset = len(self.text)
+        if end_sections:
+            end_start_offset = min(section['start_offset'] for section in end_sections)
+        
+        # Search for chapters only in the content between intro and end sections
+        search_text = self.text[intro_end_offset:end_start_offset]
+        
+        # Pattern to match: # NUM followed by ## Title
+        # This matches the structure: # 1 \n ## Title
+        main_chapter_pattern = re.compile(
+            r'^\s*#+\s*(?:\d+|[IVXLC]+)\s*\n+\s*#+\s*([^#\n]+)',
             re.MULTILINE | re.IGNORECASE
         )
 
-        terminator_pattern = re.compile(
-            r"^\s*#*\s*(?:Index|Bibliography|References|Appendix|Appendices|Glossary|Acknowledgements|Notes|Endnotes|Afterword)\s*$",
-            re.MULTILINE | re.IGNORECASE
-        )
-
-        chapter_matches = list(chapter_pattern.finditer(self.text))
+        chapter_matches = list(main_chapter_pattern.finditer(search_text))
 
         if not chapter_matches:
-            return []
-
-        last_chapter_start_offset = chapter_matches[-1].start()
-    
-        terminator_matches = list(terminator_pattern.finditer(self.text))
-
-        valid_terminator_starts = [
-            match.start() 
-            for match in terminator_matches 
-            if match.start() > last_chapter_start_offset
-        ]
-
-        if valid_terminator_starts:
-            global_end_offset = min(valid_terminator_starts)
-        else:
-            global_end_offset = len(self.text)
-
-        chapters = []
-        for i, current_match in enumerate(chapter_matches):
-            start_offset = current_match.start()
+            # Fallback: look for numbered headers with substantial content
+            fallback_pattern = re.compile(
+                r"^\s*#+\s*(?:\d+|[IVXLC]+)\s*$",
+                re.MULTILINE | re.IGNORECASE
+            )
+            fallback_matches = list(fallback_pattern.finditer(search_text))
             
-            title = current_match.group(0).strip()
-            title_lines = title.split('\n')
-            if len(title_lines) > 1:
-                chapter_line = title_lines[0].strip()
-                title_line = title_lines[1].strip().lstrip('#').strip()
+            # Filter to only include chapters with substantial content and meaningful titles
+            main_chapters = []
+            for i, match in enumerate(fallback_matches):
+                start_offset = match.start() + intro_end_offset
+                chapter_num_text = match.group(0).strip()
                 
-                # Extract chapter number for consistent formatting
-                num_match = re.search(r'(\d+|[IVXLC]+)', chapter_line)
-                if num_match:
-                    chapter_num = num_match.group(1)
-                    title = f"Chapter {chapter_num}: {title_line}"
+                # Look for content after the chapter number
+                content_start = match.end()
+                if content_start < len(search_text) and search_text[content_start] == '\n':
+                    content_start += 1
+                
+                # Find the end of this chapter
+                if i + 1 < len(fallback_matches):
+                    next_chapter_start = fallback_matches[i + 1].start()
+                    # Look for the next "main" chapter (one with substantial content)
+                    end_offset = next_chapter_start + intro_end_offset
+                    for j in range(i + 1, len(fallback_matches)):
+                        next_match = fallback_matches[j]
+                        next_content_start = next_match.end()
+                        if next_content_start < len(search_text) and search_text[next_content_start] == '\n':
+                            next_content_start += 1
+                        if j + 1 < len(fallback_matches):
+                            next_content_end = fallback_matches[j + 1].start()
+                        else:
+                            next_content_end = len(search_text)
+                        next_content = search_text[next_content_start:next_content_end]
+                        
+                        # Check if this next chapter has a title or substantial content
+                        next_lines = next_content.split('\n')[:5]
+                        has_title = any(line.strip().startswith('#') and not re.match(r'^\s*#+\s*(?:\d+|[IVXLC]+)\s*$', line.strip()) for line in next_lines)
+                        
+                        if has_title or len(next_content.strip()) > 5000:
+                            end_offset = next_match.start() + intro_end_offset
+                            break
                 else:
-                    title = f"{chapter_line}: {title_line}" # Fallback
-            else:
-                 # For "Chapter X" style, keep the matched line as title
-                 title = title.strip()
-
-            if start_offset >= global_end_offset:
-                continue
-
-            is_last_chapter = (i == len(chapter_matches) - 1) or \
-                            (chapter_matches[i + 1].start() >= global_end_offset)
+                    end_offset = end_start_offset
+                
+                chapter_content = search_text[content_start:end_offset - intro_end_offset]
+                
+                # Look for a title in the first few lines
+                lines = chapter_content.split('\n')[:5]
+                title_text = ""
+                for line in lines:
+                    line = line.strip()
+                    if line.startswith('#') and not re.match(r'^\s*#+\s*(?:\d+|[IVXLC]+)\s*$', line):
+                        title_text = line.lstrip('#').strip()
+                        break
+                
+                # Only include if:
+                # 1. Has a meaningful title (not empty)
+                # 2. Has substantial content (> 3000 characters)
+                if title_text and len(chapter_content.strip()) > 3000:
+                    num_match = re.search(r'(\d+|[IVXLC]+)', chapter_num_text)
+                    if num_match:
+                        chapter_num = num_match.group(1)
+                        title = f"Chapter {chapter_num}: {title_text}"
+                    else:
+                        title = f"{chapter_num_text}: {title_text}"
+                    
+                    main_chapters.append((title, start_offset, end_offset))
             
-            if is_last_chapter:
-                end_offset = global_end_offset
-            else:
-                end_offset = chapter_matches[i + 1].start()
+            return main_chapters
 
+        # Process the main pattern matches
+        chapters = []
+        for i, match in enumerate(chapter_matches):
+            start_offset = match.start() + intro_end_offset
+            title_text = match.group(1).strip()
+            
+            # Extract chapter number from the full match
+            full_match = match.group(0)
+            num_match = re.search(r'(\d+|[IVXLC]+)', full_match)
+            if num_match:
+                chapter_num = num_match.group(1)
+                title = f"Chapter {chapter_num}: {title_text}"
+            else:
+                title = title_text
+            
+            # Calculate end offset
+            if i + 1 < len(chapter_matches):
+                end_offset = chapter_matches[i + 1].start() + intro_end_offset
+            else:
+                end_offset = end_start_offset
+            
             chapters.append((title, start_offset, end_offset))
 
-        return chapters
-    
-    def find_intro_sections(self):
-        chapters = self.find_chapters()
-        if not chapters:
-            return []
+        # Additional filtering to remove subsections that might be mistaken for chapters
+        # Look for patterns like Chapter 2, 3, 4, 5 following a higher-numbered chapter
+        # which are likely subsections, not main chapters
+        # another vibey heuristic that should be examined more closely
+        filtered_chapters = []
+        seen_chapter_numbers = set()
         
-        first_chapter_start_offset = chapters[0][1]
-        truncated_text = self.text[:first_chapter_start_offset]
-        
-        # Updated pattern to include Contents and handle apostrophes
-        intro_pattern = re.compile(
-            r'^#+\s*(?:Contents|Introduction|Preface|Prologue|Publisher\'?s?\s*Acknowledgements?|Acknowledgements?)\s*$', 
+        for title, start, end in chapters:
+            # Extract the chapter number
+            num_match = re.search(r'Chapter (\d+)', title)
+            if num_match:
+                chapter_num = int(num_match.group(1))
+                
+                # Only include the first occurrence of each chapter number
+                if chapter_num not in seen_chapter_numbers:
+                    seen_chapter_numbers.add(chapter_num)
+                    filtered_chapters.append((title, start, end))
+            else:
+                # If no chapter number found, include it anyway
+                filtered_chapters.append((title, start, end))
+
+        return filtered_chapters
+
+    def find_intro_sections_independent(self):
+        # First, find where the main content (numbered chapters) starts
+        main_content_pattern = re.compile(
+            r'^\s*#+\s*(?:\d+|[IVXLC]+)\s*$',  # Numbered headers
             re.MULTILINE | re.IGNORECASE
         )
         
-        # Find all intro section headers
-        intro_matches = list(intro_pattern.finditer(truncated_text))
+        main_content_matches = list(main_content_pattern.finditer(self.text))
+        if main_content_matches:
+            first_chapter_start = main_content_matches[0].start()
+        else:
+            # If no numbered chapters, search the entire text
+            first_chapter_start = len(self.text)
+        
+        # Only look for intro sections before the first chapter
+        intro_search_text = self.text[:first_chapter_start]
+        
+        # More flexible pattern that handles variations in section names
+        intro_pattern = re.compile(
+            r'^#+\s*(?:Contents|Introduction|Preface|Prologue|(?:Publisher\'?s?\s*)?Acknowledgements?)\s*$', 
+            re.MULTILINE | re.IGNORECASE
+        )
+        
+        # Find all intro section headers within the search range
+        intro_matches = list(intro_pattern.finditer(intro_search_text))
         if not intro_matches:
             return []
         
         # Extract full sections with their content
         intro_sections = []
         for i, match in enumerate(intro_matches):
+            # Normalize the title for consistent output
             title = match.group(0).strip().lstrip('#').strip()
+            # Simplify "Publisher's Acknowledgements" to "Acknowledgements" for consistency
+            if 'publisher' in title.lower() and 'acknowledgement' in title.lower():
+                title = "Acknowledgements"
+            
             start_offset = match.start()
             content_start = match.end()
             
             # Skip the newline after the header if present
-            if content_start < len(truncated_text) and truncated_text[content_start] == '\n':
+            if content_start < len(intro_search_text) and intro_search_text[content_start] == '\n':
                 content_start += 1
             
             # Find the end of this section
@@ -210,8 +339,8 @@ class Parser:
                 # Next intro section exists
                 end_offset = intro_matches[i + 1].start()
             else:
-                # Last intro section, ends at first chapter
-                end_offset = first_chapter_start_offset
+                # Last intro section, ends at main content
+                end_offset = first_chapter_start
             
             intro_sections.append({
                 'title': title,
@@ -222,7 +351,77 @@ class Parser:
             })
         
         return intro_sections
+
+    def find_end_sections(self):
+        # Look for end sections like Bibliography, Index, etc.
+        end_pattern = re.compile(
+            r"^\s*#*\s*(?:Bibliography|Index|References|Appendix|Appendices|Glossary|(?:Publisher\'?s?\s*)?Acknowledgements?|Endnotes|Afterword|Notes)\s*$",
+            re.MULTILINE | re.IGNORECASE
+        )
+
+        end_matches = list(end_pattern.finditer(self.text))
+        if not end_matches:
+            return []
+
+        # Find the last numbered chapter to determine where main content ends
+        main_content_pattern = re.compile(
+            r'^\s*#+\s*(?:\d+|[IVXLC]+)\s*$',  # Numbered headers
+            re.MULTILINE | re.IGNORECASE
+        )
         
+        main_content_matches = list(main_content_pattern.finditer(self.text))
+        if main_content_matches:
+            # Find the last numbered chapter
+            last_chapter = main_content_matches[-1]
+            min_end_start = last_chapter.end()
+        else:
+            min_end_start = 0
+
+        # Only include sections that come after the last numbered chapter
+        # and filter out chapter-level Notes sections by checking content length
+        # this heuristic may need refinement
+        valid_end_matches = []
+        for match in end_matches:
+            if match.start() >= min_end_start:
+                # For "Notes" sections, only include if they seem to be document-level
+                # (i.e., have substantial content or come very late in the document)
+                title = match.group(0).strip().lstrip('#').strip()
+                if title.lower() == 'notes':
+                    # Check if this appears to be a document-level notes section
+                    # by looking at its position relative to the end of the document
+                    distance_from_end = len(self.text) - match.start()
+                    if distance_from_end > len(self.text) * 0.1:  # Not in the last 10% of document
+                        continue  # Skip chapter-level notes sections
+                
+                valid_end_matches.append(match)
+
+        if not valid_end_matches:
+            return []
+
+        end_sections = []
+        for i, match in enumerate(valid_end_matches):
+            title = match.group(0).strip().lstrip('#').strip()
+            start_offset = match.start()
+            content_start = match.end()
+
+            if content_start < len(self.text) and self.text[content_start] == '\n':
+                content_start += 1
+
+            if i + 1 < len(valid_end_matches):
+                end_offset = valid_end_matches[i + 1].start()
+            else:
+                end_offset = len(self.text)
+
+            end_sections.append({
+                'title': title,
+                'start_offset': start_offset,
+                'content_start': content_start,
+                'end_offset': end_offset,
+                'content': self.text[content_start:end_offset].strip()
+            })
+
+        return end_sections
+
     def find_chapter_subsections(self):
         chapters = self.find_chapters()
         if not chapters:
@@ -274,50 +473,6 @@ class Parser:
                 })
 
         return chapter_map
-    
-    def find_end_sections(self):
-        chapters = self.find_chapters()
-        if not chapters:
-            return []
-
-        last_chapter_end_offset = chapters[-1][2]
-        truncated_text = self.text[last_chapter_end_offset:]
-
-        end_pattern = re.compile(
-            r"^\s*#*\s*(?:Index|Bibliography|References|Appendix|Appendices|Glossary|Acknowledgements?|Notes|Endnotes|Afterword)\s*$",
-            re.MULTILINE | re.IGNORECASE
-        )
-
-        end_sections = []
-
-        matches = list(end_pattern.finditer(truncated_text))
-
-        for i, match in enumerate(matches):
-            title = match.group(0).strip().lstrip('#').strip()
-            start_offset = match.start()
-            content_start = match.end()
-
-            if content_start < len(truncated_text) and truncated_text[content_start] == '\n':
-                content_start += 1
-
-            if i + 1 < len(matches):
-                end_offset = matches[i + 1].start()
-            else:
-                end_offset = len(truncated_text)
-            
-            global_start_offset = last_chapter_end_offset + start_offset
-            global_content_start = last_chapter_end_offset + content_start
-            global_end_offset = last_chapter_end_offset + end_offset
-
-            end_sections.append({
-                'title': title,
-                'start_offset': global_start_offset,
-                'content_start': global_content_start,
-                'end_offset': global_end_offset,
-                'content': truncated_text[content_start:end_offset].strip()
-            })
-
-        return end_sections
     
     def find_paragraphs_in_block(self, content_text, content_start_offset):
         paragraphs = []
@@ -425,7 +580,7 @@ class Parser:
     def find_note_references(self):
         reference_pattern = re.compile(r'\$\{\s*\}\^\{(\d+(?:,\d+)*)\}\$') # matches on note references like ${ }^{(1,2,3)} $
         references = []
-        for match in reference_pattern.finditer(self.text):
+        for match in reference_pattern.finditer(self.original_text):
             note_ids = match.group(1).split(',')
             offset = match.start()
             for note_id in note_ids:
@@ -445,9 +600,9 @@ class Parser:
         chapters_with_notes['Unlinked Notes'] = []
 
         # Find the notes section boundaries to avoid matching references within it
-        notes_header = re.search(r'^#{0,4}\s*Notes\s*$', self.text, re.MULTILINE | re.IGNORECASE)
-        notes_section_start = notes_header.start() if notes_header else len(self.text)
-        notes_section_end = len(self.text)  # Default to end of text
+        notes_header = re.search(r'^#{0,4}\s*Notes\s*$', self.original_text, re.MULTILINE | re.IGNORECASE)
+        notes_section_start = notes_header.start() if notes_header else len(self.original_text)
+        notes_section_end = len(self.original_text)  # Default to end of text
         
         if notes_header:
             # Try to find the end of the notes section by looking for the next major section
@@ -456,7 +611,7 @@ class Parser:
                 r"(?:\s+\d+)?\s*$", 
                 re.MULTILINE | re.IGNORECASE
             )
-            next_section_match = next_section_pattern.search(self.text, pos=notes_header.end())
+            next_section_match = next_section_pattern.search(self.original_text, pos=notes_header.end())
             if next_section_match:
                 notes_section_end = next_section_match.start()
 
@@ -609,7 +764,7 @@ class Parser:
             for subsection in chapter.get('subsections', []):
                 all_paragraphs.extend(subsection.get('paragraphs', []))
 
-        intext_citations = self.find_intext_citations(self.text, all_paragraphs)
+        intext_citations = self.find_intext_citations(self.original_text, all_paragraphs)
 
         # link citations to bibliography
         unlinked_citations = []

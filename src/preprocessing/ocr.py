@@ -20,6 +20,7 @@ class OCR:
             return None
 
     def run_ocr(self):
+        # Get the base64 encoded PDF
         base64_pdf = self.encode_pdf()
 
         if not base64_pdf:
@@ -34,6 +35,7 @@ class OCR:
 
         print(f"Processing {self.pdf_path}...")
         try:
+            # Remove await since client.ocr.process is synchronous
             ocr_response = client.ocr.process(
                 model="mistral-ocr-latest",
                 document={

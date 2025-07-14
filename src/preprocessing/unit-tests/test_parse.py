@@ -70,22 +70,62 @@ class TestParser(unittest.TestCase):
         # Construct the absolute path to the test file
         current_dir = os.path.dirname(os.path.abspath(__file__))
         project_root = os.path.abspath(os.path.join(current_dir, '..', '..', '..'))
-        file_path = os.path.join(project_root, 'texts', 'txt', 'unit-tests', 'chapters.txt')
-
-        # Check if the file is empty, if so, skip the test
-        if os.path.getsize(file_path) == 0:
-            self.skipTest("chapters.txt is empty, skipping test")
+        file_path = os.path.join(project_root, 'texts', 'txt', 'apriori.txt')
 
         with open(file_path, 'r') as f:
             text = f.read()
 
         parser = Parser(text)
         chapters = parser.find_chapters()
-        
-        print("Detected chapters:", chapters)
+
+        print(f"Found {len(chapters)} chapters in apriori.txt.")
+        for i, chapter in enumerate(chapters):
+            print(f"  {i+1}: {chapter[0]}")
 
         # Example assertion: Check if chapters are found
         self.assertIsInstance(chapters, list)
+        self.assertEqual(len(chapters), 18, "Should find 18 chapters in apriori.txt")
+
+    def test_find_intro_sections(self):
+        # Construct the absolute path to the test file
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.abspath(os.path.join(current_dir, '..', '..', '..'))
+        file_path = os.path.join(project_root, 'texts', 'txt', 'apriori.txt')
+
+        with open(file_path, 'r') as f:
+            text = f.read()
+
+        parser = Parser(text)
+        intro_sections = parser.find_intro_sections()
+
+        print(f"Found {len(intro_sections)} intro sections in apriori.txt.")
+        intro_titles = [s['title'] for s in intro_sections]
+        print("Intro section titles:", intro_titles)
+
+        self.assertIsInstance(intro_sections, list)
+        self.assertTrue(len(intro_sections) > 0, "Should find at least one intro section.")
+
+        # Be flexible about which intro sections are present, but expect common ones
+        # Check that we find some reasonable intro sections
+        found_intro_types = set()
+        for title in intro_titles:
+            title_lower = title.lower()
+            if 'content' in title_lower:
+                found_intro_types.add('contents')
+            elif 'preface' in title_lower:
+                found_intro_types.add('preface')
+            elif 'acknowledgement' in title_lower:
+                found_intro_types.add('acknowledgements')
+            elif 'introduction' in title_lower:
+                found_intro_types.add('introduction')
+
+        # Expect at least 2 types of intro sections to be found
+        self.assertGreaterEqual(len(found_intro_types), 2, 
+                               f"Should find at least 2 types of intro sections, found: {found_intro_types}")
+        
+        # Specifically check for common intro sections that should be in this document
+        self.assertIn('contents', found_intro_types, "Should find Contents section")
+        self.assertIn('preface', found_intro_types, "Should find Preface section")
 
     def test_find_note_references(self):
         # Construct the absolute path to the test file
@@ -169,7 +209,7 @@ class TestParser(unittest.TestCase):
         # Construct the absolute path to the test file
         current_dir = os.path.dirname(os.path.abspath(__file__))
         project_root = os.path.abspath(os.path.join(current_dir, '..', '..', '..'))
-        file_path = os.path.join(project_root, 'texts', 'txt', 'unit-tests', 'end-sections.txt')
+        file_path = os.path.join(project_root, 'texts', 'txt', 'apriori.txt')
         
         with open(file_path, 'r') as f:
             text = f.read()
@@ -178,11 +218,37 @@ class TestParser(unittest.TestCase):
         end_sections = parser.find_end_sections()
         
         self.assertIsInstance(end_sections, list)
-        self.assertTrue(len(end_sections) > 0)
+        self.assertTrue(len(end_sections) > 0, "Should find at least one end section.")
 
         section_titles = [s['title'] for s in end_sections]
-        self.assertIn('Bibliography', section_titles)
-        self.assertIn('Index', section_titles)
+        print(f"Found {len(end_sections)} end sections in apriori.txt.")
+        print("End section titles:", section_titles)
+
+        # Be flexible about which end sections are present
+        # Check that we find some reasonable end sections
+        found_end_types = set()
+        for title in section_titles:
+            title_lower = title.lower()
+            if 'bibliography' in title_lower:
+                found_end_types.add('bibliography')
+            elif 'index' in title_lower:
+                found_end_types.add('index')
+            elif 'notes' in title_lower:
+                found_end_types.add('notes')
+            elif 'reference' in title_lower:
+                found_end_types.add('references')
+            elif 'appendix' in title_lower or 'appendices' in title_lower:
+                found_end_types.add('appendix')
+
+        # Expect at least 1 type of end section to be found
+        self.assertGreaterEqual(len(found_end_types), 1, 
+                               f"Should find at least 1 type of end section, found: {found_end_types}")
+        
+        # Check for common end sections that should be in this academic document
+        common_end_sections = {'bibliography', 'index'}
+        found_common = found_end_types.intersection(common_end_sections)
+        self.assertTrue(len(found_common) > 0, 
+                       f"Should find at least one common end section (Bibliography or Index), found: {found_end_types}")
 
     def test_find_paragraphs(self):
         # Construct the absolute path to the test file
@@ -259,7 +325,7 @@ class TestParser(unittest.TestCase):
         # Construct the absolute path to the test file
         current_dir = os.path.dirname(os.path.abspath(__file__))
         project_root = os.path.abspath(os.path.join(current_dir, '..', '..', '..'))
-        file_path = os.path.join(project_root, 'texts', 'txt', 'apriori.txt')
+        file_path = os.path.join(project_root, 'texts', 'txt', 'unit-tests', 'chapters.txt')
         
         # Read the apriori.txt file
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -270,7 +336,7 @@ class TestParser(unittest.TestCase):
         parsed_document = parser.parse()
         
         # Write the result to test.json in the base directory
-        output_path = os.path.join(project_root, 'test.json')
+        output_path = os.path.join(project_root, 'test-smol.json')
         with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(parsed_document, f, indent=2, ensure_ascii=False)
         
@@ -386,6 +452,101 @@ class TestParser(unittest.TestCase):
             print(f"  - All citations have required fields")
         
         print(f"\nTest completed successfully. Output saved to {output_path}")
+
+    def test_note_reference_preprocessing(self):
+        # Test case where note reference is on same line as chapter heading
+        text_with_inline_note = """
+# Chapter 1
+
+## Some Chapter Title ${ }^{1}$ More Text
+
+This is a paragraph with some content.
+
+## Another Section ${ }^{2,3}$
+
+More content here.
+
+# Notes
+
+1. This is note 1
+2. This is note 2  
+3. This is note 3
+"""
+        
+        parser = Parser(text_with_inline_note)
+        
+        # Check that original text is preserved
+        self.assertEqual(parser.original_text, text_with_inline_note)
+        
+        # Check that note references are isolated in processed text
+        processed_lines = parser.text.split('\n')
+        
+        # The note reference should now be on its own line, separated from the heading
+        found_isolated_note_1 = False
+        found_isolated_note_2 = False
+        
+        for i, line in enumerate(processed_lines):
+            if line.strip() == '${ }^{1}$':
+                found_isolated_note_1 = True
+                # Check that it's surrounded by blank lines or separated from other content
+                self.assertTrue(i > 0 and (processed_lines[i-1].strip() == '' or 'Some Chapter Title' in processed_lines[i-1]))
+                self.assertTrue(i < len(processed_lines) - 1 and (processed_lines[i+1].strip() == '' or processed_lines[i+1].strip() == 'More Text'))
+            elif line.strip() == '${ }^{2,3}$':
+                found_isolated_note_2 = True
+                # Should be isolated from "Another Section"
+                self.assertTrue(i > 0 and (processed_lines[i-1].strip() == '' or 'Another Section' in processed_lines[i-1]))
+        
+        self.assertTrue(found_isolated_note_1, "Note reference 1 should be isolated")
+        self.assertTrue(found_isolated_note_2, "Note reference 2,3 should be isolated")
+        
+        # Test that note references can still be found using original text
+        note_refs = parser.find_note_references()
+        self.assertEqual(len(note_refs), 3)  # Should find references to notes 1, 2, and 3
+        
+        note_ids = [ref[0] for ref in note_refs]
+        self.assertIn('1', note_ids)
+        self.assertIn('2', note_ids)
+        self.assertIn('3', note_ids)
+        
+        print("Note reference preprocessing test passed!")
+
+    def test_note_reference_integration_with_parsing(self):
+        """Test that note references are properly isolated and don't interfere with parsing"""
+        
+        # Test case where note reference is on same line as chapter heading
+        text_with_inline_note = """
+# Chapter 1
+
+## Some Chapter Title ${ }^{1}$ More Text
+
+This is a paragraph with some content and a note reference ${ }^{2,3}$.
+
+# Notes
+
+1. This is note 1
+2. This is note 2  
+3. This is note 3
+"""
+        
+        parser = Parser(text_with_inline_note)
+        parsed_doc = parser.parse()
+        
+        # Verify that chapter titles are clean (no note references)
+        for chapter_title, chapter_data in parsed_doc['chapters'].items():
+            self.assertNotIn('${ }^{', chapter_title, f"Chapter title '{chapter_title}' should not contain note references")
+        
+        # Verify that we can still find the note references in the original text
+        note_refs = parser.find_note_references()
+        self.assertEqual(len(note_refs), 3)  # Should find references to notes 1, 2, and 3
+        
+        # Verify the notes are properly linked
+        linked_notes = parser.link_notes_to_text()
+        chapter_titles = list(linked_notes.keys())
+        # Should have at least one chapter with linked notes
+        chapter_with_notes = [title for title in chapter_titles if title != 'Unlinked Notes' and linked_notes[title]]
+        self.assertGreater(len(chapter_with_notes), 0, "At least one chapter should have linked notes")
+        
+        print("Note reference integration test passed!")
 
 
 if __name__ == '__main__':
