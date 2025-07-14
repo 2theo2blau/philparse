@@ -1,5 +1,5 @@
-from src.llm.llm_client import LLMClient
-from src.database.pgvector import PGVector
+from llm.llm_client import LLMClient
+from database.pgvector import PGVector
 import os
 import json
 import asyncio
