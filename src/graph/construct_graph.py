@@ -5,6 +5,7 @@ from llm.llm_client import LLMClient
 from threading import Lock
 from typing import Any, Dict, List
 from concurrent.futures import ThreadPoolExecutor
+from tqdm import tqdm
 
 class GraphConstructor:
     def __init__(self, json_doc: dict, llm_client: LLMClient, context_window_size: int = 4096):
@@ -35,6 +36,9 @@ class GraphConstructor:
         self.chapters = self.doc_data["chapters"]
         self.bibliography = self.doc_data["bibliography"]
 
+        # Extract the paragraph ID map from the metadata, if it exists.
+        self.paragraph_id_map = self.doc_data.get("metadata", {}).get("paragraph_id_map", {})
+
         self.llm_client = llm_client
         self.context_window_size = context_window_size
         self.annotated_components = []
@@ -44,6 +48,7 @@ class GraphConstructor:
         self.total_atoms = 0
         self.processed_atoms = 0
         self.current_status = "idle"
+        self.pbar = None
 
         # add cache for ontology and taxonomy
         self._cache = {}
@@ -96,34 +101,26 @@ class GraphConstructor:
             total_atoms += len(para.get("atoms", []))
 
         if total_atoms == 0:
-            print(f"Chapter {chapter_idx + 1} ({chapter_title}): No atoms to process")
             return []
 
-        processed_atoms = 0
+        processed_atoms_in_chapter = 0
         chapter_components = []
-        context_window = deque(maxlen=self.context_window_size)
-        
-        print(f"Chapter {chapter_idx + 1} ({chapter_title}): Processing {total_atoms} atoms...")
-
-        last_logged_quarter = 0
-        
-        def log_progress():
-            """Simple progress logging at quarter intervals"""
-            nonlocal last_logged_quarter
-            percent = int(100 * processed_atoms / total_atoms) if total_atoms > 0 else 0
-            current_quarter = percent // 25
-            
-            if current_quarter > last_logged_quarter and current_quarter > 0:
-                print(f"Chapter {chapter_idx + 1} ({chapter_title}): {current_quarter * 25}% complete ({processed_atoms}/{total_atoms})")
-                last_logged_quarter = current_quarter
+        # context_window = deque(maxlen=self.context_window_size)  # REMOVE global context window
 
         # Process chapter-level paragraphs first (sequential to maintain context)
+        prev_paragraph_atoms = []
         for paragraph in chapter_data.get("paragraphs", []):
             atoms = paragraph.get("atoms", [])
             for atom_idx, atom in enumerate(atoms):
                 atom_id = f"chap{chapter_idx}_par{paragraph['id']}_atom{atom_idx+1}"
                 target_component = {"id": atom_id, "text": atom["text"]}
-                context = list(context_window)
+                # Build local context: all atoms from previous paragraph + previous atoms in this paragraph
+                context = []
+                context.extend(prev_paragraph_atoms)
+                context.extend([
+                    {"id": f"chap{chapter_idx}_par{paragraph['id']}_atom{idx+1}", "text": atoms[idx]["text"]}
+                    for idx in range(atom_idx)
+                ])
                 llm_response = self.llm_client.process_atom(target_component, context)
                 annotated_component = {
                     "id": atom_id, "chapter_title": chapter_title, "section_id": None,
@@ -133,27 +130,35 @@ class GraphConstructor:
                     "relationships": llm_response.get("relationships", [])
                 }
                 chapter_components.append(annotated_component)
-                context_window.append(target_component)
-                processed_atoms += 1
+                processed_atoms_in_chapter += 1
                 
                 # Update global progress counter (thread-safe)
                 with self.print_lock:
                     self.processed_atoms += 1
-                
-                log_progress()
-        
-        # Define a nested function to process one subsection
-        def _process_subsection(subsection_data: dict, initial_context: deque):
-            nonlocal processed_atoms
-            subsection_components = []
-            local_context_window = initial_context.copy()
+                    if self.pbar:
+                        self.pbar.update(1)
+            # After processing this paragraph, update prev_paragraph_atoms
+            prev_paragraph_atoms = [
+                {"id": f"chap{chapter_idx}_par{paragraph['id']}_atom{idx+1}", "text": atom["text"]}
+                for idx, atom in enumerate(atoms)
+            ]
 
+        # Define a nested function to process one subsection
+        def _process_subsection(subsection_data: dict):
+            subsection_components = []
+            prev_paragraph_atoms = []
             for paragraph in subsection_data.get("paragraphs", []):
                 atoms = paragraph.get("atoms", [])
                 for atom_idx, atom in enumerate(atoms):
                     atom_id = f"chap{chapter_idx}_sec{subsection_data['id']}_par{paragraph['id']}_atom{atom_idx+1}"
                     target_component = {"id": atom_id, "text": atom["text"]}
-                    context = list(local_context_window)
+                    # Build local context: all atoms from previous paragraph + previous atoms in this paragraph
+                    context = []
+                    context.extend(prev_paragraph_atoms)
+                    context.extend([
+                        {"id": f"chap{chapter_idx}_sec{subsection_data['id']}_par{paragraph['id']}_atom{idx+1}", "text": atoms[idx]["text"]}
+                        for idx in range(atom_idx)
+                    ])
                     llm_response = self.llm_client.process_atom(target_component, context)
                     annotated_component = {
                         "id": atom_id, "chapter_title": chapter_title, "section_id": subsection_data['id'],
@@ -163,12 +168,15 @@ class GraphConstructor:
                         "relationships": llm_response.get("relationships", [])
                     }
                     subsection_components.append(annotated_component)
-                    local_context_window.append(target_component)
                     with self.print_lock:
-                        processed_atoms += 1
-                        # Update global progress counter (thread-safe)
                         self.processed_atoms += 1
-                    log_progress()
+                        if self.pbar:
+                            self.pbar.update(1)
+                # After processing this paragraph, update prev_paragraph_atoms
+                prev_paragraph_atoms = [
+                    {"id": f"chap{chapter_idx}_sec{subsection_data['id']}_par{paragraph['id']}_atom{idx+1}", "text": atom["text"]}
+                    for idx, atom in enumerate(atoms)
+                ]
             return subsection_components
 
         # Process subsections in parallel using ThreadPoolExecutor
@@ -177,24 +185,22 @@ class GraphConstructor:
         ]
         
         if subsections_to_process:
-            # Use ThreadPoolExecutor for parallel processing of subsections
             with ThreadPoolExecutor(max_workers=min(len(subsections_to_process), 4)) as executor:
                 futures = [
-                    executor.submit(_process_subsection, s, context_window.copy())
+                    executor.submit(_process_subsection, s)
                     for s in subsections_to_process
                 ]
                 for future in futures:
                     subsection_components = future.result()
                     chapter_components.extend(subsection_components)
 
-        print(f"Chapter {chapter_idx + 1} ({chapter_title}): Completed processing {len(chapter_components)} components")
         return chapter_components
 
     def build_graph(self):
         self.annotated_components = []
         self.processed_atoms = 0
         self.current_status = "building"
-        print(f"Building graph for document: {self.title}")
+        # print(f"Building graph for document: {self.title}")
         
         # Calculate total atoms for overall progress tracking
         self.total_atoms = 0
@@ -207,15 +213,22 @@ class GraphConstructor:
             for chapter_data in chapters_to_process:
                 self.total_atoms += self._count_atoms_in_chapter(chapter_data)
         
+        if self.total_atoms > 0:
+            self.pbar = tqdm(total=self.total_atoms, desc=f"Building graph for '{self.title}'", unit="atom")
+        else:
+            print(f"No atoms to process for document '{self.title}'.")
+            self.current_status = "complete"
+            return {"document_title": self.title, "components": []}
+
         # Ensure chapters is in the correct format
         if isinstance(self.chapters, str):
             raise ValueError(f"Expected chapters to be dict or list, but got string: {self.chapters}")
         elif isinstance(self.chapters, dict):
             num_chapters = len(self.chapters)
-            print(f"Found {num_chapters} chapters with {self.total_atoms} total atoms to process...")
+            # print(f"Found {num_chapters} chapters with {self.total_atoms} total atoms to process...")
         elif isinstance(self.chapters, list):
             num_chapters = len(self.chapters)
-            print(f"Found {num_chapters} chapters with {self.total_atoms} total atoms to process...")
+            # print(f"Found {num_chapters} chapters with {self.total_atoms} total atoms to process...")
         else:
             raise ValueError(f"Unexpected chapters type: {type(self.chapters)}")
 
@@ -246,15 +259,19 @@ class GraphConstructor:
             self.current_status = "error"
             print(f"Error during chapter processing: {exc}")
             raise
+        finally:
+            if self.pbar:
+                self.pbar.close()
+                self.pbar = None
 
         self.current_status = "filtering"
-        print(f"Graph construction complete! Generated {len(self.annotated_components)} components")
+        # print(f"Graph construction complete! Generated {len(self.annotated_components)} components")
         
         raw_graph = {"document_title": self.title, "components": self.annotated_components}
         
-        print("Filtering graph based on ontology...")
+        # print("Filtering graph based on ontology...")
         filtered_graph = self.prune_by_ontology(raw_graph)
-        print(f"Graph filtering complete. {len(raw_graph['components'])} components remain.")
+        # print(f"Graph filtering complete. {len(raw_graph['components'])} components remain.")
         
         self.current_status = "complete"
         return raw_graph
@@ -293,7 +310,7 @@ class GraphConstructor:
             
             # Skip invalid components
             if classification not in valid_classes:
-                print(f"Warning: Filtering out component '{component_id}' with invalid classification: '{classification}'")
+                # print(f"Warning: Filtering out component '{component_id}' with invalid classification: '{classification}'")
                 continue
             
             # Component is valid, track it
@@ -311,12 +328,12 @@ class GraphConstructor:
                     direction not in ["outgoing", "incoming"] or
                     relationship_type not in relationship_rules):
                     
-                    if target_id not in component_ids:
-                        print(f"Warning: Filtering relationship from '{component_id}' to invalid/filtered target '{target_id}'")
-                    elif direction not in ["outgoing", "incoming"]:
-                        print(f"Warning: Filtering relationship from '{component_id}' with invalid direction '{direction}'")
-                    else:
-                        print(f"Warning: Filtering relationship from '{component_id}' with invalid relationship type '{relationship_type}'")
+                    # if target_id not in component_ids:
+                    #     print(f"Warning: Filtering relationship from '{component_id}' to invalid/filtered target '{target_id}'")
+                    # elif direction not in ["outgoing", "incoming"]:
+                    #     print(f"Warning: Filtering relationship from '{component_id}' with invalid direction '{direction}'")
+                    # else:
+                    #     print(f"Warning: Filtering relationship from '{component_id}' with invalid relationship type '{relationship_type}'")
                     continue
                 
                 # We'll validate ontology rules in the second pass since we need all valid components first
@@ -341,7 +358,7 @@ class GraphConstructor:
                 
                 # Skip if target component was filtered out
                 if target_id not in valid_component_ids:
-                    print(f"Warning: Filtering relationship from '{component['id']}' to invalid/filtered target '{target_id}'")
+                    # print(f"Warning: Filtering relationship from '{component['id']}' to invalid/filtered target '{target_id}'")
                     continue
                 
                 # Get target component classification (fast lookup)
@@ -362,8 +379,8 @@ class GraphConstructor:
                 
                 if is_valid:
                     filtered_relationships.append(relationship)
-                else:
-                    print(f"Warning: Filtering invalid ontology relationship: {source_class} --({relationship_type}, {direction})--> {target_class}")
+                # else:
+                #     print(f"Warning: Filtering invalid ontology relationship: {source_class} --({relationship_type}, {direction})--> {target_class}")
             
             component['relationships'] = filtered_relationships
         
@@ -376,10 +393,22 @@ class GraphConstructor:
         atoms_for_db = []
         components = pruned_graph.get("components", [])
         for component in components:
+            source_paragraph_id = component.get("paragraph_id")
+            
+            # Use the map to get the correct DB paragraph ID.
+            # The map keys are strings because of JSON serialization.
+            db_paragraph_id = self.paragraph_id_map.get(str(source_paragraph_id))
+            
+            if db_paragraph_id is None:
+                # Fallback or error handling if a paragraph ID is not in the map.
+                # For now, we'll log a warning and skip it to prevent crashes.
+                # logger.warning(f"Could not find mapping for paragraph_id: {source_paragraph_id}. Skipping atom.")
+                continue
+
             atom_data = {
                 "graph_id": component["id"],  # Temporary field for mapping
                 "document_id": document_id,
-                "paragraph_id": component.get("paragraph_id"),
+                "paragraph_id": db_paragraph_id,
                 "text": component.get("text"),
                 "classification": component.get("classification"),
                 "start_offset": component.get("start_offset", -1),
