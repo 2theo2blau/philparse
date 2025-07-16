@@ -4,9 +4,41 @@ import json
 import numpy as np
 import time
 from typing import List, Dict, Any
+import threading
+
+class TokenBucketRateLimiter:
+    def __init__(self, rate: float, capacity: float):
+        """
+        rate: refill rate in tokens per second (e.g., 6)
+        capacity: max burst size (same as rate for steady usage)
+        """
+        self.rate = rate
+        self.capacity = capacity
+        self.tokens = capacity
+        self.last_refill = time.monotonic()
+        self.lock = threading.Lock()
+
+    def consume(self):
+        with self.lock:
+            while True:
+                now = time.monotonic()
+                elapsed = now - self.last_refill
+                # Refill tokens
+                self.tokens = min(self.capacity, self.tokens + elapsed * self.rate)
+                self.last_refill = now
+
+                if self.tokens >= 1:
+                    self.tokens -= 1
+                    return
+                else:
+                    # Calculate time to next token
+                    wait_time = (1 - self.tokens) / self.rate
+                    if wait_time > 0:
+                        time.sleep(wait_time)
+                    # After sleeping, loop to recalculate tokens
 
 class LLMClient:
-    def __init__(self, retries: int = 3, backoff_factor: float = 0.5):
+    def __init__(self, retries: int = 3, backoff_factor: float = 0.1):
         self.model_name = os.getenv("MISTRAL_MODEL")
         self.api_key = os.getenv("MISTRAL_API_KEY")
         self.retries = retries
@@ -18,6 +50,9 @@ class LLMClient:
             
         self.client = Mistral(api_key=self.api_key)
         self._cache_resources()
+
+        # Rate limiting state
+        self.rate_limiter = TokenBucketRateLimiter(rate=6.0, capacity=6.0)
 
     def _cache_resources(self):
         """Loads prompts, taxonomy, and ontology into memory to avoid redundant file I/O."""
@@ -48,9 +83,11 @@ class LLMClient:
 
     def _run_completion_request(self, messages: List[Dict[str, str]], temperature: float = 0.1) -> Dict[str, Any] | None:
         """
-        Executes the chat completion API call with a retry mechanism.
+        Executes the chat completion API call with a retry mechanism and token bucket rate limiting.
         Returns the parsed JSON object on success, or None on failure.
         """
+        self.rate_limiter.consume() # Wait here to respect the rate limit before making a request.
+
         for i in range(self.retries):
             try:
                 response = self.client.chat.complete(
@@ -69,10 +106,18 @@ class LLMClient:
                 
                 return json.loads(response_text)
 
-            except json.JSONDecodeError as e:
-                print(f"Warning: Failed to parse JSON response. Attempt {i+1}/{self.retries}. Error: {e}")
             except Exception as e:
-                print(f"Warning: API call failed. Attempt {i+1}/{self.retries}. Error: {e}")
+                # Check if this is a rate limiting error (429)
+                if hasattr(e, 'status_code') and e.status_code == 429:
+                    print(f"Warning: Rate limited by API (429). Attempt {i+1}/{self.retries}. Backing off.")
+                elif hasattr(e, 'status_code'):
+                    print(f"Warning: API call failed with status {e.status_code}. Attempt {i+1}/{self.retries}. Error: {e}")
+                else:
+                    # Handle JSON decode errors and other exceptions
+                    if isinstance(e, json.JSONDecodeError):
+                        print(f"Warning: Failed to parse JSON response. Attempt {i+1}/{self.retries}. Error: {e}")
+                    else:
+                        print(f"Warning: API call failed. Attempt {i+1}/{self.retries}. Error: {e}")
 
             if i < self.retries - 1:
                 time.sleep(self.backoff_factor * (2 ** i))
