@@ -5,18 +5,19 @@ from contextlib import asynccontextmanager
 from typing import List, Optional, AsyncGenerator
 
 from fastapi import FastAPI, APIRouter, HTTPException, UploadFile, File, BackgroundTasks, Query, Path
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
 from llm.llm_client import LLMClient
 from database.pgvector import PGVector, PGVectorConfig
-from graph.metagraph import Metagraph
+# from graph.metagraph import Metagraph
 from graph.construct_graph import GraphConstructor
 from preprocessing.parse import Parser
 from preprocessing.ocr import OCR
 from .models import (
     Document, Atom, Relationship, DocumentInfo,
-    DocumentStructureNode, GraphContext, AtomNeighborhood
+    DocumentStructureNode, GraphContext, AtomNeighborhood, GraphConstructionProgress
 )
 
 # --- Configuration & Logging ---
@@ -44,6 +45,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     try:
         await db_client.initialize()
         app.state.db_client = db_client
+        app.state.graph_constructors = {}  # For tracking progress
         logger.info("Application startup complete. Database connected.")
         yield
     finally:
@@ -59,6 +61,17 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan
 )
+
+# --- CORS Middleware ---
+# Allows the frontend to communicate with this API on any port.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origin_regex=r"http://127.0.0.1:.*",
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 router = APIRouter(prefix="/api")
 
 # --- Dependency Injection ---
@@ -143,38 +156,74 @@ async def parse_document(document_id: int = Path(..., description="ID of the doc
     parser = Parser(doc["raw_content"])
     parsed_json = parser.parse()
 
-    async with get_db().transaction() as conn: # Use a transaction for atomicity
-        db_with_conn = get_db()
-        db_with_conn.pool.release(conn) # Temporarily release to use our own
-        db_with_conn.pool._pool.append(conn) # Hack to make it work with the transaction manager
-        await db_with_conn.update_document_parsed_content(document_id, parsed_json)
-        await db_with_conn.add_document_structure(document_id, parsed_json)
+    # Use the new atomic method to update parsed content and add structure
+    await get_db().update_document_and_add_structure(document_id, parsed_json)
 
     return {"message": "Document parsed and structure saved successfully."}
 
-@router.post("/documents/{document_id}/graph", summary="Step 3: Construct knowledge graph")
-async def construct_graph(document_id: int = Path(..., description="ID of the document to build a graph for.")):
+@router.post("/documents/{document_id}/graph", summary="Step 3: Construct knowledge graph", status_code=202)
+async def construct_graph(
+    document_id: int,
+    background_tasks: BackgroundTasks
+):
     """
-    Analyzes the parsed document structure, classifies text 'atoms', identifies
-    relationships, and saves the resulting knowledge graph to the database.
+    Triggers knowledge graph construction for a document in the background.
+    Poll the `/documents/{document_id}/graph/progress` endpoint to check status.
     """
-    doc = await get_db().get_document(document_id)
+    db = get_db()
+    doc = await db.get_document(document_id)
     if not doc or not doc.get("parsed_content"):
         raise HTTPException(status_code=400, detail="Document must be parsed before constructing a graph.")
 
+    if document_id in app.state.graph_constructors:
+        constructor = app.state.graph_constructors[document_id]
+        if constructor.current_status in ["building", "filtering"]:
+            raise HTTPException(status_code=409, detail="Graph construction is already in progress.")
+
     graph_constructor = GraphConstructor(doc["parsed_content"], llm_client)
-    graph = graph_constructor.build_graph()
+    app.state.graph_constructors[document_id] = graph_constructor
+
+    background_tasks.add_task(_run_graph_construction, document_id, db, llm_client)
     
-    # Use a transaction to ensure the entire graph is saved atomically
-    async with get_db().transaction():
+    return {"message": "Graph construction started in the background."}
+
+
+async def _run_graph_construction(document_id: int, db: PGVector, llm: LLMClient):
+    """Internal helper to run graph construction in the background."""
+    graph_constructor = app.state.graph_constructors.get(document_id)
+    if not graph_constructor:
+        logger.error(f"Could not find graph constructor for document {document_id} to run in background.")
+        return
+
+    try:
+        graph = graph_constructor.build_graph()
+        
         atoms_to_add = graph_constructor.get_atoms_from_graph(graph, document_id)
-        atom_id_map = await get_db().add_atoms(atoms_to_add)
-
+        atom_id_map = await db.add_atoms(atoms_to_add)
         rels_to_add = graph_constructor.get_relationships_from_graph(graph, document_id, atom_id_map)
+        
         if rels_to_add:
-            await get_db().add_relationships(rels_to_add)
+            await db.add_relationships(rels_to_add)
+        
+        logger.info(f"Graph construction complete for document {document_id}.")
 
-    return {"message": f"Graph constructed with {len(atoms_to_add)} atoms and {len(rels_to_add)} relationships."}
+    except Exception as e:
+        logger.error(f"Background graph construction failed for doc {document_id}: {e}", exc_info=True)
+        graph_constructor.current_status = "error"
+
+
+@router.get("/documents/{document_id}/graph/progress", summary="Get graph construction progress", response_model=GraphConstructionProgress)
+async def get_graph_construction_progress(document_id: int):
+    """
+    Poll this endpoint to check the status of a graph construction process
+    that was started in the background.
+    """
+    constructor = app.state.graph_constructors.get(document_id)
+    if not constructor:
+        raise HTTPException(status_code=404, detail="No graph construction process found for this document. It may not have been started or has been cleaned up.")
+    
+    return constructor.get_progress_info()
+
 
 # --- Convenience Endpoint for Full Pipeline ---
 async def _run_full_pipeline(document_id: int, db: PGVector):
@@ -189,25 +238,27 @@ async def _run_full_pipeline(document_id: int, db: PGVector):
             return
         parser = Parser(doc["raw_content"])
         parsed_json = parser.parse()
-        await db.update_document_parsed_content(document_id, parsed_json)
-        await db.add_document_structure(document_id, parsed_json)
+        await db.update_document_and_add_structure(document_id, parsed_json)
         logger.info(f"Parsing complete for document {document_id}.")
 
         # Step 2: Construct Graph
         doc = await db.get_document(document_id) # Re-fetch to get parsed_content
         graph_constructor = GraphConstructor(doc["parsed_content"], llm_client)
+        app.state.graph_constructors[document_id] = graph_constructor # Track progress
+        
         graph = graph_constructor.build_graph()
         
-        async with db.transaction():
-            atoms_to_add = graph_constructor.get_atoms_from_graph(graph, document_id)
-            atom_id_map = await db.add_atoms(atoms_to_add)
-            rels_to_add = graph_constructor.get_relationships_from_graph(graph, document_id, atom_id_map)
-            if rels_to_add:
-                await db.add_relationships(rels_to_add)
+        atoms_to_add = graph_constructor.get_atoms_from_graph(graph, document_id)
+        atom_id_map = await db.add_atoms(atoms_to_add)
+        rels_to_add = graph_constructor.get_relationships_from_graph(graph, document_id, atom_id_map)
+        if rels_to_add:
+            await db.add_relationships(rels_to_add)
         logger.info(f"Graph construction complete for document {document_id}.")
         
     except Exception as e:
         logger.error(f"Background processing failed for document {document_id}: {e}", exc_info=True)
+        if document_id in app.state.graph_constructors:
+            app.state.graph_constructors[document_id].current_status = "error"
 
 @router.post("/documents/{document_id}/process", summary="Run full processing pipeline")
 async def process_document_in_background(

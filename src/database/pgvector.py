@@ -95,7 +95,22 @@ class PGVector:
     async def get_documents(self, page: int = 1, page_size: int = 20) -> List[Dict[str, Any]]:
         """Retrieves a paginated list of documents."""
         offset = (page - 1) * page_size
-        query = "SELECT id, title, created_at FROM documents ORDER BY created_at DESC LIMIT $1 OFFSET $2;"
+        query = """
+            SELECT
+                d.id,
+                d.title,
+                d.created_at,
+                CASE
+                    WHEN EXISTS (SELECT 1 FROM atoms WHERE document_id = d.id) THEN 'COMPLETED'
+                    WHEN EXISTS (SELECT 1 FROM document_structure WHERE document_id = d.id) THEN 'PARSED'
+                    ELSE 'PROCESSING'
+                END as status
+            FROM
+                documents d
+            ORDER BY
+                d.created_at DESC
+            LIMIT $1 OFFSET $2;
+        """
         async with self.pool.acquire() as conn:
             records = await conn.fetch(query, page_size, offset)
         return [dict(r) for r in records]
@@ -107,6 +122,12 @@ class PGVector:
         async with self.pool.acquire() as conn:
             await conn.execute(query, parsed_content_json, document_id)
 
+    async def _update_document_parsed_content_with_conn(self, conn, document_id: int, parsed_content: Dict):
+        """Updates the parsed_content of a document using an existing connection."""
+        query = "UPDATE documents SET parsed_content = $1 WHERE id = $2"
+        parsed_content_json = json.dumps(parsed_content)
+        await conn.execute(query, parsed_content_json, document_id)
+
     async def delete_document(self, document_id: int) -> bool:
         """Deletes a document and all its associated data via cascading deletes."""
         query = "DELETE FROM documents WHERE id = $1"
@@ -115,12 +136,43 @@ class PGVector:
         # "DELETE 1" means one row was deleted
         return status.endswith('1')
 
+    async def update_document_and_add_structure(self, document_id: int, parsed_content: Dict):
+        """
+        Atomically updates the document's parsed content and adds the document structure.
+        This method ensures both operations succeed or fail together.
+        """
+        async with self.transaction() as conn:
+            # This adds the structure and returns a map of old paragraph IDs to new ones.
+            paragraph_id_map = await self._add_document_structure_with_conn(conn, document_id, parsed_content)
+            
+            # Store this map within the parsed_content to be saved in the DB.
+            if "metadata" not in parsed_content:
+                parsed_content["metadata"] = {}
+            parsed_content["metadata"]["paragraph_id_map"] = paragraph_id_map
+            
+            await self._update_document_parsed_content_with_conn(conn, document_id, parsed_content)
+        logger.info(f"Successfully updated document {document_id} and added structure with ID mapping.")
+
     # --- Structure Operations (document_structure table) ---
 
     async def add_document_structure(self, document_id: int, parsed_content: Dict):
         """Populates the document_structure table by traversing parsed_content."""
         if not parsed_content:
             return
+
+        async with self.transaction() as conn:
+            await self._add_document_structure_with_conn(conn, document_id, parsed_content)
+        logger.info(f"Successfully populated document_structure for document {document_id}")
+
+    async def _add_document_structure_with_conn(self, conn, document_id: int, parsed_content: Dict) -> Dict[str, int]:
+        """
+        Populates the document_structure table using an existing connection.
+        Returns a map of source paragraph ID (from JSON) to new database ID.
+        """
+        if not parsed_content:
+            return {}
+
+        paragraph_id_map = {}
 
         async def _insert_recursive(conn, element: Dict, parent_id: Optional[int], element_type: str):
             query = """
@@ -131,6 +183,13 @@ class PGVector:
                 query, document_id, parent_id, element_type, element.get("title"),
                 element.get("text"), element.get("start_offset"), element.get("end_offset")
             )
+
+            # If the element is a paragraph, map its original ID to the new DB ID.
+            if element_type == 'paragraph':
+                source_id = element.get('id')
+                if source_id is not None:
+                    paragraph_id_map[str(source_id)] = new_id
+
             # Handle nested children (e.g., subsections in chapters, paragraphs in sections)
             if element_type == 'chapter':
                 for sub in element.get('subsections', []):
@@ -141,15 +200,15 @@ class PGVector:
                 for para in element.get('paragraphs', []):
                     await _insert_recursive(conn, para, new_id, 'paragraph')
 
-        async with self.transaction() as conn:
-            for intro in parsed_content.get('introductions', []):
-                await _insert_recursive(conn, intro, None, 'introduction')
-            for title, data in parsed_content.get('chapters', {}).items():
-                data['title'] = data.get('title', title)
-                await _insert_recursive(conn, data, None, 'chapter')
-            for end_sec in parsed_content.get('end_sections', []):
-                await _insert_recursive(conn, end_sec, None, 'end_section')
-        logger.info(f"Successfully populated document_structure for document {document_id}")
+        for intro in parsed_content.get('introductions', []):
+            await _insert_recursive(conn, intro, None, 'introduction')
+        for title, data in parsed_content.get('chapters', {}).items():
+            data['title'] = data.get('title', title)
+            await _insert_recursive(conn, data, None, 'chapter')
+        for end_sec in parsed_content.get('end_sections', []):
+            await _insert_recursive(conn, end_sec, None, 'end_section')
+        
+        return paragraph_id_map
 
     async def get_document_structure_tree(self, document_id: int) -> List[Dict[str, Any]]:
         """Retrieves the entire document structure as a nested tree."""
@@ -184,18 +243,28 @@ class PGVector:
         if not atoms:
             return {}
         
+        async with self.transaction() as conn:
+            return await self._add_atoms_with_conn(conn, atoms)
+
+    async def _add_atoms_with_conn(self, conn, atoms: List[Dict[str, Any]]) -> Dict[str, int]:
+        """
+        Adds atoms using an existing connection and returns a map of their temporary
+        graph_id to their new database ID.
+        """
+        if not atoms:
+            return {}
+        
         id_map = {}
         query = """
             INSERT INTO atoms (document_id, paragraph_id, text, classification, start_offset, end_offset)
             VALUES ($1, $2, $3, $4, $5, $6) RETURNING id
         """
-        async with self.transaction() as conn:
-            for atom in atoms:
-                db_id = await conn.fetchval(
-                    query, atom["document_id"], atom["paragraph_id"], atom["text"],
-                    atom["classification"], atom["start_offset"], atom["end_offset"]
-                )
-                id_map[atom["graph_id"]] = db_id
+        for atom in atoms:
+            db_id = await conn.fetchval(
+                query, atom["document_id"], atom["paragraph_id"], atom["text"],
+                atom["classification"], atom["start_offset"], atom["end_offset"]
+            )
+            id_map[atom["graph_id"]] = db_id
         return id_map
 
     async def get_atom(self, atom_id: int) -> Optional[Dict[str, Any]]:
@@ -217,14 +286,33 @@ class PGVector:
         if not relationships:
             return
         
+        async with self.pool.acquire() as conn:
+            await self._add_relationships_with_conn(conn, relationships)
+
+    async def _add_relationships_with_conn(self, conn, relationships: List[Dict[str, Any]]):
+        """Bulk-adds relationships using an existing connection."""
+        if not relationships:
+            return
+        
         # Prepare data for executemany
         data_to_insert = [
             (r["document_id"], r["source_atom_id"], r["target_atom_id"], r["type"], r["justification"])
             for r in relationships
         ]
         query = "INSERT INTO relationships (document_id, source_atom_id, target_atom_id, type, justification) VALUES ($1, $2, $3, $4, $5)"
-        async with self.pool.acquire() as conn:
-            await conn.executemany(query, data_to_insert)
+        await conn.executemany(query, data_to_insert)
+
+    async def add_graph_data(self, atoms: List[Dict[str, Any]], relationships: List[Dict[str, Any]]) -> Dict[str, int]:
+        """
+        Atomically adds atoms and relationships to the database.
+        Returns a map of graph_id to database ID for the atoms.
+        """
+        async with self.transaction() as conn:
+            atom_id_map = await self._add_atoms_with_conn(conn, atoms)
+            if relationships:
+                await self._add_relationships_with_conn(conn, relationships)
+        logger.info(f"Successfully added {len(atoms)} atoms and {len(relationships)} relationships")
+        return atom_id_map
 
     # --- Note & Citation Operations (notes, bibliography_entries, etc.) ---
 
