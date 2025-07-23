@@ -1,6 +1,9 @@
 import re
 import os
 import nltk
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Parser:
@@ -237,7 +240,7 @@ class Parser:
         self._cache['footnotes'] = result
         return result
 
-    def find_chapters(self, intro_sections, end_sections) -> list[tuple[str, int, int]]:
+    def find_chapters(self, intro_sections, end_sections) -> list[dict]:
         # Calculate the search boundaries from arguments
         intro_end_offset = 0
         if intro_sections:
@@ -247,17 +250,21 @@ class Parser:
         if end_sections:
             end_start_offset = min(section['start_offset'] for section in end_sections)
         
+        logger.debug(f"Chapter search boundaries: intro_end={intro_end_offset}, end_start={end_start_offset}")
+        
         # Search for chapters only in the content between intro and end sections
         search_text = self.text[intro_end_offset:end_start_offset]
         
         # Pattern to match: # NUM followed by ## Title
         # This matches the structure: # 1 \n ## Title
+        # Be more specific to avoid matching subsection headers as chapters
         main_chapter_pattern = re.compile(
-            r'^\s*#+\s*(?:\d+|[IVXLC]+)\s*\n+\s*#+\s*([^#\n]+)',
+            r'^\s*#\s*(?:\d+|[IVXLC]+)\s*\n+\s*#{1,2}\s*([^#\n]+)',
             re.MULTILINE | re.IGNORECASE
         )
 
         chapter_matches = list(main_chapter_pattern.finditer(search_text))
+        logger.debug(f"Found {len(chapter_matches)} chapters with main pattern")
 
         if not chapter_matches:
             # Fallback: look for numbered headers with substantial content
@@ -266,11 +273,13 @@ class Parser:
                 re.MULTILINE | re.IGNORECASE
             )
             fallback_matches = list(fallback_pattern.finditer(search_text))
+            logger.debug(f"Using fallback pattern, found {len(fallback_matches)} potential chapters")
             
             # Filter to only include chapters with substantial content and meaningful titles
             main_chapters = []
             for i, match in enumerate(fallback_matches):
                 start_offset = match.start() + intro_end_offset
+                header_end_offset = match.end() + intro_end_offset
                 chapter_num_text = match.group(0).strip()
                 
                 # Look for content after the chapter number
@@ -281,33 +290,14 @@ class Parser:
                 # Find the end of this chapter
                 if i + 1 < len(fallback_matches):
                     next_chapter_start = fallback_matches[i + 1].start()
-                    # Look for the next "main" chapter (one with substantial content)
                     end_offset = next_chapter_start + intro_end_offset
-                    for j in range(i + 1, len(fallback_matches)):
-                        next_match = fallback_matches[j]
-                        next_content_start = next_match.end()
-                        if next_content_start < len(search_text) and search_text[next_content_start] == '\n':
-                            next_content_start += 1
-                        if j + 1 < len(fallback_matches):
-                            next_content_end = fallback_matches[j + 1].start()
-                        else:
-                            next_content_end = len(search_text)
-                        next_content = search_text[next_content_start:next_content_end]
-                        
-                        # Check if this next chapter has a title or substantial content
-                        next_lines = next_content.split('\n')[:5]
-                        has_title = any(line.strip().startswith('#') and not re.match(r'^\s*#+\s*(?:\d+|[IVXLC]+)\s*$', line.strip()) for line in next_lines)
-                        
-                        if has_title or len(next_content.strip()) > 5000:
-                            end_offset = next_match.start() + intro_end_offset
-                            break
                 else:
                     end_offset = end_start_offset
                 
                 chapter_content = search_text[content_start:end_offset - intro_end_offset]
                 
                 # Look for a title in the first few lines
-                lines = chapter_content.split('\n')[:5]
+                lines = chapter_content.split('\n')[:10]  # Increased from 5 to 10 lines
                 title_text = ""
                 for line in lines:
                     line = line.strip()
@@ -315,25 +305,47 @@ class Parser:
                         title_text = line.lstrip('#').strip()
                         break
                 
-                # Only include if:
-                # 1. Has a meaningful title (not empty)
-                # 2. Has substantial content (> 3000 characters)
-                if title_text and len(chapter_content.strip()) > 3000:
+                # More flexible content validation:
+                # 1. Has a meaningful title (not empty) OR has substantial content
+                # 2. Reduced minimum content length requirement
+                # 3. Skip if it's likely a Notes section masquerading as a chapter
+                is_likely_notes = (
+                    title_text.lower() == 'notes' or 
+                    chapter_content.strip().lower().startswith('notes') or
+                    (len(chapter_content.strip()) > 0 and 
+                     re.match(r'^\s*\d+\.\s', chapter_content.strip()))  # Starts with numbered list
+                )
+                
+                content_length = len(chapter_content.strip())
+                has_meaningful_title = title_text and title_text.lower() != 'notes'
+                has_substantial_content = content_length > 1000
+                
+                if (has_meaningful_title or has_substantial_content) and not is_likely_notes:
                     num_match = re.search(r'(\d+|[IVXLC]+)', chapter_num_text)
                     if num_match:
                         chapter_num = num_match.group(1)
-                        title = f"Chapter {chapter_num}: {title_text}"
+                        if title_text:
+                            title = f"Chapter {chapter_num}: {title_text}"
+                        else:
+                            title = f"Chapter {chapter_num}"
                     else:
-                        title = f"{chapter_num_text}: {title_text}"
+                        title = title_text or f"Chapter {i + 1}"
                     
-                    main_chapters.append((title, start_offset, end_offset))
+                    main_chapters.append({
+                        'title': title,
+                        'start_offset': start_offset,
+                        'end_offset': end_offset,
+                        'header_end_offset': header_end_offset
+                    })
             
+            logger.debug(f"After filtering, found {len(main_chapters)} valid chapters")
             return main_chapters
 
         # Process the main pattern matches
         chapters = []
         for i, match in enumerate(chapter_matches):
             start_offset = match.start() + intro_end_offset
+            header_end_offset = match.end() + intro_end_offset
             title_text = match.group(1).strip()
             
             # Extract chapter number from the full match
@@ -351,29 +363,59 @@ class Parser:
             else:
                 end_offset = end_start_offset
             
-            chapters.append((title, start_offset, end_offset))
+            chapters.append({
+                'title': title,
+                'start_offset': start_offset,
+                'end_offset': end_offset,
+                'header_end_offset': header_end_offset
+            })
 
-        # Additional filtering to remove subsections that might be mistaken for chapters
-        # Look for patterns like Chapter 2, 3, 4, 5 following a higher-numbered chapter
-        # which are likely subsections, not main chapters
-        # another vibey heuristic that should be examined more closely
+        # Improved filtering to remove subsections that might be mistaken for chapters
+        # while being more permissive of legitimate chapters
+        # Also extend chapter boundaries to include any skipped content
         filtered_chapters = []
         seen_chapter_numbers = set()
+        max_chapter_number = 0
         
-        for title, start, end in chapters:
+        for i, chapter in enumerate(chapters):
+            title = chapter['title']
+            start = chapter['start_offset']
+            end = chapter['end_offset']
+            
             # Extract the chapter number
             num_match = re.search(r'Chapter (\d+)', title)
             if num_match:
                 chapter_num = int(num_match.group(1))
                 
-                # Only include the first occurrence of each chapter number
-                if chapter_num not in seen_chapter_numbers:
-                    seen_chapter_numbers.add(chapter_num)
-                    filtered_chapters.append((title, start, end))
+                # If this chapter number is lower than the highest we've seen,
+                # it's likely a subsection that was incorrectly identified as a chapter
+                if chapter_num < max_chapter_number:
+                    logger.debug(f"Skipping '{title}' - chapter number {chapter_num} appears after chapter {max_chapter_number}")
+                    # Extend the previous chapter to include this skipped content
+                    if filtered_chapters:
+                        # Extend to include the skipped chapter's content
+                        filtered_chapters[-1]['end_offset'] = end
+                        logger.debug(f"Extended previous chapter '{filtered_chapters[-1]['title']}' to include skipped content, new end: {end}")
+                    continue
+                
+                # Allow duplicate chapter numbers but with different titles at the same level
+                # This handles cases where parsing might create multiple entries for the same chapter
+                chapter_key = (chapter_num, title)
+                if chapter_key not in seen_chapter_numbers:
+                    seen_chapter_numbers.add(chapter_key)
+                    max_chapter_number = max(max_chapter_number, chapter_num)
+                    filtered_chapters.append(chapter)
+                else:
+                    logger.debug(f"Skipping duplicate chapter: {title}")
+                    # Also extend previous chapter for duplicate content
+                    if filtered_chapters:
+                        filtered_chapters[-1]['end_offset'] = end
+                        logger.debug(f"Extended previous chapter '{filtered_chapters[-1]['title']}' to include duplicate content, new end: {end}")
             else:
-                # If no chapter number found, include it anyway
-                filtered_chapters.append((title, start, end))
+                # If no chapter number found, include it anyway (but don't update max_chapter_number)
+                filtered_chapters.append(chapter)
 
+        logger.debug(f"After filtering, found {len(filtered_chapters)} final chapters")
         return filtered_chapters
 
     def find_intro_sections(self) -> list[dict]:
@@ -458,7 +500,7 @@ class Parser:
             self._cache['end_sections'] = []
             return []
 
-        # Find the last numbered chapter to determine where main content ends
+        # Find ALL numbered chapters to better understand document structure
         main_content_pattern = re.compile(
             r'^\s*#+\s*(?:\d+|[IVXLC]+)\s*$',  # Numbered headers
             re.MULTILINE | re.IGNORECASE
@@ -469,30 +511,75 @@ class Parser:
             # Find the last numbered chapter
             last_chapter = main_content_matches[-1]
             min_end_start = last_chapter.end()
+            num_chapters = len(main_content_matches)
         else:
             min_end_start = 0
+            num_chapters = 0
 
         # Only include sections that come after the last numbered chapter
-        # and filter out chapter-level Notes sections by checking content length
-        # this heuristic may need refinement
+        # with improved filtering for chapter-level Notes sections
         valid_end_matches = []
         for match in end_matches:
             if match.start() >= min_end_start:
-                # For "Notes" sections, only include if they seem to be document-level
-                # (i.e., have substantial content or come very late in the document)
                 title = match.group(0).strip().lstrip('#').strip()
+                
+                # Enhanced filtering for Notes sections
                 if title.lower() == 'notes':
-                    # Check if this appears to be a document-level notes section
-                    # by looking at its position relative to the end of the document
+                    # Multiple checks to determine if this is a document-level notes section
+                    is_document_level = False
+                    
+                    # Check 1: Position relative to document end (must be in last 15% of document)
                     distance_from_end = len(self.text) - match.start()
-                    if distance_from_end > len(self.text) * 0.1:  # Not in the last 10% of document
+                    position_ratio = distance_from_end / len(self.text)
+                    
+                    # Check 2: Must come after a substantial number of chapters (at least 3)
+                    comes_after_chapters = num_chapters >= 3
+                    
+                    # Check 3: Look ahead to see if there are more numbered chapters after this Notes section
+                    # If there are, it's likely a chapter-level Notes section
+                    text_after_notes = self.text[match.start():]
+                    subsequent_chapters = main_content_pattern.findall(text_after_notes)
+                    has_subsequent_chapters = len(subsequent_chapters) > 0
+                    
+                    # Check 4: Content length - document-level notes are typically substantial
+                    content_start = match.end()
+                    if content_start < len(self.text) and self.text[content_start] == '\n':
+                        content_start += 1
+                    
+                    # Find the end of this notes section
+                    next_section_start = len(self.text)
+                    for future_match in end_matches:
+                        if future_match.start() > match.start():
+                            next_section_start = future_match.start()
+                            break
+                    
+                    notes_content = self.text[content_start:next_section_start].strip()
+                    content_length = len(notes_content)
+                    
+                    # A Notes section is document-level if:
+                    # - It's in the last 15% of the document AND
+                    # - It comes after multiple chapters AND
+                    # - It has no subsequent numbered chapters AND
+                    # - It has substantial content (>1000 characters)
+                    is_document_level = (
+                        position_ratio <= 0.15 and
+                        comes_after_chapters and
+                        not has_subsequent_chapters and
+                        content_length > 1000
+                    )
+                    
+                    if not is_document_level:
+                        logger.debug(f"Skipping chapter-level Notes section at position {match.start()}")
                         continue  # Skip chapter-level notes sections
                 
                 valid_end_matches.append(match)
 
         if not valid_end_matches:
+            logger.debug("No valid end sections found")
             self._cache['end_sections'] = []
             return []
+        
+        logger.debug(f"Found {len(valid_end_matches)} valid end sections")
 
         end_sections = []
         for i, match in enumerate(valid_end_matches):
@@ -508,6 +595,8 @@ class Parser:
             else:
                 end_offset = len(self.text)
 
+            logger.debug(f"Processing end section '{title}' at position {start_offset}-{end_offset}")
+
             end_sections.append({
                 'title': title,
                 'start_offset': start_offset,
@@ -516,10 +605,11 @@ class Parser:
                 'text': self.text[content_start:end_offset].strip()
             })
 
+        logger.debug(f"Final end sections: {[s['title'] for s in end_sections]}")
         self._cache['end_sections'] = end_sections
         return end_sections
 
-    def find_chapter_subsections(self, chapters) -> dict:
+    def find_chapter_subsections(self, chapters: list[dict]) -> dict:
         if not chapters:
             return {}
 
@@ -528,20 +618,14 @@ class Parser:
         # Regex to find markdown headers (e.g., #, ## Subsection)
         subsection_pattern = re.compile(r"^\s*#+\s*(.+?)\s*$", re.MULTILINE)
 
-        # Re-run chapter search to get header end positions
-        chapter_header_pattern_str = (
-            r"^\s*#+\s*(?:Chapter\s+)?(?:\d+|[IVXLC]+)\s*\n+\s*#+\s*[^#\n].*$"
-            r"|^\s*Chapter\s+(?:\d+|[IVXLC]+)\s*$"
-        )
-        chapter_header_pattern = re.compile(chapter_header_pattern_str, re.MULTILINE | re.IGNORECASE)
-        chapter_header_matches = {match.start(): match for match in chapter_header_pattern.finditer(self.text)}
-
-        for i, (title, start_offset, end_offset) in enumerate(chapters):
+        for i, chapter in enumerate(chapters):
+            title = chapter['title']
+            start_offset = chapter['start_offset']
+            end_offset = chapter['end_offset']
+            content_start = chapter.get('header_end_offset', start_offset)
+            
             chapter_map[title] = []
             
-            header_match = chapter_header_matches.get(start_offset)
-            content_start = header_match.end() if header_match else start_offset
-
             # Find all subsection headers within the chapter's content
             subsection_matches = list(subsection_pattern.finditer(self.text, pos=content_start, endpos=end_offset))
 
@@ -637,43 +721,37 @@ class Parser:
         for intro in intro_sections:
             content_text = intro.get('text', '')
             content_start_offset = intro.get('content_start', 0)
-            intro['paragraphs'] = self.find_paragraphs_in_block(content_text, content_start_offset)
-
+            
+            # Do not decompose introduction sections for now
+            intro['paragraphs'] = self.find_paragraphs_in_block(
+                content_text, 
+                content_start_offset, 
+                decompose_into_atoms=False
+            )
         # Process chapters and subsections from arguments
-        chapters_data = chapters
-        chapter_offset_map = {title: {'start_offset': start, 'end_offset': end} for title, start, end in chapters_data}
-
         processed_chapters = {}
-        for chapter_title, subsections in chapter_subsections.items():
-            chapter_info = chapter_offset_map.get(chapter_title, {})
+        for chapter in chapters:
+            chapter_title = chapter['title']
+            subsections = chapter_subsections.get(chapter_title, [])
+
             processed_chapter = {
                 'title': chapter_title,
-                'start_offset': chapter_info.get('start_offset'),
-                'end_offset': chapter_info.get('end_offset'),
+                'start_offset': chapter.get('start_offset'),
+                'end_offset': chapter.get('end_offset'),
                 'subsections': [],
                 'paragraphs': []
             }
 
             if not subsections:
                 # Find chapter content if there are no subsections
-                chapter_header_pattern_str = (
-                    r"^\s*#+\s*(?:Chapter\s+)?(?:\d+|[IVXLC]+)\s*\n+\s*#+\s*[^#\n].*$"
-                    r"|^\s*Chapter\s+(?:\d+|[IVXLC]+)\s*$"
-                )
-                chapter_header_pattern = re.compile(chapter_header_pattern_str, re.MULTILINE | re.IGNORECASE)
+                content_start = chapter.get('header_end_offset', chapter.get('start_offset', 0))
+                end_offset = chapter.get('end_offset', 0)
+
+                if content_start < len(self.text) and self.text[content_start] == '\n':
+                    content_start += 1
                 
-                if chapter_info:
-                    start_offset = chapter_info['start_offset']
-                    end_offset = chapter_info['end_offset']
-                    
-                    header_match = chapter_header_pattern.search(self.text, pos=start_offset, endpos=end_offset)
-                    content_start = header_match.end() if header_match else start_offset
-                    
-                    if content_start < len(self.text) and self.text[content_start] == '\n':
-                        content_start += 1
-                    
-                    content_text = self.text[content_start:end_offset]
-                    processed_chapter['paragraphs'] = self.find_paragraphs_in_block(content_text, content_start, decompose_into_atoms=True)
+                content_text = self.text[content_start:end_offset]
+                processed_chapter['paragraphs'] = self.find_paragraphs_in_block(content_text, content_start, decompose_into_atoms=True)
             else:
                 for subsection in subsections:
                     subsection_content = subsection.get('text', '')
@@ -707,7 +785,7 @@ class Parser:
         if not chapters or not notes_map:
             return {"error": "Could not find chapters or notes to link."}
 
-        chapters_with_notes = {title: [] for title, _, _ in chapters}
+        chapters_with_notes = {c['title']: [] for c in chapters}
         chapters_with_notes['Unlinked Notes'] = []
 
         # Find the notes section boundaries to avoid matching references within it
@@ -745,7 +823,8 @@ class Parser:
 
             # Find all chapters that contain references to this note
             found_in_any_chapter = False
-            for title, start_offset, end_offset in chapters:
+            for chapter in chapters:
+                title, start_offset, end_offset = chapter['title'], chapter['start_offset'], chapter['end_offset']
                 # Check if any reference for this note is within this chapter
                 chapter_refs = [offset for offset in ref_offsets if start_offset <= offset < end_offset]
                 if chapter_refs:
@@ -865,7 +944,7 @@ class Parser:
 
         bib_map = self.parse_bibliography_entries(bib_text, bib_offset)
 
-        intext_citations = self.find_intext_citations(self.original_text, all_paragraphs)
+        intext_citations = self.find_intext_citations(all_paragraphs)
 
         # link citations to bibliography
         unlinked_citations = []
@@ -997,7 +1076,90 @@ class Parser:
 
         return atoms
     
-    def parse(self) -> dict:
+    def parse(self, chapters_with_text: list[dict] = None) -> dict:
+        if chapters_with_text:
+            return self.parse_from_pre_chunked_chapters(chapters_with_text)
+        else:
+            return self.parse_with_regex_fallback()
+
+    def parse_from_pre_chunked_chapters(self, chapters_with_text: list[dict]) -> dict:
+        # Reconstruct the full text for context-dependent parsing (notes, bibliography)
+        # and create an offset map to translate chapter-local offsets to global offsets.
+        full_text = ""
+        offset = 0
+        text_map = []
+        for chapter in chapters_with_text:
+            chapter_text = chapter.get('text', '')
+            text_map.append({'title': chapter['title'], 'start_offset': offset})
+            full_text += chapter_text + "\n\n" # Add separators for context
+            offset = len(full_text)
+        
+        # We need a temporary parser instance for the full reconstructed text
+        # to find elements that span across chapters, like notes and bibliography.
+        context_parser = Parser(full_text)
+
+        # 1. Identify Structure (Chapters are pre-defined)
+        title = None # Title is not available at this level
+        
+        chapters = []
+        for i, item in enumerate(text_map):
+            start_offset = item['start_offset']
+            end_offset = text_map[i+1]['start_offset'] if i + 1 < len(text_map) else len(full_text)
+            chapters.append({
+                'title': item['title'],
+                'start_offset': start_offset,
+                'end_offset': end_offset,
+                'header_end_offset': start_offset # No distinct header in this case
+            })
+
+        chapter_subsections = context_parser.find_chapter_subsections(chapters)
+
+        # 2. Extract Content (Paragraphs)
+        main_content = context_parser.find_paragraphs([], chapters, chapter_subsections)
+
+        # 3. Handle End Sections & Bibliography (use context parser)
+        end_sections = context_parser.find_end_sections()
+        bibliography_section = None
+        other_end_sections = []
+        for section in end_sections:
+            if section['title'].lower() == 'bibliography':
+                bibliography_section = section
+            else:
+                section['paragraphs'] = context_parser.find_paragraphs_in_block(
+                    content_text=section.get('text', ''),
+                    content_start_offset=section.get('content_start', 0)
+                )
+                other_end_sections.append(section)
+
+        # 4. Handle Annotations (use context parser)
+        notes_map = context_parser.find_notes()
+        note_references = context_parser.find_note_references()
+        linked_notes_map = context_parser.link_notes_to_text(chapters, notes_map, note_references)
+        footnotes = context_parser.find_footnotes()
+        
+        # 5. Handle Citations
+        all_paragraphs = []
+        for chapter in main_content.get('chapters', {}).values():
+            all_paragraphs.extend(chapter.get('paragraphs', []))
+            for subsection in chapter.get('subsections', []):
+                all_paragraphs.extend(subsection.get('paragraphs', []))
+        
+        bibliography_data = context_parser.link_citations_to_bibliography(bibliography_section, all_paragraphs)
+        
+        # 6. Assemble Document
+        doc = {
+            "title": title,
+            "introductions": [],
+            "chapters": main_content.get('chapters', {}),
+            "end_sections": other_end_sections,
+            "notes": notes_map,
+            "linked_notes": linked_notes_map,
+            "footnotes": footnotes,
+            "bibliography": bibliography_data
+        }
+        return doc
+
+    def parse_with_regex_fallback(self) -> dict:
         # 1. Identify Structure
         title = self.find_title()
         intro_sections = self.find_intro_sections()
@@ -1050,5 +1212,4 @@ class Parser:
             "footnotes": footnotes,
             "bibliography": bibliography_data
         }
-
         return doc

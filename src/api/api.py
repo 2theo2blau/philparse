@@ -1,10 +1,11 @@
 import os
 import logging
 import tempfile
+import json
 from contextlib import asynccontextmanager
 from typing import List, Optional, AsyncGenerator
 
-from fastapi import FastAPI, APIRouter, HTTPException, UploadFile, File, BackgroundTasks, Query, Path
+from fastapi import FastAPI, APIRouter, HTTPException, UploadFile, File, BackgroundTasks, Query, Path, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -15,6 +16,7 @@ from database.pgvector import PGVector, PGVectorConfig
 from graph.construct_graph import GraphConstructor
 from preprocessing.parse import Parser
 from preprocessing.ocr import OCR
+from src.preprocessing.metadata import MetadataExtractor
 from .models import (
     Document, Atom, Relationship, DocumentInfo,
     DocumentStructureNode, GraphContext, AtomNeighborhood, GraphConstructionProgress
@@ -112,54 +114,71 @@ async def delete_document(document_id: int = Path(..., description="The ID of th
 # 2. PROCESSING PIPELINE
 # ============================================================================
 
-@router.post("/documents/upload", status_code=201, summary="Step 1: Upload and OCR a document")
-async def upload_and_ocr_document(file: UploadFile = File(...)):
+@router.post("/documents/process", status_code=201, summary="Step 1 & 2: Upload, OCR, and Parse")
+async def process_document(file: UploadFile = File(...), db: PGVector = Depends(get_db)):
     """
-    Uploads a file (PDF, PNG, JPG), runs OCR to extract raw text, and creates
-    an initial document record. This is the first step in the pipeline.
+    Uploads a file, determines the best parsing strategy (metadata or regex),
+    runs OCR, parses the document structure, and saves it to the database.
+    This single endpoint replaces the separate upload and parse steps.
     """
-    if file.content_type not in ["application/pdf", "image/png", "image/jpeg"]:
-        raise HTTPException(status_code=400, detail="Invalid file type. Please upload a PDF, PNG, or JPG.")
+    if file.content_type not in ["application/pdf"]:
+        raise HTTPException(status_code=400, detail="Invalid file type. Only PDF is supported for this endpoint.")
 
-    with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(file.filename)[1]) as temp_file:
-        temp_file.write(await file.read())
-        temp_file_path = temp_file.name
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
+        tmp.write(await file.read())
+        tmp_path = tmp.name
 
     try:
-        ocr_client = OCR(temp_file_path)
-        raw_text = ocr_client.run_ocr()
-        if not raw_text or not raw_text.strip():
-            raise HTTPException(status_code=400, detail="OCR failed to extract any text from the document.")
+        # 1. Decide on parsing strategy: Metadata-first or Regex-fallback
+        metadata_extractor = MetadataExtractor(tmp_path)
+        chapter_ranges = metadata_extractor.get_chapter_page_ranges()
+        
+        ocr_processor = OCR(tmp_path)
+        parser: Parser
+        parsed_json: dict
+        title: str
 
-        # Attempt to find a title, but don't fail if it's not found
-        try:
-            title = Parser(raw_text).find_title() or "Untitled Document"
-        except Exception as e:
-            logger.warning(f"Could not determine title during initial parse: {e}")
-            title = "Untitled Document"
+        if chapter_ranges:
+            logger.info(f"Strategy: Metadata-based parsing for {file.filename}")
+            chapters_with_text = ocr_processor.run_ocr_on_chapters(chapter_ranges)
+            if not chapters_with_text:
+                raise HTTPException(status_code=500, detail="OCR processing failed for all chapters.")
+            
+            # Reconstruct full text for context-dependent parsing and to store in the database
+            full_text = "\n\n".join([chapter['text'] for chapter in chapters_with_text])
+            title = file.filename # Use filename as title, since metadata doesn't give a document title
+            
+            # Initialize parser with the full reconstructed text
+            parser = Parser(full_text)
+            parsed_json = parser.parse(chapters_with_text=chapters_with_text)
 
-        doc_id = await get_db().add_document(title=title, raw_content=raw_text, parsed_content={})
-        return {"document_id": doc_id, "title": title, "message": "Document uploaded and OCR complete."}
+        else:
+            logger.info(f"Strategy: Regex-fallback parsing for {file.filename}")
+            full_text = ocr_processor.run_ocr_on_all_pages()
+            if not full_text:
+                raise HTTPException(status_code=500, detail="Full document OCR failed.")
+            
+            parser = Parser(full_text)
+            parsed_json = parser.parse()
+            title = parsed_json.get("title", "Untitled Document")
+
+        # 2. Save to database
+        doc_id = await db.add_document(title=title, raw_content=full_text, parsed_content={})
+        await db.update_document_and_add_structure(doc_id, parsed_json)
+
+        return {
+            "document_id": doc_id,
+            "title": title,
+            "message": "Document processed and saved successfully."
+        }
+
+    except Exception as e:
+        logger.error(f"Error processing document {file.filename}: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
     finally:
-        os.unlink(temp_file_path) # Clean up the temp file
+        if os.path.exists(tmp_path):
+            os.remove(tmp_path)
 
-@router.post("/documents/{document_id}/parse", summary="Step 2: Parse document structure")
-async def parse_document(document_id: int = Path(..., description="ID of the document to parse.")):
-    """
-    Parses the raw text of a document to identify its structure (chapters, sections, etc.)
-    and saves this structure to the database.
-    """
-    doc = await get_db().get_document(document_id)
-    if not doc:
-        raise HTTPException(status_code=404, detail="Document not found.")
-    
-    parser = Parser(doc["raw_content"])
-    parsed_json = parser.parse()
-
-    # Use the new atomic method to update parsed content and add structure
-    await get_db().update_document_and_add_structure(document_id, parsed_json)
-
-    return {"message": "Document parsed and structure saved successfully."}
 
 @router.post("/documents/{document_id}/graph", summary="Step 3: Construct knowledge graph", status_code=202)
 async def construct_graph(
@@ -196,20 +215,35 @@ async def _run_graph_construction(document_id: int, db: PGVector, llm: LLMClient
         return
 
     try:
+        # Step 1: Build the graph in memory
         graph = graph_constructor.build_graph()
         
+        # Step 2: Prepare data for the database
         atoms_to_add = graph_constructor.get_atoms_from_graph(graph, document_id)
-        atom_id_map = await db.add_atoms(atoms_to_add)
-        rels_to_add = graph_constructor.get_relationships_from_graph(graph, document_id, atom_id_map)
         
-        if rels_to_add:
-            await db.add_relationships(rels_to_add)
+        # If no valid atoms were produced, there's nothing to add.
+        if not atoms_to_add:
+            logger.warning(f"Graph construction for doc {document_id} produced 0 valid atoms to add. Aborting database insertion.")
+            graph_constructor.current_status = "complete_with_warnings"
+            return
         
-        logger.info(f"Graph construction complete for document {document_id}.")
+        async with db.transaction() as conn:
+            # Add atoms and get the mapping from graph_id to db_id
+            atom_id_map = await db._add_atoms_with_conn(conn, atoms_to_add)
+            
+            # Prepare relationships using the new mapping
+            rels_to_add = graph_constructor.get_relationships_from_graph(graph, document_id, atom_id_map)
+            
+            # Add relationships within the same transaction
+            if rels_to_add:
+                await db._add_relationships_with_conn(conn, rels_to_add)
+
+        logger.info(f"Graph construction and database insertion complete for document {document_id}.")
 
     except Exception as e:
         logger.error(f"Background graph construction failed for doc {document_id}: {e}", exc_info=True)
-        graph_constructor.current_status = "error"
+        if graph_constructor:
+            graph_constructor.current_status = "error"
 
 
 @router.get("/documents/{document_id}/graph/progress", summary="Get graph construction progress", response_model=GraphConstructionProgress)
